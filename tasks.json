@@ -294,6 +294,63 @@
       ],
       "implementationGuide": "1. app/manifest.ts에서 MetadataRoute.Manifest를 반환한다. 2. name, short_name, start_url, display standalone, theme_color를 설정한다. 3. icons에 192x192와 512x512 PNG를 넣는다. 4. 아이콘 이미지는 사용자가 제공하거나 생성 후 확인받는다.",
       "verificationCriteria": "/manifest.webmanifest 응답에 name, display standalone, 192와 512 아이콘이 있음"
+    },
+    {
+      "id": "e63c0309-978e-4e59-8210-11faff702cd9",
+      "name": "P4-6 apple-touch-icon metadata와 설치 안내 문구",
+      "description": "layout metadata에 apple-touch-icon 링크를 연결하고, 안드로이드는 설치 버튼, 아이폰은 공유 후 홈 화면에 추가 안내 문구를 표시한다. 설치 버튼은 beforeinstallprompt 이벤트를 사용하는 클라이언트 컴포넌트로 만든다.",
+      "notes": "ThemeProvider와 suppressHydrationWarning 유지. 테마 의존 UI는 mounted 가드를 쓴다.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "db8b803c-3e5f-46fe-89bc-a998ba747905"
+        }
+      ],
+      "createdAt": "2026-10-30T05:26:08.528Z",
+      "updatedAt": "2026-10-30T05:26:08.528Z",
+      "relatedFiles": [
+        {
+          "path": "app/layout.tsx",
+          "type": "TO_MODIFY",
+          "description": "metadata와 apple-touch-icon",
+          "lineStart": 1,
+          "lineEnd": 100
+        },
+        {
+          "path": "components/install",
+          "type": "CREATE",
+          "description": "설치 안내 클라이언트 컴포넌트",
+          "lineStart": 1,
+          "lineEnd": 100
+        }
+      ],
+      "implementationGuide": "1. app/layout.tsx의 metadata.icons.apple에 apple-touch-icon 경로를 지정한다. 2. components/install 아래에 클라이언트 컴포넌트를 둔다. 3. navigator.userAgent로 iOS와 안드로이드를 구분하고, 기본 설치 프롬프트는 이벤트 저장 후 버튼으로 호출한다. 4. 이미 standalone 모드면 안내를 숨긴다.",
+      "verificationCriteria": "HTML head에 apple-touch-icon 링크 포함, 안드로이드와 아이폰 각각에 맞는 안내가 보임, 하이드레이션 경고 없음"
+    },
+    {
+      "id": "4ce10dbc-fc0c-41e5-b2fd-73137e41aff8",
+      "name": "P4-7 PWA manifest 데스크톱 Chrome 검증",
+      "description": "데스크톱 Chrome 개발자 도구의 Application 탭에서 manifest 항목에 오류가 없는지 확인한다. 설치 가능성 판정과 아이콘 표시를 확인한다.",
+      "notes": "실기기 확인은 Phase 5에서 한다.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "e63c0309-978e-4e59-8210-11faff702cd9"
+        }
+      ],
+      "createdAt": "2026-10-30T05:26:08.528Z",
+      "updatedAt": "2026-10-30T05:26:08.528Z",
+      "relatedFiles": [
+        {
+          "path": "app/manifest.ts",
+          "type": "REFERENCE",
+          "description": "검증 대상",
+          "lineStart": 1,
+          "lineEnd": 100
+        }
+      ],
+      "implementationGuide": "1. npm run dev 또는 npm run build 후 start로 서버를 띄운다. 2. Playwright로 /manifest.webmanifest와 HTML head를 확인한다. 3. 가능하면 Lighthouse 또는 DevTools로 installability를 확인한다.",
+      "verificationCriteria": "manifest 오류 없음, 설치 가능 조건 충족, 아이콘 로드 오류 없음"
     }
   ]
 }
