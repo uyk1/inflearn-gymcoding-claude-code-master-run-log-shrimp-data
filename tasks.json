@@ -5,10 +5,10 @@
       "name": "P2-1 NEXT_PUBLIC 미사용 및 API 키 번들 미노출 확인",
       "description": "NOTION_API_KEY가 클라이언트 번들에 포함되지 않았는지 확인한다. 대상은 lib/notion/client.ts와 container.ts 및 이를 import하는 파일이다. NEXT_PUBLIC_ 접두사 사용 여부를 검색하고, Notion 모듈이 'use client' 파일에서 import되지 않는지 확인한다.",
       "notes": "실제 키 값을 읽거나 출력하지 않는다. .env* 파일은 열지 않는다.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [],
       "createdAt": "2026-10-30T05:25:51.390Z",
-      "updatedAt": "2026-10-30T05:25:51.390Z",
+      "updatedAt": "2026-10-30T08:20:16.827Z",
       "relatedFiles": [
         {
           "path": "lib/notion/client.ts",
