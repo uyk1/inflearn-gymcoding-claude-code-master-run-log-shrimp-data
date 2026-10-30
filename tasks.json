@@ -558,14 +558,14 @@
       "name": "P2-4 페이스가 없을 때 단위 표시 수정",
       "description": "페이스가 '-'일 때 '-/km'로 표시되는 문제를 고친다. lib/notion/duration.ts에 paceText를 화면용 문자열로 바꾸는 작은 함수(예: formatPaceLabel)를 추가한다. paceText가 '-'이면 '-'를, 그 외에는 paceText 뒤에 '/km'를 붙여 반환한다. components/runs/run-card.tsx 26행과 app/runs/[id]/page.tsx 43행에서 이 함수를 사용한다. DTO의 paceText 값은 그대로 둔다(통계 집계에서 재사용). PRD 4장은 거리가 0이거나 소요 시간이 없으면 페이스를 '-'로 표시하라고 정한다.",
       "notes": "담당: nextjs-developer. lib/ 수정이 포함되므로 ui-markup-developer가 아니라 이쪽이 맡는다. 거리 0 행 표시 확인에 노션 TEST 행이 필요하면 사용자에게 먼저 확인한다. 개발 서버가 떠 있으면 build를 하지 않는다.",
-      "status": "in_progress",
+      "status": "completed",
       "dependencies": [
         {
           "taskId": "03c7c9cc-8197-4e85-9346-af1ba0b28e79"
         }
       ],
       "createdAt": "2026-10-30T08:44:16.540Z",
-      "updatedAt": "2026-10-30T08:50:03.821Z",
+      "updatedAt": "2026-10-30T08:50:07.475Z",
       "relatedFiles": [
         {
           "path": "lib/notion/duration.ts",
@@ -586,7 +586,8 @@
       "implementationGuide": "1) duration.ts의 formatPace 아래에 formatPaceLabel(paceText: string): string을 추가하고 한국어 주석을 한 줄 단다. 2) run-card와 상세 페이지의 단위 붙이는 부분을 이 함수 호출로 교체한다. 3) npx tsc --noEmit, npm run lint, npm run build 순서로 검증한다.",
       "verificationCriteria": "paceText가 '-'이면 카드와 상세에 '-'만 보이고 '/km'가 붙지 않는다. 정상 값(예: 6:00)은 '6:00/km'로 그대로 표시된다. tsc, lint, build가 통과한다.",
       "analysisResult": "Run Log의 Phase 2 UI 보완과 Phase 3 마무리. 담당 에이전트를 nextjs-developer(lib, 라우팅, 데이터)와 ui-markup-developer(components 마크업, 스타일, 시각 확인)로 나눈다. 기존 구조(app은 라우팅, components는 화면, lib는 로직)와 한국어 주석, 세미콜론, 큰따옴표 스타일을 따르고 components/ui는 직접 수정하지 않는다.",
-      "summary": "lib/notion/duration.ts에 formatPaceLabel을 추가해 paceText가 '-'이면 '-', 그 외에는 '/km'를 붙이도록 하고 run-card.tsx와 app/runs/[id]/page.tsx 두 곳이 이 함수를 쓰도록 교체했다. DTO와 mapper의 paceText는 그대로 둠. diff는 함수 1개, import 2줄, 표시 2곳뿐이고 남은 '/km' 직접 결합은 새 함수 안 1곳. 확인한 것: tsc, lint, build 통과(직접 재실행으로 tsc, lint 확인), formatPaceLabel을 node로 직접 호출해 '-'는 '-', '6:00'은 '6:00/km', '12:34'는 '12:34/km', mapper는 distanceKm이 null일 때만 제외하므로 거리 0 행이 검사를 통과해 paceText가 '-'가 되는 경로를 소스 읽기로 확인, 수정 파일 BOM 없음. 확인하지 못한 것: 거리 0인 노션 행을 실제로 화면에서 렌더링해 보는 확인은 노션 TEST 행이 필요해 하지 않았고 소스 추적까지만 했다(화면 미확인). 정상 값이 화면에서 '6:00/km'로 보이는지도 브라우저로는 보지 않았다."
+      "summary": "lib/notion/duration.ts에 formatPaceLabel을 추가해 paceText가 '-'이면 '-', 그 외에는 '/km'를 붙이도록 하고 run-card.tsx와 app/runs/[id]/page.tsx 두 곳이 이 함수를 쓰도록 교체했다. DTO와 mapper의 paceText는 그대로 둠. diff는 함수 1개, import 2줄, 표시 2곳뿐이고 남은 '/km' 직접 결합은 새 함수 안 1곳. 확인한 것: tsc, lint, build 통과(직접 재실행으로 tsc, lint 확인), formatPaceLabel을 node로 직접 호출해 '-'는 '-', '6:00'은 '6:00/km', '12:34'는 '12:34/km', mapper는 distanceKm이 null일 때만 제외하므로 거리 0 행이 검사를 통과해 paceText가 '-'가 되는 경로를 소스 읽기로 확인, 수정 파일 BOM 없음. 확인하지 못한 것: 거리 0인 노션 행을 실제로 화면에서 렌더링해 보는 확인은 노션 TEST 행이 필요해 하지 않았고 소스 추적까지만 했다(화면 미확인). 정상 값이 화면에서 '6:00/km'로 보이는지도 브라우저로는 보지 않았다.",
+      "completedAt": "2026-10-30T08:50:07.473Z"
     },
     {
       "id": "ce7cc4e1-c176-4d85-b7c7-06dded955f2c",
