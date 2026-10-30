@@ -214,7 +214,7 @@
       "id": "2c32bdfa-eaa3-4760-a936-34e15fc93429",
       "name": "P4-3 통계 화면과 차트 구현",
       "description": "app/stats 페이지에 주간·월간 거리와 평균 페이스 차트를 만든다. 차트 부분만 'use client' 클라이언트 컴포넌트로 분리하고, 데이터 로딩은 서버 컴포넌트에서 한다. revalidate 값은 목록과 맞춘다.",
-      "notes": "Tailwind CSS 4 설정은 app/globals.css에 있다.",
+      "notes": "Tailwind CSS 4 설정은 app/globals.css에 있다. 담당 분리: app/stats/page.tsx, 데이터 로딩, revalidate는 nextjs-developer. 차트 래퍼와 카드 등 마크업과 스타일, 라이트·다크 대응, 360px 확인은 ui-markup-developer. 집계는 P4-2가 만든 함수를 쓰고 새 노션 호출 경로를 만들지 않는다. 빈 상태와 에러 표시는 P2-3의 공통 컴포넌트를 재사용한다. 차트 색은 시맨틱 토큰을 쓰고 색 값을 직접 쓰지 않는다.",
       "status": "pending",
       "dependencies": [
         {
@@ -222,7 +222,7 @@
         }
       ],
       "createdAt": "2026-10-30T05:26:02.252Z",
-      "updatedAt": "2026-10-30T05:26:02.252Z",
+      "updatedAt": "2026-10-30T08:44:58.195Z",
       "relatedFiles": [
         {
           "path": "app/stats/page.tsx",
