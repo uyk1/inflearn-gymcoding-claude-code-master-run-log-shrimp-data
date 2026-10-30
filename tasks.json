@@ -359,7 +359,7 @@
     {
       "id": "fc0e5007-d9ee-404c-bd0f-5c9cd26dafeb",
       "name": "P5-1 캐싱과 페이지네이션 점검",
-      "description": "revalidate 300이 목록, 상세, 홈, 통계 페이지에 모두 적용되었는지 확인하고, Notion 페이지네이션이 끝까지 호출되는지와 rate limit 대응을 점검한다. revalidate는 이미 목록 페이지에 적용되어 있으므로 나머지 페이지만 확인한다.",
+      "description": "캐시가 홈, 상세, 목록, 통계 페이지에 의도대로 적용되었는지 확인하고 rate limit 대응을 점검한다. 현재 구조: 홈과 상세(/runs/[id])는 ISR(revalidate 300, 상세는 generateStaticParams가 빈 배열), 목록(/runs)은 searchParams 때문에 동적 페이지이고 lib/runs/load.ts의 unstable_cache가 노션 조회를 5분 캐시한다. 통계 페이지가 생겼다면 같은 방식을 따르는지 확인한다. Notion 페이지네이션 100건 초과 검증은 P2-6에서 다룬다. 선택 확인: 상세가 캐시된 목록을 거치지 않아 새 기록이 목록보다 먼저 보이는 불일치를 정리할지 보고한다.",
       "notes": "앱 코드 수정이 필요하면 별도 작업으로 분리한다.",
       "status": "pending",
       "dependencies": [
@@ -368,7 +368,7 @@
         }
       ],
       "createdAt": "2026-10-30T05:26:19.187Z",
-      "updatedAt": "2026-10-30T05:26:19.187Z",
+      "updatedAt": "2026-10-30T08:45:05.358Z",
       "relatedFiles": [
         {
           "path": "lib/notion/repository.ts",
@@ -378,8 +378,8 @@
           "lineEnd": 200
         }
       ],
-      "implementationGuide": "1. Grep으로 revalidate 사용처를 찾는다. 2. lib/notion/repository.ts의 페이지네이션 루프 종료 조건을 확인한다. 3. 필요 시 최소 수정 대신 보고만 한다.",
-      "verificationCriteria": "모든 데이터 페이지에 revalidate 적용, 페이지네이션이 has_more 기준으로 끝까지 조회됨"
+      "implementationGuide": "1. Grep으로 revalidate와 unstable_cache 사용처를 찾고 빌드 표(○ 정적, ● ISR, ƒ 동적)와 대조한다. 2. 통계 페이지의 데이터 로딩이 loadRunRecords()를 쓰는지 확인한다. 3. 노션 호출 횟수를 서버 로그나 임시 로그로 확인할 때는 임시 코드를 확인 후 반드시 제거한다. 4. 앱 코드 수정이 필요하면 고치지 말고 보고하고 별도 작업으로 분리한다.",
+      "verificationCriteria": "홈과 상세는 ISR, 목록과 통계는 unstable_cache된 노션 조회를 쓰는 것이 빌드 표와 소스로 확인된다. 새로 만든 페이지가 요청마다 노션을 호출하지 않는다. 발견된 문제는 수정하지 않고 보고한다."
     },
     {
       "id": "009c31b3-3b4d-499c-b33d-05e7c4d97bc0",
