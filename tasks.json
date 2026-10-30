@@ -351,6 +351,159 @@
       ],
       "implementationGuide": "1. npm run dev 또는 npm run build 후 start로 서버를 띄운다. 2. Playwright로 /manifest.webmanifest와 HTML head를 확인한다. 3. 가능하면 Lighthouse 또는 DevTools로 installability를 확인한다.",
       "verificationCriteria": "manifest 오류 없음, 설치 가능 조건 충족, 아이콘 로드 오류 없음"
+    },
+    {
+      "id": "fc0e5007-d9ee-404c-bd0f-5c9cd26dafeb",
+      "name": "P5-1 캐싱과 페이지네이션 점검",
+      "description": "revalidate 300이 목록, 상세, 홈, 통계 페이지에 모두 적용되었는지 확인하고, Notion 페이지네이션이 끝까지 호출되는지와 rate limit 대응을 점검한다. revalidate는 이미 목록 페이지에 적용되어 있으므로 나머지 페이지만 확인한다.",
+      "notes": "앱 코드 수정이 필요하면 별도 작업으로 분리한다.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "4ce10dbc-fc0c-41e5-b2fd-73137e41aff8"
+        }
+      ],
+      "createdAt": "2026-10-30T05:26:19.187Z",
+      "updatedAt": "2026-10-30T05:26:19.187Z",
+      "relatedFiles": [
+        {
+          "path": "lib/notion/repository.ts",
+          "type": "REFERENCE",
+          "description": "페이지네이션 처리",
+          "lineStart": 1,
+          "lineEnd": 200
+        }
+      ],
+      "implementationGuide": "1. Grep으로 revalidate 사용처를 찾는다. 2. lib/notion/repository.ts의 페이지네이션 루프 종료 조건을 확인한다. 3. 필요 시 최소 수정 대신 보고만 한다.",
+      "verificationCriteria": "모든 데이터 페이지에 revalidate 적용, 페이지네이션이 has_more 기준으로 끝까지 조회됨"
+    },
+    {
+      "id": "009c31b3-3b4d-499c-b33d-05e7c4d97bc0",
+      "name": "P5-2 배포 환경 변수 등록과 배포",
+      "description": "배포 플랫폼에 NOTION_API_KEY와 NOTION_DATA_SOURCE_ID를 등록하고 프로덕션 배포를 한다. 실제 값은 플랫폼 콘솔에만 입력하며 저장소에 기록하지 않는다.",
+      "notes": "플랫폼 선택과 계정 로그인은 사용자 결정이 필요하다.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "fc0e5007-d9ee-404c-bd0f-5c9cd26dafeb"
+        }
+      ],
+      "createdAt": "2026-10-30T05:26:19.187Z",
+      "updatedAt": "2026-10-30T05:26:19.187Z",
+      "relatedFiles": [
+        {
+          "path": ".env.example",
+          "type": "REFERENCE",
+          "description": "변수 이름 기준",
+          "lineStart": 1,
+          "lineEnd": 20
+        }
+      ],
+      "implementationGuide": "1. 배포 플랫폼을 사용자와 확정한다. 2. 환경 변수 두 개를 플랫폼에 등록한다(사용자가 직접 입력). 3. 배포를 실행하고 빌드 로그에서 오류가 없는지 확인한다.",
+      "verificationCriteria": "배포 URL이 열리고 /runs 목록이 노션 데이터를 표시함"
+    },
+    {
+      "id": "c516acd6-8854-4ed7-8229-797bf827f4d5",
+      "name": "P5-3 배포 URL 키 미노출 확인",
+      "description": "배포 URL의 HTML과 JS 번들에 NOTION_API_KEY 값이나 키 문자열이 노출되지 않는지 확인한다.",
+      "notes": "키 값 자체를 로그나 보고서에 쓰지 않는다.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "009c31b3-3b4d-499c-b33d-05e7c4d97bc0"
+        }
+      ],
+      "createdAt": "2026-10-30T05:26:19.187Z",
+      "updatedAt": "2026-10-30T05:26:19.187Z",
+      "relatedFiles": [
+        {
+          "path": "lib/notion/client.ts",
+          "type": "REFERENCE",
+          "description": "서버 전용 클라이언트",
+          "lineStart": 1,
+          "lineEnd": 100
+        }
+      ],
+      "implementationGuide": "1. 배포 URL 페이지 소스와 _next/static 자산을 조회한다. 2. 키 접두사 패턴 검색 결과가 없는지 확인한다. 3. 결과만 보고하고 키 값은 출력하지 않는다.",
+      "verificationCriteria": "배포 산출물에 키 문자열 없음, 서버 응답에 키 없음"
+    },
+    {
+      "id": "69528d04-1f27-43cf-8dea-94e17e6fbf06",
+      "name": "P5-4 갤럭시 Chrome 홈 화면 설치 실기기 확인",
+      "description": "갤럭시 기기의 Chrome과 Samsung Internet에서 배포 URL을 열고 홈 화면에 추가한 뒤 주소창 없는 독립 창으로 실행되는지 확인한다.",
+      "notes": "사용자 기기에서 수행하는 작업이므로 사용자에게 절차를 안내한다.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "c516acd6-8854-4ed7-8229-797bf827f4d5"
+        }
+      ],
+      "createdAt": "2026-10-30T05:26:19.187Z",
+      "updatedAt": "2026-10-30T05:26:19.187Z",
+      "relatedFiles": [
+        {
+          "path": "app/manifest.ts",
+          "type": "REFERENCE",
+          "description": "설치 대상 매니페스트",
+          "lineStart": 1,
+          "lineEnd": 100
+        }
+      ],
+      "implementationGuide": "1. 배포 URL을 기기에서 연다. 2. 설치 버튼 또는 메뉴에서 홈 화면에 추가한다. 3. 홈 화면 아이콘으로 실행해 주소창이 없는지 확인한다. 4. 목록과 상세가 열리는지 확인한다.",
+      "verificationCriteria": "갤럭시 Chrome 또는 Samsung Internet에서 설치 후 standalone 실행 확인"
+    },
+    {
+      "id": "f6b3a947-95c2-4980-9c21-4ab6388be4cd",
+      "name": "P5-5 아이폰 Safari 홈 화면 설치 실기기 확인",
+      "description": "아이폰 Safari에서 배포 URL을 열고 공유 메뉴의 홈 화면에 추가로 설치한 뒤 독립 창으로 실행되는지, apple-touch-icon이 표시되는지 확인한다.",
+      "notes": "사용자 기기에서 수행하는 작업이므로 사용자에게 절차를 안내한다.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "c516acd6-8854-4ed7-8229-797bf827f4d5"
+        }
+      ],
+      "createdAt": "2026-10-30T05:26:19.187Z",
+      "updatedAt": "2026-10-30T05:26:19.187Z",
+      "relatedFiles": [
+        {
+          "path": "app/layout.tsx",
+          "type": "REFERENCE",
+          "description": "apple-touch-icon 설정",
+          "lineStart": 1,
+          "lineEnd": 100
+        }
+      ],
+      "implementationGuide": "1. Safari로 배포 URL을 연다. 2. 공유 후 홈 화면에 추가를 실행한다. 3. 홈 화면 아이콘으로 실행해 주소창이 없는지 확인한다. 4. 아이콘 표시를 확인한다.",
+      "verificationCriteria": "아이폰 Safari에서 홈 화면 추가 후 standalone 실행, apple-touch-icon 표시"
+    },
+    {
+      "id": "1d96fb9e-6088-44ec-89ee-57f4d0f0bc59",
+      "name": "P5-6 실기기 발견 문제 수정과 완료 기록",
+      "description": "실기기 확인에서 발견된 문제를 수정하고, 완료 기준을 모두 충족했는지 점검한다. ROADMAP 상태 갱신은 사용자 승인 후 별도로 한다.",
+      "notes": "ROADMAP 갱신과 커밋은 사용자 결정 사항이다.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "69528d04-1f27-43cf-8dea-94e17e6fbf06"
+        },
+        {
+          "taskId": "f6b3a947-95c2-4980-9c21-4ab6388be4cd"
+        }
+      ],
+      "createdAt": "2026-10-30T05:26:19.187Z",
+      "updatedAt": "2026-10-30T05:26:19.187Z",
+      "relatedFiles": [
+        {
+          "path": "docs/ROADMAP.md",
+          "type": "REFERENCE",
+          "description": "완료 기준 대조",
+          "lineStart": 1,
+          "lineEnd": 100
+        }
+      ],
+      "implementationGuide": "1. P5-4와 P5-5에서 나온 문제 목록을 정리한다. 2. 각 문제를 최소 수정으로 고친다. 3. npx tsc --noEmit, npm run lint, npm run build를 통과시킨다.",
+      "verificationCriteria": "실기기 문제 없음, tsc와 lint와 build 통과"
     }
   ]
 }
