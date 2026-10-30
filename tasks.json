@@ -702,11 +702,11 @@
       "status": "pending",
       "dependencies": [
         {
-          "taskId": "4ed284a1-be25-4561-8b4a-c9d9a9c9dab2"
+          "taskId": "11dfc3eb-36c7-47cc-83d9-94cb0a4092d9"
         }
       ],
       "createdAt": "2026-10-30T08:44:33.903Z",
-      "updatedAt": "2026-10-30T08:44:33.903Z",
+      "updatedAt": "2026-10-30T08:47:13.953Z",
       "relatedFiles": [
         {
           "path": "lib/notion/duration.ts",
