@@ -558,14 +558,14 @@
       "name": "P2-4 페이스가 없을 때 단위 표시 수정",
       "description": "페이스가 '-'일 때 '-/km'로 표시되는 문제를 고친다. lib/notion/duration.ts에 paceText를 화면용 문자열로 바꾸는 작은 함수(예: formatPaceLabel)를 추가한다. paceText가 '-'이면 '-'를, 그 외에는 paceText 뒤에 '/km'를 붙여 반환한다. components/runs/run-card.tsx 26행과 app/runs/[id]/page.tsx 43행에서 이 함수를 사용한다. DTO의 paceText 값은 그대로 둔다(통계 집계에서 재사용). PRD 4장은 거리가 0이거나 소요 시간이 없으면 페이스를 '-'로 표시하라고 정한다.",
       "notes": "담당: nextjs-developer. lib/ 수정이 포함되므로 ui-markup-developer가 아니라 이쪽이 맡는다. 거리 0 행 표시 확인에 노션 TEST 행이 필요하면 사용자에게 먼저 확인한다. 개발 서버가 떠 있으면 build를 하지 않는다.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "03c7c9cc-8197-4e85-9346-af1ba0b28e79"
         }
       ],
       "createdAt": "2026-10-30T08:44:16.540Z",
-      "updatedAt": "2026-10-30T08:47:10.330Z",
+      "updatedAt": "2026-10-30T08:48:00.312Z",
       "relatedFiles": [
         {
           "path": "lib/notion/duration.ts",
