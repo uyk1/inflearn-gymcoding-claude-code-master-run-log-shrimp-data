@@ -5,10 +5,10 @@
       "name": "개발 서버 중지 후 검증 명령 실행",
       "description": "3000 포트를 쓰는 개발 서버(node)를 중지한 뒤 npm run build, npx tsc --noEmit, npm run lint를 순서대로 실행한다. 개발 서버가 떠 있는 상태에서 build를 실행하면 .next 충돌로 500이 나므로 순서를 지킨다.",
       "notes": "값이 있는 .env.local 내용은 출력하지 않는다.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [],
       "createdAt": "2026-10-30T05:09:15.926Z",
-      "updatedAt": "2026-10-30T05:09:15.926Z",
+      "updatedAt": "2026-10-30T05:10:07.739Z",
       "relatedFiles": [
         {
           "path": "package.json",
