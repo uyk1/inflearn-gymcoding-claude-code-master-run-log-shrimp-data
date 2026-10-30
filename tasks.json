@@ -35,14 +35,14 @@
       "name": "P2-2 파싱 실패 행 제외와 서버 로그 확인",
       "description": "소요시간 형식 오류나 필수값 누락 행이 목록에서 빠지고 서버 로그에 남는지 실제 노션 데이터 또는 대표 입력으로 확인한다.",
       "notes": "노션 데이터를 수정하지 않는다. 테스트용 행 추가가 필요하면 사용자에게 확인한다.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "cba6aedb-0029-4251-b49f-ae3093e3cde6"
         }
       ],
       "createdAt": "2026-10-30T05:25:51.390Z",
-      "updatedAt": "2026-10-30T05:25:51.390Z",
+      "updatedAt": "2026-10-30T08:28:36.337Z",
       "relatedFiles": [
         {
           "path": "lib/notion/service.ts",
