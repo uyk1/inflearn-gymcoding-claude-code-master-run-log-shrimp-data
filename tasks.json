@@ -552,6 +552,118 @@
       "implementationGuide": "1. CLAUDE.md와 shrimp-rules.md를 읽고 기존 app/page.tsx, app/runs/page.tsx의 마크업 스타일(space-y, text-2xl font-bold tracking-tight)을 따른다.\n2. not-found.tsx는 서버 컴포넌트로 만들고 next/link와 buttonVariants(components/ui/button)로 홈(/)과 /runs 링크를 둔다.\n3. error.tsx는 \"use client\"를 넣고 export default function Error({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) 형태로 만든다. error.message는 화면에 쓰지 않는다. useEffect로 console.error(error)만 남긴다.\n4. runs/loading.tsx는 서버 컴포넌트로 제목 영역과 카드 자리표시(animate-pulse div 몇 개)를 보여준다. 모바일(360px)에서 가로 스크롤이 생기지 않게 grid-cols-1 기준으로 만든다.\n5. npx tsc --noEmit, npm run lint, npm run build 순서로 검증한다. 개발 서버가 떠 있으면 build는 하지 않는다.",
       "verificationCriteria": "1) 존재하지 않는 주소(/nope)와 없는 기록 id(/runs/does-not-exist)에서 한국어 404 화면과 홈, 목록 링크가 보인다. 2) 의도적으로 던진 예외 상황에서 error.tsx 화면이 나오고 에러 내부 메시지가 화면에 노출되지 않으며 다시 시도 버튼이 동작한다(확인 후 임시 코드는 제거). 3) /runs 이동 시 로딩 UI가 보이다가 목록으로 바뀐다. 4) 360px 폭에서 가로 스크롤이 없다. 5) npx tsc --noEmit, npm run lint, npm run build가 통과한다.",
       "analysisResult": "Run Log(Next.js 15.5 App Router)의 라우팅 골격을 보완한다. 화면(홈, 목록, 상세)은 이미 구현됐지만 not-found, error, loading 같은 특수 파일이 없어 Next 기본 화면이 노출된다. 기존 구조 원칙(app/은 라우팅 전용, 컴포넌트는 components/, 로직은 lib/)과 한국어 주석, 세미콜론, 큰따옴표 스타일을 따른다."
+    },
+    {
+      "id": "115de30e-b5f5-489f-bbdb-788f21343200",
+      "name": "P2-4 페이스가 없을 때 단위 표시 수정",
+      "description": "페이스가 '-'일 때 '-/km'로 표시되는 문제를 고친다. lib/notion/duration.ts에 paceText를 화면용 문자열로 바꾸는 작은 함수(예: formatPaceLabel)를 추가한다. paceText가 '-'이면 '-'를, 그 외에는 paceText 뒤에 '/km'를 붙여 반환한다. components/runs/run-card.tsx 26행과 app/runs/[id]/page.tsx 43행에서 이 함수를 사용한다. DTO의 paceText 값은 그대로 둔다(통계 집계에서 재사용). PRD 4장은 거리가 0이거나 소요 시간이 없으면 페이스를 '-'로 표시하라고 정한다.",
+      "notes": "담당: nextjs-developer. lib/ 수정이 포함되므로 ui-markup-developer가 아니라 이쪽이 맡는다. 거리 0 행 표시 확인에 노션 TEST 행이 필요하면 사용자에게 먼저 확인한다. 개발 서버가 떠 있으면 build를 하지 않는다.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "058a237a-2188-4e7b-8b65-b93c3d6febe2"
+        }
+      ],
+      "createdAt": "2026-10-30T08:44:16.540Z",
+      "updatedAt": "2026-10-30T08:44:16.540Z",
+      "relatedFiles": [
+        {
+          "path": "lib/notion/duration.ts",
+          "type": "TO_MODIFY",
+          "description": "formatPaceLabel 추가"
+        },
+        {
+          "path": "components/runs/run-card.tsx",
+          "type": "TO_MODIFY",
+          "description": "26행 단위 표시 교체"
+        },
+        {
+          "path": "app/runs/[id]/page.tsx",
+          "type": "TO_MODIFY",
+          "description": "43행 단위 표시 교체"
+        }
+      ],
+      "implementationGuide": "1) duration.ts의 formatPace 아래에 formatPaceLabel(paceText: string): string을 추가하고 한국어 주석을 한 줄 단다. 2) run-card와 상세 페이지의 단위 붙이는 부분을 이 함수 호출로 교체한다. 3) npx tsc --noEmit, npm run lint, npm run build 순서로 검증한다.",
+      "verificationCriteria": "paceText가 '-'이면 카드와 상세에 '-'만 보이고 '/km'가 붙지 않는다. 정상 값(예: 6:00)은 '6:00/km'로 그대로 표시된다. tsc, lint, build가 통과한다.",
+      "analysisResult": "Run Log의 Phase 2 UI 보완과 Phase 3 마무리. 담당 에이전트를 nextjs-developer(lib, 라우팅, 데이터)와 ui-markup-developer(components 마크업, 스타일, 시각 확인)로 나눈다. 기존 구조(app은 라우팅, components는 화면, lib는 로직)와 한국어 주석, 세미콜론, 큰따옴표 스타일을 따르고 components/ui는 직접 수정하지 않는다."
+    },
+    {
+      "id": "ce7cc4e1-c176-4d85-b7c7-06dded955f2c",
+      "name": "P2-3 공통 상태 컴포넌트 분리 (빈 상태, 에러 표시)",
+      "description": "빈 상태와 에러 표시를 공통 컴포넌트로 분리한다. 현재 app/page.tsx(43, 45행), app/runs/page.tsx(29, 31행), app/runs/[id]/page.tsx(34행)에 인라인 p 태그로 흩어져 있다. components/common/에 EmptyState와 ErrorMessage를 만들고 세 페이지에 적용한다. 문구는 props로 받고 마크업과 스타일만 담당한다. 기존 스타일(text-muted-foreground text-sm, text-destructive text-sm)을 기본으로 하고 에러 표시에는 접근성 역할(alert)을 더한다.",
+      "notes": "담당: ui-markup-developer. 분기 로직(errorMessage 여부, 기록 수)은 페이지에 그대로 두고 컴포넌트는 표시만 한다. components/ui는 수정하지 않는다. 에러 화면 재현에는 노션 쓰기를 쓰지 않고 소스 확인과 임시 코드(확인 후 삭제)로 한다.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "115de30e-b5f5-489f-bbdb-788f21343200"
+        }
+      ],
+      "createdAt": "2026-10-30T08:44:16.540Z",
+      "updatedAt": "2026-10-30T08:44:16.540Z",
+      "relatedFiles": [
+        {
+          "path": "components/common/empty-state.tsx",
+          "type": "CREATE",
+          "description": "빈 상태 컴포넌트"
+        },
+        {
+          "path": "components/common/error-message.tsx",
+          "type": "CREATE",
+          "description": "에러 표시 컴포넌트"
+        },
+        {
+          "path": "app/page.tsx",
+          "type": "TO_MODIFY",
+          "description": "43, 45행 교체"
+        },
+        {
+          "path": "app/runs/page.tsx",
+          "type": "TO_MODIFY",
+          "description": "29, 31행 교체"
+        },
+        {
+          "path": "app/runs/[id]/page.tsx",
+          "type": "TO_MODIFY",
+          "description": "34행 교체"
+        }
+      ],
+      "implementationGuide": "1) shadcn MCP로 레지스트리 @shadcn에 빈 상태나 알림 관련 항목이 있는지 먼저 탐색하고 쓸지 판단한다(registries 인자에 @shadcn 지정). 2) 단순하면 직접 작성한다. 3) 세 페이지의 인라인 p 태그를 교체한다. 4) playwright로 360px, 라이트, 다크를 확인한다.",
+      "verificationCriteria": "세 페이지의 빈 상태와 에러 화면이 공통 컴포넌트로 표시되고 기존과 같은 문구가 나온다. 에러 표시에 접근성 역할이 있다. 360px에서 가로 스크롤이 없고 라이트와 다크 모두 읽힌다. tsc, lint, build가 통과한다.",
+      "analysisResult": "Run Log의 Phase 2 UI 보완과 Phase 3 마무리. 담당 에이전트를 nextjs-developer(lib, 라우팅, 데이터)와 ui-markup-developer(components 마크업, 스타일, 시각 확인)로 나눈다. 기존 구조(app은 라우팅, components는 화면, lib는 로직)와 한국어 주석, 세미콜론, 큰따옴표 스타일을 따르고 components/ui는 직접 수정하지 않는다."
+    },
+    {
+      "id": "11dfc3eb-36c7-47cc-83d9-94cb0a4092d9",
+      "name": "P2-5 RunCard 시맨틱과 로딩 스켈레톤 정합",
+      "description": "RunCard의 시맨틱과 접근성을 보완하고 로딩 스켈레톤을 실제 카드와 맞춘다. (1) 거리, 시간, 페이스를 span 나열에서 dl, dt, dd로 바꾼다. (2) 카드 링크에 키보드 포커스 표시가 보이는지 확인하고 필요하면 focus-visible 스타일을 더한다. (3) hover:bg-muted/50이 라이트 모드에서 거의 구분되지 않는지 확인하고 필요하면 조정한다. (4) app/runs/loading.tsx의 자리표시 높이와 구조를 실제 카드(날짜, 제목, 거리·시간·페이스 줄)와 비슷하게 맞춘다. 목록의 ul, li 구조도 검토한다.",
+      "notes": "담당: ui-markup-developer. 표시 문자열(페이스 단위)은 P2-4 결과를 따른다. 목록의 ul, li 변경이 필요하면 app/runs/page.tsx의 마크업만 바꾸고 데이터 로직은 건드리지 않는다.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "ce7cc4e1-c176-4d85-b7c7-06dded955f2c"
+        }
+      ],
+      "createdAt": "2026-10-30T08:44:16.540Z",
+      "updatedAt": "2026-10-30T08:44:16.540Z",
+      "relatedFiles": [
+        {
+          "path": "components/runs/run-card.tsx",
+          "type": "TO_MODIFY",
+          "description": "dl 구조와 포커스, hover"
+        },
+        {
+          "path": "app/runs/loading.tsx",
+          "type": "TO_MODIFY",
+          "description": "스켈레톤 크기 정합"
+        },
+        {
+          "path": "app/runs/page.tsx",
+          "type": "OTHER",
+          "description": "ul, li 구조 검토"
+        }
+      ],
+      "implementationGuide": "1) components/ui/card의 구조를 읽고 RunCard 안쪽 마크업만 바꾼다. 2) 포커스와 hover는 playwright로 Tab 키와 hover 상태를 확인한다. 3) loading.tsx의 자리표시를 실제 카드 높이에 맞춘다(실제 렌더 높이를 evaluate로 재서 비교).",
+      "verificationCriteria": "거리, 시간, 페이스가 라벨과 값 짝으로 읽힌다. Tab 키로 카드에 포커스가 보이고 라이트와 다크에서 hover 상태가 구분된다. 로딩 자리표시와 실제 카드의 높이 차이가 눈에 띄지 않는다. 360px에서 가로 스크롤이 없고 tsc, lint, build가 통과한다.",
+      "analysisResult": "Run Log의 Phase 2 UI 보완과 Phase 3 마무리. 담당 에이전트를 nextjs-developer(lib, 라우팅, 데이터)와 ui-markup-developer(components 마크업, 스타일, 시각 확인)로 나눈다. 기존 구조(app은 라우팅, components는 화면, lib는 로직)와 한국어 주석, 세미콜론, 큰따옴표 스타일을 따르고 components/ui는 직접 수정하지 않는다."
     }
   ]
 }
