@@ -561,11 +561,11 @@
       "status": "pending",
       "dependencies": [
         {
-          "taskId": "058a237a-2188-4e7b-8b65-b93c3d6febe2"
+          "taskId": "03c7c9cc-8197-4e85-9346-af1ba0b28e79"
         }
       ],
       "createdAt": "2026-10-30T08:44:16.540Z",
-      "updatedAt": "2026-10-30T08:44:16.540Z",
+      "updatedAt": "2026-10-30T08:47:10.330Z",
       "relatedFiles": [
         {
           "path": "lib/notion/duration.ts",
