@@ -5,10 +5,10 @@
       "name": "개발 서버 중지 후 검증 명령 실행",
       "description": "3000 포트를 쓰는 개발 서버(node)를 중지한 뒤 npm run build, npx tsc --noEmit, npm run lint를 순서대로 실행한다. 개발 서버가 떠 있는 상태에서 build를 실행하면 .next 충돌로 500이 나므로 순서를 지킨다.",
       "notes": "값이 있는 .env.local 내용은 출력하지 않는다.",
-      "status": "in_progress",
+      "status": "completed",
       "dependencies": [],
       "createdAt": "2026-10-30T05:09:15.926Z",
-      "updatedAt": "2026-10-30T05:10:52.832Z",
+      "updatedAt": "2026-10-30T05:10:53.831Z",
       "relatedFiles": [
         {
           "path": "package.json",
@@ -21,7 +21,8 @@
       "implementationGuide": "1) netstat 또는 Get-NetTCPConnection으로 3000 포트 PID 확인 2) 프로세스 이름이 node인지 확인 후 중지 3) npm run build 4) npx tsc --noEmit 5) npm run lint. 각 명령의 종료 코드를 기록한다.",
       "verificationCriteria": "build, tsc, lint 세 명령의 종료 코드가 모두 0이다.",
       "analysisResult": "Run Log 저장소(run-log-web)의 ROADMAP Phase 1(골격: 환경 구조) 완료 확인과 남은 정리 작업. 기준 문서는 docs/ROADMAP.md Phase 1 섹션. 완료 기준은 PR 머지 여부, PRD 커밋 여부, env 파일 분리, build 통과 네 가지이다.",
-      "summary": "3000 포트 무사용 확인 후 npm run build, npx tsc --noEmit, npm run lint 실행. 종료 코드 모두 0."
+      "summary": "3000 포트 무사용 확인 후 npm run build, npx tsc --noEmit, npm run lint 실행. 종료 코드 모두 0.",
+      "completedAt": "2026-10-30T05:10:53.826Z"
     },
     {
       "id": "8839786e-c314-4a43-be20-b5a17fbabde1",
