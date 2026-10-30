@@ -32,7 +32,7 @@
       "status": "in_progress",
       "dependencies": [],
       "createdAt": "2026-10-30T05:09:15.926Z",
-      "updatedAt": "2026-10-30T05:13:05.602Z",
+      "updatedAt": "2026-10-30T05:14:08.138Z",
       "relatedFiles": [
         {
           "path": "CLAUDE.md",
@@ -51,7 +51,8 @@
       ],
       "implementationGuide": "1) find로 node_modules, .next, .git 제외 목록 생성 2) CLAUDE.md 구조 섹션의 경로 추출 3) shrimp-rules.md 2장의 경로 추출 4) 각 경로의 존재 여부를 확인하고 불일치를 표로 정리한다.",
       "verificationCriteria": "두 문서의 경로가 모두 실제 파일 또는 디렉터리와 일치한다.",
-      "analysisResult": "Run Log 저장소(run-log-web)의 ROADMAP Phase 1(골격: 환경 구조) 완료 확인과 남은 정리 작업. 기준 문서는 docs/ROADMAP.md Phase 1 섹션. 완료 기준은 PR 머지 여부, PRD 커밋 여부, env 파일 분리, build 통과 네 가지이다."
+      "analysisResult": "Run Log 저장소(run-log-web)의 ROADMAP Phase 1(골격: 환경 구조) 완료 확인과 남은 정리 작업. 기준 문서는 docs/ROADMAP.md Phase 1 섹션. 완료 기준은 PR 머지 여부, PRD 커밋 여부, env 파일 분리, build 통과 네 가지이다.",
+      "summary": "CLAUDE.md에 구조 (큰 그림) 섹션을 복원(22줄 추가, 미커밋). shrimp-rules.md 2장 경로와 CLAUDE.md 구조 섹션의 경로(lib/notion 8개 파일, lib/runs/load.ts, lib/api/response.ts, lib/errors.ts, components/runs)를 모두 확인해 존재함을 확인. lib/notion 파일 수는 8개로 정정."
     },
     {
       "id": "8f90fc3c-957f-43c4-84cf-e52ffb46358c",
