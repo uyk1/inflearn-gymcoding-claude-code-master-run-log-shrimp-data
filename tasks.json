@@ -1,3 +1,146 @@
 {
-  "tasks": []
+  "tasks": [
+    {
+      "id": "cba6aedb-0029-4251-b49f-ae3093e3cde6",
+      "name": "P2-1 NEXT_PUBLIC 미사용 및 API 키 번들 미노출 확인",
+      "description": "NOTION_API_KEY가 클라이언트 번들에 포함되지 않았는지 확인한다. 대상은 lib/notion/client.ts와 container.ts 및 이를 import하는 파일이다. NEXT_PUBLIC_ 접두사 사용 여부를 검색하고, Notion 모듈이 'use client' 파일에서 import되지 않는지 확인한다.",
+      "notes": "실제 키 값을 읽거나 출력하지 않는다. .env* 파일은 열지 않는다.",
+      "status": "pending",
+      "dependencies": [],
+      "createdAt": "2026-10-30T05:25:51.390Z",
+      "updatedAt": "2026-10-30T05:25:51.390Z",
+      "relatedFiles": [
+        {
+          "path": "lib/notion/client.ts",
+          "type": "REFERENCE",
+          "description": "Notion 클라이언트 래퍼",
+          "lineStart": 1,
+          "lineEnd": 100
+        },
+        {
+          "path": "lib/notion/container.ts",
+          "type": "REFERENCE",
+          "description": "의존성 조립",
+          "lineStart": 1,
+          "lineEnd": 100
+        }
+      ],
+      "implementationGuide": "1. Grep으로 NEXT_PUBLIC_ 및 NOTION_ 사용처 검색. 2. 'use client' 파일에서 lib/notion 또는 lib/runs import 여부 검색. 3. 필요 시 npm run build 후 .next/static에서 키 문자열 부재 확인. 키 값은 출력하지 않는다.",
+      "verificationCriteria": "NEXT_PUBLIC_ 접두사 미사용 확인, 클라이언트 컴포넌트에서 lib/notion import 없음, 빌드 산출물에 키 문자열 없음"
+    },
+    {
+      "id": "03c7c9cc-8197-4e85-9346-af1ba0b28e79",
+      "name": "P2-2 파싱 실패 행 제외와 서버 로그 확인",
+      "description": "소요시간 형식 오류나 필수값 누락 행이 목록에서 빠지고 서버 로그에 남는지 실제 노션 데이터 또는 대표 입력으로 확인한다.",
+      "notes": "노션 데이터를 수정하지 않는다. 테스트용 행 추가가 필요하면 사용자에게 확인한다.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "cba6aedb-0029-4251-b49f-ae3093e3cde6"
+        }
+      ],
+      "createdAt": "2026-10-30T05:25:51.390Z",
+      "updatedAt": "2026-10-30T05:25:51.390Z",
+      "relatedFiles": [
+        {
+          "path": "lib/notion/service.ts",
+          "type": "REFERENCE",
+          "description": "변환과 제외 로직",
+          "lineStart": 1,
+          "lineEnd": 200
+        },
+        {
+          "path": "lib/notion/duration.ts",
+          "type": "REFERENCE",
+          "description": "소요시간 파싱",
+          "lineStart": 1,
+          "lineEnd": 100
+        }
+      ],
+      "implementationGuide": "1. lib/notion/service.ts와 mapper.ts의 실패 처리 경로를 읽는다. 2. npm run dev 후 /runs 페이지를 열어 제외 여부를 확인한다. 3. 터미널 로그에 실패 행 기록이 남는지 확인한다. 4. 미확인이면 로그 누락을 보고한다.",
+      "verificationCriteria": "형식 오류 행이 목록에서 제외됨, 서버 로그에 행 식별 정보가 남음, 정상 행은 영향 없음"
+    },
+    {
+      "id": "280d346c-9fc5-49af-9cfc-38ecf635daf8",
+      "name": "P3-1 메모와 장소가 빈 기록의 표시 확인",
+      "description": "메모나 장소가 비어 있는 기록의 목록과 상세 화면이 깨지지 않고 표시되는지 확인한다.",
+      "notes": "Playwright MCP로 화면 확인 가능.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "03c7c9cc-8197-4e85-9346-af1ba0b28e79"
+        }
+      ],
+      "createdAt": "2026-10-30T05:25:51.390Z",
+      "updatedAt": "2026-10-30T05:25:51.390Z",
+      "relatedFiles": [
+        {
+          "path": "components/runs",
+          "type": "REFERENCE",
+          "description": "기록 표시 컴포넌트",
+          "lineStart": 1,
+          "lineEnd": 200
+        },
+        {
+          "path": "app/runs/[id]/page.tsx",
+          "type": "REFERENCE",
+          "description": "상세 화면",
+          "lineStart": 1,
+          "lineEnd": 200
+        }
+      ],
+      "implementationGuide": "1. 노션에 빈 메모 또는 장소 기록이 있는지 확인한다. 없으면 노션에 테스트 행을 추가하도록 사용자에게 요청한다. 2. npm run dev 후 목록과 상세 화면을 연다. 3. 빈 필드가 '-' 또는 생략으로 처리되는지 확인한다.",
+      "verificationCriteria": "빈 메모와 장소 기록에서 런타임 오류 없이 표시되고 빈 필드가 깨지지 않음"
+    },
+    {
+      "id": "40a9f5c0-d4ea-4670-89ab-ddff68e0f223",
+      "name": "P3-2 날짜 없는 기록의 목록 제외 확인",
+      "description": "날짜가 비어 있는 노션 행이 목록에서 제외되고 로그가 남는지 확인한다.",
+      "notes": "P2-2와 중복되는 부분은 함께 확인한다.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "280d346c-9fc5-49af-9cfc-38ecf635daf8"
+        }
+      ],
+      "createdAt": "2026-10-30T05:25:51.390Z",
+      "updatedAt": "2026-10-30T05:25:51.390Z",
+      "relatedFiles": [
+        {
+          "path": "lib/notion/mapper.ts",
+          "type": "REFERENCE",
+          "description": "날짜 필드 매핑",
+          "lineStart": 1,
+          "lineEnd": 200
+        }
+      ],
+      "implementationGuide": "1. 날짜 없는 행이 노션에 있는지 확인한다. 없으면 사용자에게 테스트 행 추가를 요청한다. 2. /runs 목록에서 해당 행이 없는지 확인한다. 3. 서버 로그를 확인한다.",
+      "verificationCriteria": "날짜 없는 행이 목록에 나타나지 않음, 정렬과 필터가 정상 동작함"
+    },
+    {
+      "id": "ae1b4252-2852-4446-9c65-5aaf4b672292",
+      "name": "P3-3 노션 신규 기록의 새로고침 반영 확인",
+      "description": "노션에 기록을 추가한 뒤 새로고침하면 목록에 반영되는지 확인한다. ISR revalidate=300 때문에 최대 5분 지연될 수 있으므로 그 조건을 함께 확인한다.",
+      "notes": "노션 데이터 변경은 사용자 승인 후 진행한다.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "40a9f5c0-d4ea-4670-89ab-ddff68e0f223"
+        }
+      ],
+      "createdAt": "2026-10-30T05:25:51.390Z",
+      "updatedAt": "2026-10-30T05:25:51.390Z",
+      "relatedFiles": [
+        {
+          "path": "app/runs/page.tsx",
+          "type": "REFERENCE",
+          "description": "목록 페이지와 revalidate 설정",
+          "lineStart": 1,
+          "lineEnd": 100
+        }
+      ],
+      "implementationGuide": "1. 노션에 테스트 기록 1건을 추가한다(사용자 승인 필요). 2. 새로고침 후 목록을 확인한다. 3. 반영이 안 되면 revalidate 대기 시간 후 다시 확인한다. 4. 결과를 기록한다.",
+      "verificationCriteria": "신규 기록이 revalidate 주기 안에 목록에 나타남"
+    }
+  ]
 }
