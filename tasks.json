@@ -504,6 +504,50 @@
       ],
       "implementationGuide": "1. P5-4와 P5-5에서 나온 문제 목록을 정리한다. 2. 각 문제를 최소 수정으로 고친다. 3. npx tsc --noEmit, npm run lint, npm run build를 통과시킨다.",
       "verificationCriteria": "실기기 문제 없음, tsc와 lint와 build 통과"
+    },
+    {
+      "id": "058a237a-2188-4e7b-8b65-b93c3d6febe2",
+      "name": "P3-4 라우팅 골격 보완 (not-found, error, loading)",
+      "description": "app/ 아래에 빠져 있는 Next.js 특수 파일 3개를 추가한다. (1) app/not-found.tsx: 없는 주소와 notFound() 호출 시 보여줄 한국어 404 화면. 홈과 기록 목록으로 가는 링크를 포함한다. (2) app/error.tsx: 렌더링 중 처리되지 않은 예외를 잡는 에러 경계. 반드시 파일 맨 위에 \"use client\"를 쓰고 props는 { error, reset }을 받는다. 화면에는 에러 내부 메시지나 스택을 노출하지 않고 한국어 안내문과 다시 시도 버튼(reset 호출)만 보여준다. (3) app/runs/loading.tsx: 목록이 동적 페이지라 노션 응답을 기다리는 동안 보여줄 로딩 UI. 기존 디자인 토큰(text-muted-foreground 등)과 components/ui의 기존 컴포넌트만 사용한다. components/ui는 수정하지 않는다.",
+      "notes": "담당 에이전트는 nextjs-developer를 쓴다. 완료 후 code-reviewer로 리뷰한다. P4-1 전에 끝내는 것을 권장하며, 순서 의존은 사용자와 협의해 조정한다. 이 태스크를 추가하면 shrimp_data 서브모듈에 커밋이 생기므로 포인터 PR이 별도로 필요하다.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "ae1b4252-2852-4446-9c65-5aaf4b672292"
+        }
+      ],
+      "createdAt": "2026-10-30T07:51:36.434Z",
+      "updatedAt": "2026-10-30T07:51:36.434Z",
+      "relatedFiles": [
+        {
+          "path": "app/not-found.tsx",
+          "type": "CREATE",
+          "description": "전역 404 화면"
+        },
+        {
+          "path": "app/error.tsx",
+          "type": "CREATE",
+          "description": "클라이언트 에러 경계"
+        },
+        {
+          "path": "app/runs/loading.tsx",
+          "type": "CREATE",
+          "description": "기록 목록 로딩 UI"
+        },
+        {
+          "path": "app/runs/page.tsx",
+          "type": "REFERENCE",
+          "description": "기존 마크업 스타일 참고"
+        },
+        {
+          "path": "components/ui/button.tsx",
+          "type": "DEPENDENCY",
+          "description": "buttonVariants, Button 사용"
+        }
+      ],
+      "implementationGuide": "1. CLAUDE.md와 shrimp-rules.md를 읽고 기존 app/page.tsx, app/runs/page.tsx의 마크업 스타일(space-y, text-2xl font-bold tracking-tight)을 따른다.\n2. not-found.tsx는 서버 컴포넌트로 만들고 next/link와 buttonVariants(components/ui/button)로 홈(/)과 /runs 링크를 둔다.\n3. error.tsx는 \"use client\"를 넣고 export default function Error({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) 형태로 만든다. error.message는 화면에 쓰지 않는다. useEffect로 console.error(error)만 남긴다.\n4. runs/loading.tsx는 서버 컴포넌트로 제목 영역과 카드 자리표시(animate-pulse div 몇 개)를 보여준다. 모바일(360px)에서 가로 스크롤이 생기지 않게 grid-cols-1 기준으로 만든다.\n5. npx tsc --noEmit, npm run lint, npm run build 순서로 검증한다. 개발 서버가 떠 있으면 build는 하지 않는다.",
+      "verificationCriteria": "1) 존재하지 않는 주소(/nope)와 없는 기록 id(/runs/does-not-exist)에서 한국어 404 화면과 홈, 목록 링크가 보인다. 2) 의도적으로 던진 예외 상황에서 error.tsx 화면이 나오고 에러 내부 메시지가 화면에 노출되지 않으며 다시 시도 버튼이 동작한다(확인 후 임시 코드는 제거). 3) /runs 이동 시 로딩 UI가 보이다가 목록으로 바뀐다. 4) 360px 폭에서 가로 스크롤이 없다. 5) npx tsc --noEmit, npm run lint, npm run build가 통과한다.",
+      "analysisResult": "Run Log(Next.js 15.5 App Router)의 라우팅 골격을 보완한다. 화면(홈, 목록, 상세)은 이미 구현됐지만 not-found, error, loading 같은 특수 파일이 없어 Next 기본 화면이 노출된다. 기존 구조 원칙(app/은 라우팅 전용, 컴포넌트는 components/, 로직은 lib/)과 한국어 주석, 세미콜론, 큰따옴표 스타일을 따른다."
     }
   ]
 }
