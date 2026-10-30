@@ -303,7 +303,7 @@
       "id": "e63c0309-978e-4e59-8210-11faff702cd9",
       "name": "P4-6 apple-touch-icon metadata와 설치 안내 문구",
       "description": "layout metadata에 apple-touch-icon 링크를 연결하고, 안드로이드는 설치 버튼, 아이폰은 공유 후 홈 화면에 추가 안내 문구를 표시한다. 설치 버튼은 beforeinstallprompt 이벤트를 사용하는 클라이언트 컴포넌트로 만든다.",
-      "notes": "ThemeProvider와 suppressHydrationWarning 유지. 테마 의존 UI는 mounted 가드를 쓴다.",
+      "notes": "ThemeProvider와 suppressHydrationWarning 유지. 테마 의존 UI는 mounted 가드를 쓴다. 담당 분리: app/layout.tsx의 metadata와 설치 버튼의 이벤트 로직(beforeinstallprompt, 기기 구분)은 nextjs-developer. 안내 문구와 버튼의 마크업, 스타일, 라이트·다크, 360px 확인은 ui-markup-developer. 아이폰 안내 문구는 PRD 6장의 공유 후 홈 화면에 추가 표현을 따른다.",
       "status": "pending",
       "dependencies": [
         {
@@ -311,7 +311,7 @@
         }
       ],
       "createdAt": "2026-10-30T05:26:08.528Z",
-      "updatedAt": "2026-10-30T05:26:08.528Z",
+      "updatedAt": "2026-10-30T08:45:01.437Z",
       "relatedFiles": [
         {
           "path": "app/layout.tsx",
