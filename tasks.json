@@ -141,6 +141,159 @@
       ],
       "implementationGuide": "1. 노션에 테스트 기록 1건을 추가한다(사용자 승인 필요). 2. 새로고침 후 목록을 확인한다. 3. 반영이 안 되면 revalidate 대기 시간 후 다시 확인한다. 4. 결과를 기록한다.",
       "verificationCriteria": "신규 기록이 revalidate 주기 안에 목록에 나타남"
+    },
+    {
+      "id": "a73a379c-15dd-46e8-bb61-7db4e6c92510",
+      "name": "P4-1 recharts 설치와 shadcn chart 호환 확인",
+      "description": "recharts를 설치하고 shadcn chart 컴포넌트와 호환되는지 확인한다. 설치는 npm install recharts로 하며, shadcn chart 추가는 npx shadcn@latest add chart로 한다. components/ui 직접 수정은 하지 않는다.",
+      "notes": "package.json과 package-lock.json은 훅으로 편집이 차단될 수 있으므로 npm 명령으로만 변경한다.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "ae1b4252-2852-4446-9c65-5aaf4b672292"
+        }
+      ],
+      "createdAt": "2026-10-30T05:26:02.252Z",
+      "updatedAt": "2026-10-30T05:26:02.252Z",
+      "relatedFiles": [
+        {
+          "path": "package.json",
+          "type": "TO_MODIFY",
+          "description": "recharts 의존성 추가",
+          "lineStart": 1,
+          "lineEnd": 100
+        },
+        {
+          "path": "components/ui",
+          "type": "CREATE",
+          "description": "shadcn chart 생성물",
+          "lineStart": 1,
+          "lineEnd": 100
+        }
+      ],
+      "implementationGuide": "1. context7로 recharts와 shadcn chart 문서를 확인한다. 2. npm install recharts를 실행한다. 3. npx shadcn@latest add chart를 실행한다. 4. 생성된 components/ui/chart.tsx가 빌드되는지 확인한다.",
+      "verificationCriteria": "recharts 설치 완료, npx tsc --noEmit 통과, chart 컴포넌트 생성 확인"
+    },
+    {
+      "id": "02ee111e-6683-499a-b52c-24dc65c9b669",
+      "name": "P4-2 주간·월간 집계 함수 구현",
+      "description": "기존 Notion 파싱 결과(lib/runs/load.ts 또는 lib/notion/service.ts)를 재사용해 주간·월간 총 거리, 총 시간, 평균 페이스를 계산하는 서비스 함수를 만든다. 페이스 계산은 lib/notion/duration.ts의 기존 로직을 재사용한다. 새 Notion 호출 경로는 만들지 않는다.",
+      "notes": "응답 형식은 기존 공통 응답 형식을 따른다.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "a73a379c-15dd-46e8-bb61-7db4e6c92510"
+        }
+      ],
+      "createdAt": "2026-10-30T05:26:02.252Z",
+      "updatedAt": "2026-10-30T05:26:02.252Z",
+      "relatedFiles": [
+        {
+          "path": "lib/runs/load.ts",
+          "type": "REFERENCE",
+          "description": "기록 로드 함수",
+          "lineStart": 1,
+          "lineEnd": 100
+        },
+        {
+          "path": "lib/notion/duration.ts",
+          "type": "REFERENCE",
+          "description": "페이스 계산 재사용",
+          "lineStart": 1,
+          "lineEnd": 100
+        }
+      ],
+      "implementationGuide": "1. 입력: 정규화된 기록 배열. 2. 출력: 기간별 집계 DTO(거리 합, 시간 합 초, 평균 페이스 mm:ss 또는 -). 3. 주 단위는 월요일 시작 기준으로 정한다. 4. 거리 0 기록은 페이스 계산에서 제외한다. 5. 집계 로직은 lib/runs 아래에 둔다.",
+      "verificationCriteria": "대표 입력(정상, 거리 0, 빈 기간)에 대해 기대값과 일치, tsc 통과"
+    },
+    {
+      "id": "2c32bdfa-eaa3-4760-a936-34e15fc93429",
+      "name": "P4-3 통계 화면과 차트 구현",
+      "description": "app/stats 페이지에 주간·월간 거리와 평균 페이스 차트를 만든다. 차트 부분만 'use client' 클라이언트 컴포넌트로 분리하고, 데이터 로딩은 서버 컴포넌트에서 한다. revalidate 값은 목록과 맞춘다.",
+      "notes": "Tailwind CSS 4 설정은 app/globals.css에 있다.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "02ee111e-6683-499a-b52c-24dc65c9b669"
+        }
+      ],
+      "createdAt": "2026-10-30T05:26:02.252Z",
+      "updatedAt": "2026-10-30T05:26:02.252Z",
+      "relatedFiles": [
+        {
+          "path": "app/stats/page.tsx",
+          "type": "CREATE",
+          "description": "통계 페이지",
+          "lineStart": 1,
+          "lineEnd": 100
+        },
+        {
+          "path": "components/stats",
+          "type": "CREATE",
+          "description": "차트 클라이언트 컴포넌트",
+          "lineStart": 1,
+          "lineEnd": 100
+        }
+      ],
+      "implementationGuide": "1. app/stats/page.tsx를 서버 컴포넌트로 작성한다. 2. components/stats 아래에 recharts 기반 클라이언트 차트를 둔다. 3. 세미콜론과 큰따옴표, 2칸 들여쓰기, cn 사용을 따른다. 4. 모바일 폭에서 가로 스크롤이 없도록 반응형 컨테이너를 쓴다.",
+      "verificationCriteria": "차트가 렌더링되고 빌드 통과, 모바일 폭 가로 스크롤 없음, 'use client' 범위가 차트로 한정됨"
+    },
+    {
+      "id": "188e6b7e-cbf0-406c-ab7b-d09d3621da0b",
+      "name": "P4-4 통계 수동 계산 대조와 다크모드 확인",
+      "description": "통계 화면의 주간·월간 거리와 평균 페이스가 샘플 기록의 수동 계산 값과 일치하는지 최소 1건 대조하고, 차트가 라이트·다크 모드 모두에서 읽히는지 확인한다.",
+      "notes": "다크모드는 ThemeProvider와 theme-toggle 기준으로 전환한다.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "2c32bdfa-eaa3-4760-a936-34e15fc93429"
+        }
+      ],
+      "createdAt": "2026-10-30T05:26:02.252Z",
+      "updatedAt": "2026-10-30T05:26:02.252Z",
+      "relatedFiles": [
+        {
+          "path": "components/theme-toggle.tsx",
+          "type": "REFERENCE",
+          "description": "테마 전환 기준",
+          "lineStart": 1,
+          "lineEnd": 100
+        }
+      ],
+      "implementationGuide": "1. 샘플 기록 1건을 골라 수동 계산 값을 낸다. 2. 통계 화면 값과 비교한다. 3. Playwright로 라이트·다크 모드 스크린샷을 찍어 확인한다.",
+      "verificationCriteria": "수동 계산과 화면 값 일치, 라이트·다크 모두 차트 라벨과 축이 읽힘"
+    },
+    {
+      "id": "db8b803c-3e5f-46fe-89bc-a998ba747905",
+      "name": "P4-5 PWA manifest와 아이콘 세트 준비",
+      "description": "app/manifest.ts를 작성한다(앱 이름, display standalone, 192와 512 PNG 아이콘). 아이콘 파일은 public 아래에 둔다.",
+      "notes": "service worker는 MVP 범위 밖이다.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "188e6b7e-cbf0-406c-ab7b-d09d3621da0b"
+        }
+      ],
+      "createdAt": "2026-10-30T05:26:02.252Z",
+      "updatedAt": "2026-10-30T05:26:02.252Z",
+      "relatedFiles": [
+        {
+          "path": "app/manifest.ts",
+          "type": "CREATE",
+          "description": "웹 앱 매니페스트",
+          "lineStart": 1,
+          "lineEnd": 100
+        },
+        {
+          "path": "public",
+          "type": "CREATE",
+          "description": "아이콘 PNG 저장 위치",
+          "lineStart": 1,
+          "lineEnd": 10
+        }
+      ],
+      "implementationGuide": "1. app/manifest.ts에서 MetadataRoute.Manifest를 반환한다. 2. name, short_name, start_url, display standalone, theme_color를 설정한다. 3. icons에 192x192와 512x512 PNG를 넣는다. 4. 아이콘 이미지는 사용자가 제공하거나 생성 후 확인받는다.",
+      "verificationCriteria": "/manifest.webmanifest 응답에 name, display standalone, 192와 512 아이콘이 있음"
     }
   ]
 }
