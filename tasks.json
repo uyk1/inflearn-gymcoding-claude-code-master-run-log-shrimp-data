@@ -29,10 +29,10 @@
       "name": "디렉터리 구조 대조",
       "description": "실제 파일 목록을 find로 나열하고 CLAUDE.md의 구조 섹션과 shrimp-rules.md 2장 표의 경로가 모두 존재하는지 대조한다. 파일이 없는 경로나 목록에 없는 주요 경로가 있으면 기록한다.",
       "notes": "lib/notion 파일 수는 8개다. 9개로 적힌 기록은 틀린 것이다.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [],
       "createdAt": "2026-10-30T05:09:15.926Z",
-      "updatedAt": "2026-10-30T05:09:15.926Z",
+      "updatedAt": "2026-10-30T05:13:05.602Z",
       "relatedFiles": [
         {
           "path": "CLAUDE.md",
