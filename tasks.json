@@ -481,7 +481,7 @@
       "id": "1d96fb9e-6088-44ec-89ee-57f4d0f0bc59",
       "name": "P5-6 실기기 발견 문제 수정과 완료 기록",
       "description": "실기기 확인에서 발견된 문제를 수정하고, 완료 기준을 모두 충족했는지 점검한다. ROADMAP 상태 갱신은 사용자 승인 후 별도로 한다.",
-      "notes": "ROADMAP 갱신과 커밋은 사용자 결정 사항이다.",
+      "notes": "자동 push 동작 테스트용 노트. post-commit 훅으로 서브모듈 저장소에 push되는지 확인한다.",
       "status": "pending",
       "dependencies": [
         {
@@ -492,7 +492,7 @@
         }
       ],
       "createdAt": "2026-10-30T05:26:19.187Z",
-      "updatedAt": "2026-10-30T05:26:19.187Z",
+      "updatedAt": "2026-10-30T05:49:28.252Z",
       "relatedFiles": [
         {
           "path": "docs/ROADMAP.md",
