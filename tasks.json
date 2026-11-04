@@ -106,7 +106,7 @@
       "name": "P3-2 날짜 없는 기록의 목록 제외 확인",
       "description": "날짜가 비어 있는 노션 행이 목록에서 제외되고 로그가 남는지 확인한다.",
       "notes": "P2-2와 중복되는 부분은 함께 확인한다.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "280d346c-9fc5-49af-9cfc-38ecf635daf8"
@@ -116,7 +116,7 @@
         }
       ],
       "createdAt": "2026-10-30T05:25:51.390Z",
-      "updatedAt": "2026-11-04T08:01:14.100Z",
+      "updatedAt": "2026-11-04T08:10:15.140Z",
       "relatedFiles": [
         {
           "path": "lib/notion/mapper.ts",
