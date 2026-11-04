@@ -139,14 +139,14 @@
       "name": "P3-3 노션 신규 기록의 새로고침 반영 확인",
       "description": "노션에 기록을 추가한 뒤 새로고침하면 목록에 반영되는지 확인한다. ISR revalidate=300 때문에 최대 5분 지연될 수 있으므로 그 조건을 함께 확인한다.",
       "notes": "노션 데이터 변경은 사용자 승인 후 진행한다.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "40a9f5c0-d4ea-4670-89ab-ddff68e0f223"
         }
       ],
       "createdAt": "2026-10-30T05:25:51.390Z",
-      "updatedAt": "2026-10-30T05:25:51.390Z",
+      "updatedAt": "2026-11-04T08:26:13.341Z",
       "relatedFiles": [
         {
           "path": "app/runs/page.tsx",
