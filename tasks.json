@@ -1094,7 +1094,7 @@
         }
       ],
       "createdAt": "2026-11-04T08:01:05.851Z",
-      "updatedAt": "2026-11-04T08:01:17.805Z",
+      "updatedAt": "2026-11-04T08:05:02.990Z",
       "relatedFiles": [
         {
           "path": "lib/runs/load.ts",
@@ -1113,7 +1113,8 @@
         }
       ],
       "implementationGuide": "1) load.ts 상단에 const DEFAULT_REVALIDATE_SECONDS = 300; 과 함수 readRevalidateSeconds(): process.env.RUN_RECORDS_REVALIDATE_SECONDS를 Number로 변환해 Number.isInteger이고 1 이상이면 그 값, 아니면 300을 반환한다. 2) unstable_cache 옵션의 revalidate에 readRevalidateSeconds()를 사용한다. 3) .env.example에 주석과 함께 RUN_RECORDS_REVALIDATE_SECONDS 항목을 추가한다(기본 300, 테스트 때만 낮춤, 운영에는 설정하지 않음). 4) CLAUDE.md 구조 섹션의 캐시 문단에 한 줄 추가. 5) 합성 검증: 변수 없음, 정상값(10), 0, 음수, 소수, 문자열, 빈 문자열에서 반환값 확인.",
-      "verificationCriteria": "(1) tsc와 lint, 빌드 통과. (2) 합성 검증에서 변수 없음, 0, 음수, 소수, 문자열, 빈 문자열은 300, 정상 양의 정수는 그 값이 된다. (3) 변수를 10으로 둔 프로덕션 서버에서 노션 TEST 행 생성 후 목록 반영까지 걸리는 시간이 5분보다 확연히 짧다(약 10초 이내 만료). (4) 변수 없이 시작한 서버는 기존처럼 300초 캐시다(코드상 기본값 확인). (5)홈과 상세의 revalidate 300은 그대로다. (6) TEST 행은 휴지통으로 보내고 in_trash로 확인한다. (7) code-reviewer 리뷰 통과."
+      "verificationCriteria": "(1) tsc와 lint, 빌드 통과. (2) 합성 검증에서 변수 없음, 0, 음수, 소수, 문자열, 빈 문자열은 300, 정상 양의 정수는 그 값이 된다. (3) 변수를 10으로 둔 프로덕션 서버에서 노션 TEST 행 생성 후 목록 반영까지 걸리는 시간이 5분보다 확연히 짧다(약 10초 이내 만료). (4) 변수 없이 시작한 서버는 기존처럼 300초 캐시다(코드상 기본값 확인). (5)홈과 상세의 revalidate 300은 그대로다. (6) TEST 행은 휴지통으로 보내고 in_trash로 확인한다. (7) code-reviewer 리뷰 통과.",
+      "summary": "목록 캐시 기간을 환경 변수 RUN_RECORDS_REVALIDATE_SECONDS로 조절할 수 있게 했다. lib/runs/load.ts의 readRevalidateSeconds가 1 이상의 정수면 그 값을, 없으면 300을 쓰고, 값이 있는데 올바르지 않으면 console.warn으로 알리고 300을 쓴다. 홈과 상세의 export const revalidate = 300은 정적 분석 값이라 건드리지 않았다. .env.example에 주석 처리된 설명을 추가하고 CLAUDE.md와 app/runs/page.tsx 주석을 맞췄다. 검증: tsc, lint, 빌드 통과. 합성 12개 항목(없음, 빈 문자열, 공백, 10, 1, 0, -5, 2.5, abc, 10abc, NaN, Infinity) 통과, 경고는 올바르지 않은 값 7개에서만 나오고 없음과 빈 문자열과 공백에서는 나오지 않는다. 실제 확인: 변수 없이 시작한 서버로 300초 캐시 항목을 만든 뒤 변수 10으로 서버를 다시 시작하고 노션 TEST 행을 만들었더니 목록 반영까지 3초 걸렸다(이전 약 4분). 디스크에 남은 기존 캐시가 새 값 적용을 막지 않았다. TEST 행은 휴지통으로 보내 in_trash를 확인했고 남은 행은 3건이다. code-reviewer는 차단 이슈 없음, 권장 1건(잘못된 값 경고)과 문구 보정 2건을 반영했다. 한계: 변수 없는 서버가 300초를 쓰는지는 코드와 합성 검증으로만 확인했고 실제 5분 대기 대조는 하지 않았다. 1e2나 0x10 같은 표기가 정수로 받아들여지는 것은 해롭지 않아 그대로 두었다. Vercel 운영 환경 동작은 배포 전이라 미확인."
     }
   ]
 }
