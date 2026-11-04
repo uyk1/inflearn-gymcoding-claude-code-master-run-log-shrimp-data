@@ -534,13 +534,10 @@
       "dependencies": [
         {
           "taskId": "ae1b4252-2852-4446-9c65-5aaf4b672292"
-        },
-        {
-          "taskId": "8975f858-092c-4708-8f1f-30299b50b234"
         }
       ],
       "createdAt": "2026-10-30T07:51:36.434Z",
-      "updatedAt": "2026-11-04T08:29:51.320Z",
+      "updatedAt": "2026-11-04T08:30:14.750Z",
       "relatedFiles": [
         {
           "path": "app/not-found.tsx",
