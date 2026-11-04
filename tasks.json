@@ -1180,14 +1180,14 @@
       "name": "P3-8 노션 캐시 기본 기간을 60초로 단축",
       "description": "기본 캐시 기간이 300초(5분)라 노션에 기록을 넣고 앱을 열었을 때 안 보이는 시간이 길다(P3-3 측정으로 확인). 사용자가 A 방식(60초 단축)을 선택했다. 변경: (1) app/page.tsx와 app/runs/[id]/page.tsx의 export const revalidate = 300을 60으로 바꾼다(Next가 정적으로 읽는 값이라 숫자 리터럴이어야 한다). app/runs/page.tsx의 revalidate는 동적 페이지라 효과가 없지만 일관성을 위해 60으로 맞추고 주석을 정확히 한다. (2) lib/runs/load.ts의 DEFAULT_REVALIDATE_SECONDS를 60으로 바꾸고 주석과 경고 로그 문구의 기본값 표기를 함께 맞춘다(RUN_RECORDS_REVALIDATE_SECONDS 의미는 그대로: 테스트 때 더 줄이는 용도). 캐시 키 [run-records, v2]는 값 형태가 같으므로 그대로 둔다. (3) 문서의 300초와 5분 표기를 찾아 맞춘다: .env.example 설명, CLAUDE.md의 노션 호출 줄이는 방식 줄, shrimp-rules.md, docs/PRD.md 8장(수치가 있으면)과 6장. 사용자가 단축 방향을 승인했으므로 숫자 보정 범위만 수정하고 요구사항 문장은 바꾸지 않는다. docs/ROADMAP.md는 R-1(/docs:update-roadmap)에서 승인 후 반영하므로 이 태스크에서 수정하지 않는다. .claude/agents/*.md에 revalidate 300 안내가 있으면 같이 맞춘다. 이중 구조(홈이 ISR 안에서 목록 캐시를 또 읽는 것) 정리는 이번 범위가 아니며 P5-1에서 다룬다.",
       "notes": "P3-3 측정(기본 300초 기준)이 끝난 뒤에 빌드와 서버 확인을 한다(측정 중 빌드 금지). .env.local은 열지 않는다. 노션 쓰기는 사용자 확인 후 TEST- 행으로만 하고 끝나면 휴지통으로 보낸다. Vercel 배포 시에도 이 값이 기본이며 환경 변수는 설정하지 않는다. ROADMAP 반영은 R-1에서 한다.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "40a9f5c0-d4ea-4670-89ab-ddff68e0f223"
         }
       ],
       "createdAt": "2026-11-04T08:29:07.710Z",
-      "updatedAt": "2026-11-04T08:30:05.058Z",
+      "updatedAt": "2026-11-04T08:30:21.342Z",
       "relatedFiles": [
         {
           "path": "app/page.tsx",
