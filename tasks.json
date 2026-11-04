@@ -857,14 +857,14 @@
       "name": "P2-8 페이스를 숫자로 다루도록 구조 개선",
       "description": "페이스를 문자열이 아니라 숫자 또는 null로 다루도록 바꿔 '-' 문자열 비교 결합을 없앤다. (1) lib/notion/duration.ts의 formatPace를 calcPaceSecondsPerKm(totalSeconds, distanceKm): number | null로 바꾼다. 거리가 0 이하이면 null, 그 외에는 Math.round(totalSeconds / distanceKm)로 기존 반올림 기준을 유지한다. (2) formatPaceLabel을 formatPaceLabel(paceSecondsPerKm: number | null): string으로 바꾼다. null이면 '-', 아니면 m:ss 형식에 '/km'를 붙인다. 이 함수 한 곳에만 '-' 문자열이 남는다. (3) lib/notion/dto.ts의 paceText: string을 paceSecondsPerKm: number | null로 바꾸고 lib/notion/mapper.ts가 calcPaceSecondsPerKm을 쓰게 한다. (4) components/runs/run-card.tsx와 app/runs/[id]/page.tsx는 formatPaceLabel(record.paceSecondsPerKm)을 호출한다. 화면에 보이는 결과는 지금과 같아야 한다.",
       "notes": "담당: nextjs-developer. 이미 머지된 P2-4(formatPaceLabel)의 설계를 고치는 것이며 동작 결과는 같아야 한다. P2-5가 run-card.tsx를 먼저 수정하므로 그 뒤에 진행한다. 거리 0 행의 실제 화면 확인에는 노션 TEST 행이 필요하므로 사용자에게 먼저 확인하고, 하지 않으면 함수 직접 호출과 소스 추적까지만 하고 화면 미확인으로 보고한다. 개발 서버가 떠 있으면 build를 하지 않는다. 노션 쓰기는 사용자 확인 없이 하지 않는다.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "fe0f6557-db14-4135-a949-0428e5cbd260"
         }
       ],
       "createdAt": "2026-11-04T02:09:07.664Z",
-      "updatedAt": "2026-11-04T02:09:07.664Z",
+      "updatedAt": "2026-11-04T05:54:39.697Z",
       "relatedFiles": [
         {
           "path": "lib/notion/duration.ts",
