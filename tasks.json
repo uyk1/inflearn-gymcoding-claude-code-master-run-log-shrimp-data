@@ -1125,14 +1125,14 @@
       "name": "P2-11 노션 날짜를 한국 시간 기준 YYYY-MM-DD로 정규화",
       "description": "노션 날짜 필드에서 시간 포함을 켜면 값이 2026-11-08T07:00:00.000+09:00 형태로 오는데, lib/notion/mapper.ts가 이를 그대로 넘겨 (1) 기간 필터에서 기간의 마지막 날 기록이 빠지고(이번 주 일요일, 이번 달 말일) (2) 카드와 상세의 날짜가 2026.11.08T07:00:00.000+09:00 (undefined)로 깨진다(P3-2 실제 노션 TEST 행으로 확인됨). 변경 범위: (1) lib/notion/date.ts 신규: normalizeNotionDate(start: string): string | null. 규칙: YYYY-MM-DD 형식이고 실제 달력에 있는 날짜면 그대로 반환. 시간이 포함되고 오프셋(Z 또는 +hh:mm)이 있으면 그 순간을 한국 시간(Asia/Seoul)의 날짜로 바꿔 반환(예: 2026-11-07T23:00:00.000Z는 2026-11-08). 시간이 있지만 오프셋이 없으면 적힌 날짜 부분을 그대로 반환. 그 밖의 형식이나 존재하지 않는 날짜(2026-13-45)는 null. (2) lib/notion/dto.ts: ExcludedReason에 날짜 형식 오류 추가. (3) lib/notion/mapper.ts: readDate 결과를 normalizeNotionDate로 정규화하고, 원본이 있는데 정규화가 null이면 날짜 형식 오류, 원본이 없으면 날짜 없음을 사유로 한다. 로그 문구 형식은 기존과 같고 입력값은 로그에 넣지 않는다. (4) docs/PRD.md 4장 날짜 행에 시간이 포함돼도 한국 시간 기준 날짜로 처리한다는 문장을 사용자 승인된 범위에서 추가하고, CLAUDE.md의 날짜 설명(기간 필터와 날짜 계산 줄)과 shrimp-rules.md를 필요한 만큼 맞춘다. lib/runs/date.ts는 YYYY-MM-DD 전제를 그대로 쓰므로 수정하지 않는다.",
       "notes": "사용자가 이 방향(정규화를 별도 Phase 2 태스크로 등록)을 승인했다. P3-2에서 실제 노션 TEST 행으로 결함이 확인되었다. P3-2는 이 태스크 뒤에 시간 포함 행으로 이번 주 필터를 다시 확인한다. 노션 쓰기는 사용자 확인 후 TEST- 행으로만 하고 끝나면 휴지통으로 보낸다. 시간 포함 날짜 행은 시간대를 따로 주지 않고 start에 오프셋을 포함해 만든다(time_zone과 오프셋을 함께 주면 노션이 거부함). .env.local은 열지 않는다. 개발 서버는 띄우지 않고 프로덕션 서버(3100)를 변수 RUN_RECORDS_REVALIDATE_SECONDS=10으로 시작해 확인한 뒤 종료한다.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "7d85792f-56b3-452c-820b-a15cf082b31a"
         }
       ],
       "createdAt": "2026-11-04T08:13:40.797Z",
-      "updatedAt": "2026-11-04T08:13:40.797Z",
+      "updatedAt": "2026-11-04T08:13:54.703Z",
       "relatedFiles": [
         {
           "path": "lib/notion/date.ts",
