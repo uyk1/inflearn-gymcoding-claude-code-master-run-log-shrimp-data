@@ -532,14 +532,14 @@
       "name": "P3-4 라우팅 골격 보완 (not-found, error, loading)",
       "description": "app/ 아래에 빠져 있는 Next.js 특수 파일 3개를 추가한다. (1) app/not-found.tsx: 없는 주소와 notFound() 호출 시 보여줄 한국어 404 화면. 홈과 기록 목록으로 가는 링크를 포함한다. (2) app/error.tsx: 렌더링 중 처리되지 않은 예외를 잡는 에러 경계. 반드시 파일 맨 위에 \"use client\"를 쓰고 props는 { error, reset }을 받는다. 화면에는 에러 내부 메시지나 스택을 노출하지 않고 한국어 안내문과 다시 시도 버튼(reset 호출)만 보여준다. (3) app/runs/loading.tsx: 목록이 동적 페이지라 노션 응답을 기다리는 동안 보여줄 로딩 UI. 기존 디자인 토큰(text-muted-foreground 등)과 components/ui의 기존 컴포넌트만 사용한다. components/ui는 수정하지 않는다.",
       "notes": "담당 에이전트는 nextjs-developer를 쓴다. 완료 후 code-reviewer로 리뷰한다. P4-1 전에 끝내는 것을 권장하며, 순서 의존은 사용자와 협의해 조정한다. 이 태스크를 추가하면 shrimp_data 서브모듈에 커밋이 생기므로 포인터 PR이 별도로 필요하다.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "ae1b4252-2852-4446-9c65-5aaf4b672292"
         }
       ],
       "createdAt": "2026-10-30T07:51:36.434Z",
-      "updatedAt": "2026-11-04T08:30:14.750Z",
+      "updatedAt": "2026-11-04T23:40:27.871Z",
       "relatedFiles": [
         {
           "path": "app/not-found.tsx",
