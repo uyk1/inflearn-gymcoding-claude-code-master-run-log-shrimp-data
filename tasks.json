@@ -1032,14 +1032,14 @@
       "name": "P2-10 제외 행 정보를 데이터 계층에서 반환",
       "description": "노션 행이 필수값 누락이나 형식 오류로 제외될 때, 제외 사실과 사유를 로그에만 남기지 않고 호출부(화면)에 전달할 수 있도록 데이터 계층의 반환 형태를 바꾼다. 현재 lib/notion/mapper.ts의 toRunRecordDto는 제외 행에 null을 돌려주고 lib/notion/service.ts의 listRunRecords가 filter로 버려 정보가 사라진다. 변경 범위: (1) lib/notion/dto.ts: ExcludedRunDto { pageId: string; title: string | null; reasons: string[]; notionUrl: string } 추가. (2) lib/notion/mapper.ts: 변환 결과를 기록 또는 제외 정보로 구분해 돌려준다. reasons는 기존 로그 사유 문구(제목 없음, 날짜 없음, 거리 없음, 소요시간 없음, 소요시간 형식 오류)를 그대로 재사용하고, 사용자가 입력한 값 자체(소요시간, 메모 등)는 담지 않는다. console.warn 로그는 지금과 같은 문구로 유지한다. (3) lib/notion/service.ts: listRunRecords가 { records, excluded }를 반환한다. findRunRecord는 records만 사용하며 동작(404 포함)을 바꾸지 않는다. (4) lib/runs/load.ts: unstable_cache가 excluded까지 직렬화해 캐시하고, loadRunRecords가 { records, excluded, errorMessage }를 돌려준다. 호출부(app/page.tsx, app/runs/page.tsx)는 타입 오류가 나지 않게 최소한으로만 맞춘다(안내 화면은 P3-6). (5) docs/PRD.md 4장 계산 규칙에 제외된 행의 사유를 화면에서 확인할 수 있다는 한 줄을 사용자 승인된 범위에서 추가하고, CLAUDE.md의 구조 설명 중 mapper와 service 줄을 함께 맞춘다.",
       "notes": "화면은 만들지 않는다(P3-6). PRD와 CLAUDE.md 수정은 사용자가 승인한 범위(제외 사유를 화면에서 확인할 수 있다는 규칙 추가)만 한다. 사용자가 결정한 사항: 제외 행의 제목은 화면에 보여 준다. 노션 쓰기는 사용자 확인 후 TEST- 행으로만 하고 끝나면 휴지통으로 보낸다. .env* 파일은 열지 않는다. 개발 서버는 띄우지 않고 프로덕션 서버(3100)로 확인한 뒤 종료한다. next build는 서버가 떠 있지 않을 때만 실행한다.",
-      "status": "in_progress",
+      "status": "completed",
       "dependencies": [
         {
           "taskId": "9fcd3ee6-64bd-4d1e-ba34-ffb11e0bf075"
         }
       ],
       "createdAt": "2026-11-04T07:30:45.039Z",
-      "updatedAt": "2026-11-04T07:42:12.947Z",
+      "updatedAt": "2026-11-04T07:42:17.723Z",
       "relatedFiles": [
         {
           "path": "lib/notion/dto.ts",
@@ -1074,7 +1074,8 @@
       ],
       "implementationGuide": "1) mapper: 기존 reasons 배열을 만든 뒤 reasons가 비어 있지 않으면 console.warn 후 { kind: 'excluded', value: { pageId: page.id, title, reasons, notionUrl: page.url } } 를 반환하고, 정상이면 { kind: 'record', value: dto } 를 반환한다. title은 제목 속성이 비었으면 null. 2) service.listRunRecords: pages.map(toRunResult)로 records와 excluded를 분리해 { records, excluded } 반환. 3) load.ts 캐시 함수의 반환값을 위 객체로 바꾸고 loadRunRecords의 반환 타입에 excluded를 추가한다(노션 실패 시 빈 배열). 4) findRunRecord는 listRunRecords().records에서 id로 찾는다. 5) 검증용 스크립트는 scratchpad에서 lib 파일을 복사해 실행한다(기존 P2-9 방식).",
       "verificationCriteria": "(1) tsc와 lint 통과. (2) 합성 데이터로 mapper가 정상 행은 record, 제목 없음·날짜 없음·거리 없음·소요시간 없음·소요시간 형식 오류(12:5) 행은 excluded로 분류하고, 사유가 기존 로그 문구와 일치하며 입력값이 reasons에 없음을 확인한다. (3) 한 행에 사유가 여러 개면 reasons에 모두 담긴다. (4) 실제 노션 TEST 행(12:5, 날짜 없음)으로 프로덕션 서버에서 excluded가 채워지고 기존 3건 records는 그대로임을 확인한다(서버 로그 사유도 유지). (5) 상세 /runs/[id]는 제외 행 ID에 404, 정상 행은 그대로 열린다. (6) TEST 행은 휴지통으로 보내고 in_trash로 확인한다. (7) code-reviewer 리뷰 통과.",
-      "summary": "제외 행 정보를 데이터 계층에서 반환하도록 변경했다. dto.ts에 ExcludedReason, ExcludedRunDto, RunRecordListDto를 추가하고, mapper는 toRunMapResult(판별 유니온)로 정상 기록 또는 제외 정보를 돌려주며 console.warn 문구는 그대로 유지한다. service.listRunRecords는 { records, excluded }를 반환하고 findRunRecord는 records에서만 찾아 404 동작이 같다. load.ts는 excluded까지 캐시하며, 이전 형태의 디스크 캐시를 읽어 빌드가 실패한 문제를 캐시 키 버전(v2)으로 해결했다. 검증: tsc, lint, 빌드 통과. 합성 데이터 14개 항목(사유 5종, 복수 사유, 입력값 미노출, service 분리, 404, 502, 직렬화 왕복) 통과. 실제 노션 TEST 행(12:5, 날짜 없음)으로 records 3건 유지, excluded 2건과 정확한 사유, 서버 로그 유지, 제외 행 상세 404, 정상 행 상세 정상 표시를 확인하고 TEST 행은 휴지통으로 보낸 뒤 in_trash와 남은 3건을 확인했다. code-reviewer는 차단 이슈 없음, 권장 3건 중 ExcludedReason 유니온, PRD 문구 모순, shrimp-rules dto 표를 반영했고 공백 제목 처리는 P3-6 컴포넌트에서 trim 처리로 넘긴다. PRD 4장, CLAUDE.md, shrimp-rules.md를 승인 범위에서 동기화했다. 미확인: 제외 안내 화면(P3-6), 캐시 키 변경 후 배포 환경의 실제 동작."
+      "summary": "제외 행 정보를 데이터 계층에서 반환하도록 변경했다. dto.ts에 ExcludedReason, ExcludedRunDto, RunRecordListDto를 추가하고, mapper는 toRunMapResult(판별 유니온)로 정상 기록 또는 제외 정보를 돌려주며 console.warn 문구는 그대로 유지한다. service.listRunRecords는 { records, excluded }를 반환하고 findRunRecord는 records에서만 찾아 404 동작이 같다. load.ts는 excluded까지 캐시하며, 이전 형태의 디스크 캐시를 읽어 빌드가 실패한 문제를 캐시 키 버전(v2)으로 해결했다. 검증: tsc, lint, 빌드 통과. 합성 데이터 14개 항목(사유 5종, 복수 사유, 입력값 미노출, service 분리, 404, 502, 직렬화 왕복) 통과. 실제 노션 TEST 행(12:5, 날짜 없음)으로 records 3건 유지, excluded 2건과 정확한 사유, 서버 로그 유지, 제외 행 상세 404, 정상 행 상세 정상 표시를 확인하고 TEST 행은 휴지통으로 보낸 뒤 in_trash와 남은 3건을 확인했다. code-reviewer는 차단 이슈 없음, 권장 3건 중 ExcludedReason 유니온, PRD 문구 모순, shrimp-rules dto 표를 반영했고 공백 제목 처리는 P3-6 컴포넌트에서 trim 처리로 넘긴다. PRD 4장, CLAUDE.md, shrimp-rules.md를 승인 범위에서 동기화했다. 미확인: 제외 안내 화면(P3-6), 캐시 키 변경 후 배포 환경의 실제 동작.",
+      "completedAt": "2026-11-04T07:42:17.720Z"
     }
   ]
 }
