@@ -69,7 +69,7 @@
       "name": "P3-1 메모와 장소가 빈 기록의 표시 확인",
       "description": "메모나 장소가 비어 있는 기록의 목록과 상세 화면이 깨지지 않고 표시되는지 확인한다.",
       "notes": "Playwright MCP로 화면 확인 가능.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "9fcd3ee6-64bd-4d1e-ba34-ffb11e0bf075"
@@ -79,7 +79,7 @@
         }
       ],
       "createdAt": "2026-10-30T05:25:51.390Z",
-      "updatedAt": "2026-11-04T07:33:06.079Z",
+      "updatedAt": "2026-11-04T07:52:33.774Z",
       "relatedFiles": [
         {
           "path": "components/runs",
