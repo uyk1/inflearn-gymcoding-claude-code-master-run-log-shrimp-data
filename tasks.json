@@ -385,15 +385,15 @@
       "id": "009c31b3-3b4d-499c-b33d-05e7c4d97bc0",
       "name": "P5-2 배포 환경 변수 등록과 배포",
       "description": "배포 플랫폼에 NOTION_API_KEY와 NOTION_DATA_SOURCE_ID를 등록하고 프로덕션 배포를 한다. 실제 값은 플랫폼 콘솔에만 입력하며 저장소에 기록하지 않는다.",
-      "notes": "플랫폼 선택과 계정 로그인은 사용자 결정이 필요하다.",
+      "notes": "플랫폼 선택과 계정 로그인은 사용자 결정이 필요하다. 배포 전에 security-checker 에이전트로 읽기 전용 점검을 한다(NEXT_PUBLIC_ 오남용, 비밀값 노출, 의존성 취약점, 입력 검증). 점검에서 나온 문제는 수정하지 않고 보고하며, 해결 후에 배포한다.",
       "status": "pending",
       "dependencies": [
         {
-          "taskId": "fc0e5007-d9ee-404c-bd0f-5c9cd26dafeb"
+          "taskId": "b031dc12-faaa-44f6-a212-7b04751d4e43"
         }
       ],
       "createdAt": "2026-10-30T05:26:19.187Z",
-      "updatedAt": "2026-10-30T05:26:19.187Z",
+      "updatedAt": "2026-11-04T04:53:42.695Z",
       "relatedFiles": [
         {
           "path": ".env.example",
