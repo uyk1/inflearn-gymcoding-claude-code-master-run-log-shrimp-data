@@ -594,14 +594,14 @@
       "name": "P2-3 공통 상태 컴포넌트 분리 (빈 상태, 에러 표시)",
       "description": "빈 상태와 에러 표시를 공통 컴포넌트로 분리한다. 현재 app/page.tsx(43, 45행), app/runs/page.tsx(29, 31행), app/runs/[id]/page.tsx(34행)에 인라인 p 태그로 흩어져 있다. components/common/에 EmptyState와 ErrorMessage를 만들고 세 페이지에 적용한다. 문구는 props로 받고 마크업과 스타일만 담당한다. 기존 스타일(text-muted-foreground text-sm, text-destructive text-sm)을 기본으로 하고 에러 표시에는 접근성 역할(alert)을 더한다.",
       "notes": "담당: ui-markup-developer. 분기 로직(errorMessage 여부, 기록 수)은 페이지에 그대로 두고 컴포넌트는 표시만 한다. components/ui는 수정하지 않는다. 에러 화면 재현에는 노션 쓰기를 쓰지 않고 소스 확인과 임시 코드(확인 후 삭제)로 한다.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "115de30e-b5f5-489f-bbdb-788f21343200"
         }
       ],
       "createdAt": "2026-10-30T08:44:16.540Z",
-      "updatedAt": "2026-10-30T08:44:16.540Z",
+      "updatedAt": "2026-11-04T00:38:30.746Z",
       "relatedFiles": [
         {
           "path": "components/common/empty-state.tsx",
