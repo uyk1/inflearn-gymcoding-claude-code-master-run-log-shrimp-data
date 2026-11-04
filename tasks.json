@@ -1187,7 +1187,7 @@
         }
       ],
       "createdAt": "2026-11-04T08:29:07.710Z",
-      "updatedAt": "2026-11-04T08:30:21.342Z",
+      "updatedAt": "2026-11-04T08:34:11.757Z",
       "relatedFiles": [
         {
           "path": "app/page.tsx",
@@ -1226,7 +1226,8 @@
         }
       ],
       "implementationGuide": "1) 저장소 전체에서 300, revalidate, 5분을 검색(.env* 제외, node_modules, .next, shrimp_data 제외)해 대상 목록을 만든다. 2) 코드 변경 3개 파일 후 tsc와 lint. 3) 합성: load.ts의 readRevalidateSeconds를 추출해 변수 없음과 빈 문자열이 60, 10이 10, 0과 abc가 60이고 올바르지 않을 때만 경고가 나오는지 확인한다. 4) 실제 확인은 변수를 빈 값으로 빌드와 시작해 노션 TEST 행 1개를 만들고 /runs와 /에서 나타나는 시각을 잰다.",
-      "verificationCriteria": "(1) tsc, lint, 빌드 통과. (2) 홈과 상세와 목록의 revalidate가 60이고 load.ts 기본값이 60이다. (3) 합성 검증 통과(변수 없음과 빈 문자열은 60, 올바른 정수는 그 값, 잘못된 값은 경고 후 60). (4) 실제 노션 TEST 행으로 기본 조건(변수 빈 값)에서 목록은 약 1분 안팎, 홈은 약 2분 안에 나타난다. (5) 문서의 300초와 5분 표기가 새 값과 일치하고 ROADMAP은 수정하지 않았다. (6) TEST 행은 휴지통으로 보내고 in_trash로 확인한다. (7) code-reviewer 리뷰 통과."
+      "verificationCriteria": "(1) tsc, lint, 빌드 통과. (2) 홈과 상세와 목록의 revalidate가 60이고 load.ts 기본값이 60이다. (3) 합성 검증 통과(변수 없음과 빈 문자열은 60, 올바른 정수는 그 값, 잘못된 값은 경고 후 60). (4) 실제 노션 TEST 행으로 기본 조건(변수 빈 값)에서 목록은 약 1분 안팎, 홈은 약 2분 안에 나타난다. (5) 문서의 300초와 5분 표기가 새 값과 일치하고 ROADMAP은 수정하지 않았다. (6) TEST 행은 휴지통으로 보내고 in_trash로 확인한다. (7) code-reviewer 리뷰 통과.",
+      "summary": "노션 캐시 기본 기간을 300초에서 60초로 단축했다. 홈, 상세, 목록의 export const revalidate를 60으로 바꾸고 lib/runs/load.ts의 DEFAULT_REVALIDATE_SECONDS와 주석, 경고 문구를 맞췄으며 RUN_RECORDS_REVALIDATE_SECONDS는 테스트용으로 더 줄이는 용도로 그대로 둔다. 캐시 키 v2는 값 형태가 같아 유지했다. .env.example, CLAUDE.md, shrimp-rules.md, nextjs-developer 에이전트 정의의 300초와 5분 표기를 맞췄고 ROADMAP은 R-1에서 승인 후 갱신하도록 두었다. 검증: tsc, lint, 빌드 통과, 합성 12개 항목 통과(변수 없음과 빈 값 60, 올바른 정수는 그 값, 잘못된 값 7개에서만 경고). 실제 노션 TEST 행으로 변수를 빈 값으로 빌드하고 시작한 기본 조건에서 목록과 홈 모두 행 생성 후 46초에 반영됨을 확인했다(300초 기본값 때 목록 약 4분). TEST 행은 휴지통으로 보내 in_trash로 확인했고 남은 행은 3건이다. code-reviewer는 차단 이슈 없음, 권장 2건(접속이 꾸준할 때의 상한이라는 조건과 상세는 목록 캐시를 거치지 않는다는 점)을 CLAUDE.md와 shrimp-rules.md에 반영했다. 한계: 반영 시간은 한 번의 측정이고 홈의 최악(ISR 60초와 목록 캐시 60초가 겹친 약 2분, 접속이 없다가 첫 접속)은 실측하지 않았다. 홈과 상세가 목록 캐시를 이중으로 쓰는 구조 정리는 P5-1 범위다. Vercel 환경의 동작은 배포 전이라 미확인."
     }
   ]
 }
