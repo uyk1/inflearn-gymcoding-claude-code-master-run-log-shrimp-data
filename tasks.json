@@ -755,6 +755,50 @@
       "implementationGuide": "1) /docs:update-roadmap 2, /docs:update-roadmap 3 순서로 실행한다. 2) 승인된 항목만 ROADMAP.md에 반영한다. 3) 서브모듈 저장소는 훅으로 자동 push되므로 메인 저장소에서 포인터 변경만 브랜치로 커밋해 PR을 만든다.",
       "verificationCriteria": "ROADMAP의 체크가 모두 근거와 함께 있고 미확인 항목은 체크되지 않았다. 서브모듈 포인터 PR이 만들어진다.",
       "analysisResult": "Run Log의 Phase 2 UI 보완과 Phase 3 마무리. 담당 에이전트를 nextjs-developer(lib, 라우팅, 데이터)와 ui-markup-developer(components 마크업, 스타일, 시각 확인)로 나눈다. 확인하지 않은 항목은 완료로 쓰지 않는다."
+    },
+    {
+      "id": "fe0f6557-db14-4135-a949-0428e5cbd260",
+      "name": "P2-7 에러와 404 화면 보완",
+      "description": "에러와 404 화면의 부족한 점을 보완한다. (1) app/error.tsx에 홈으로 가는 링크를 추가한다(현재는 다시 시도 버튼만 있다). (2) app/global-error.tsx를 추가한다. error.tsx는 루트 레이아웃(헤더, 푸터, 테마) 자체의 오류를 잡지 못하므로 html과 body를 직접 렌더링하는 클라이언트 컴포넌트가 필요하다. (3) error.tsx와 not-found.tsx가 같은 제목, 안내문, 버튼 구조를 따로 쓰고 있어 공통 전체 화면 컴포넌트로 분리한다. (4) 상세 페이지(app/runs/[id]/page.tsx)의 비 404 오류 화면에 기록 목록으로 돌아가는 링크를 둔다. (5) 에러와 404 화면의 다크 모드 시각 확인과 다시 시도 버튼 클릭 동작을 확인한다. P2-3에서 만든 EmptyState와 ErrorMessage는 인라인 문구용이므로 그대로 둔다.",
+      "notes": "담당 분리: components/common의 공통 전체 화면 컴포넌트, error.tsx, not-found.tsx, 상세 페이지의 링크 마크업, 시각 확인은 ui-markup-developer. app/global-error.tsx와 라우팅 규칙 확인은 nextjs-developer. 상세 페이지는 마크업만 수정하고 분기 로직은 건드리지 않는다. 개발 서버가 떠 있으면 build를 하지 않는다. 임시 파일은 확인 후 반드시 삭제하고 build가 다시 통과하는지 확인한다.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "11dfc3eb-36c7-47cc-83d9-94cb0a4092d9"
+        }
+      ],
+      "createdAt": "2026-11-04T00:42:55.647Z",
+      "updatedAt": "2026-11-04T00:42:55.647Z",
+      "relatedFiles": [
+        {
+          "path": "app/error.tsx",
+          "type": "TO_MODIFY",
+          "description": "홈 링크 추가, 공통 화면 컴포넌트 사용"
+        },
+        {
+          "path": "app/not-found.tsx",
+          "type": "TO_MODIFY",
+          "description": "공통 화면 컴포넌트 사용"
+        },
+        {
+          "path": "app/global-error.tsx",
+          "type": "CREATE",
+          "description": "루트 레이아웃 오류용 에러 화면"
+        },
+        {
+          "path": "components/common/status-screen.tsx",
+          "type": "CREATE",
+          "description": "에러와 404 공통 전체 화면"
+        },
+        {
+          "path": "app/runs/[id]/page.tsx",
+          "type": "TO_MODIFY",
+          "description": "비 404 오류 화면에 목록 링크"
+        }
+      ],
+      "implementationGuide": "1) 공통 전체 화면 컴포넌트를 components/common/에 만든다(제목, 안내문, 액션 영역을 props로 받는 마크업만). error.tsx는 use client이므로 이 컴포넌트가 서버 컴포넌트여도 import해서 쓸 수 있는지 확인한다. 2) global-error.tsx는 Next.js 15 문서(context7)로 규칙을 확인한다(자체 html, body 필요, 테마 토큰이 적용되는지 확인). 3) 시각 확인은 임시 라우트에서 예외를 던져 프로덕션 서버(포트 3100)에서 하고, 확인 후 임시 라우트를 삭제한다. 4) 노션 쓰기는 하지 않는다.",
+      "verificationCriteria": "에러 화면에 홈으로 가는 링크가 있다. 루트 레이아웃 오류 때 global-error 화면이 나온다. error와 not-found가 공통 컴포넌트를 쓰고 기존 문구가 그대로 나온다. 상세의 비 404 오류 화면에 목록 링크가 있다. 에러와 404 화면이 라이트와 다크에서 읽히고 360px에서 가로 스크롤이 없다. 다시 시도 버튼을 눌렀을 때 reset이 동작한다. tsc, lint, build가 통과한다.",
+      "analysisResult": "Run Log의 Phase 2 UI 보완. 에러와 404 화면을 완성도 있게 보완한다. 담당은 마크업과 시각 확인이 ui-markup-developer, global-error.tsx 같은 라우팅 파일이 nextjs-developer이다. 기존 구조와 한국어 주석, 세미콜론, 큰따옴표 스타일을 따르고 components/ui는 직접 수정하지 않는다."
     }
   ]
 }
