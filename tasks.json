@@ -933,6 +933,40 @@
       "implementationGuide": "1) README.md, package.json의 scripts, .env.example(변수 이름만), docs/PRD.md, CLAUDE.md의 구조 섹션을 읽는다. 2) README의 각 문장을 실제 파일과 명령에 대조해 틀린 것과 낡은 것을 목록으로 만든다. 3) 유용한 기존 섹션은 보존하고 틀린 부분만 고친다. 전체를 새로 쓰지 않는다. 4) 수정 후 README에 적은 명령과 경로가 모두 실제로 존재하는지 Grep으로 확인한다.",
       "verificationCriteria": "README의 모든 명령(npm run dev, build, lint, npx tsc)이 package.json과 일치한다. 환경 변수 이름이 .env.example과 일치하고 값은 어디에도 없다. 스타터 킷 시절 문구가 남아 있지 않다. 화면 구성과 노션 연동 설명이 현재 코드와 일치한다. 변경은 README.md 한 파일뿐이다.",
       "analysisResult": "Run Log 배포 전 문서 정리. README가 스타터 킷 시절 문구를 남기고 있어 현재 구현 상태(노션 연동, 화면, 환경 변수, 명령)를 반영하도록 갱신한다. 코드는 수정하지 않고 사실과 일치하는 내용만 쓴다."
+    },
+    {
+      "id": "9fcd3ee6-64bd-4d1e-ba34-ffb11e0bf075",
+      "name": "P2-9 소요시간 형식 엄격화와 제외·누락 로그 보강",
+      "description": "P2-6 검증에서 발견된 세 가지를 고친다. (1) lib/notion/duration.ts의 parseDurationToSeconds가 '12:5'를 725초로 조용히 받아들인다(정규식이 자릿수를 검사하지 않음). 12분 50초를 쓰려다 0을 빠뜨린 오타가 틀린 값으로 들어가므로, 첫 구간(mm:ss의 분, h:mm:ss의 시)은 자릿수 제한 없이 숫자이고 그 뒤의 구간(초, h:mm:ss의 분)은 정확히 두 자리여야 하도록 제한한다. '5:30', '45:23', '1:05:03', '100:00', '0:30'은 계속 허용하고, '12:5', '1:5:03', '45:7'은 null로 한다. 기존 규칙(초 59 이하, h:mm:ss의 분 59 이하, 총합 0은 null, 숫자 이외 null)은 유지한다. (2) lib/notion/mapper.ts의 제외 로그에 사유를 덧붙인다. 기존 문구 '[notion] 필수 값이 없거나 형식이 맞지 않아 제외합니다: <id>'를 유지하고 뒤에 사유 목록을 괄호로 붙인다(제목 없음, 날짜 없음, 거리 없음, 소요시간 없음, 소요시간 형식 오류). 소요시간이 빈 문자열이면 '없음', 값이 있는데 파싱이 null이면 '형식 오류'로 구분한다. 사용자가 입력한 값 자체(메모, 장소 등)는 로그에 넣지 않는다. (3) lib/notion/repository.ts에서 has_more가 true인데 next_cursor가 없으면 조회를 중단하는 기존 동작은 유지하되 console.warn으로 이후 기록이 누락될 수 있음을 알린다.",
+      "notes": "담당: nextjs-developer. 파서 규칙 강화는 입력 형식을 좁히는 동작 변경이다. PRD 4장의 문구는 자릿수를 명시하지 않으므로 docs/PRD.md와 다른 문서는 수정하지 않고 보고만 한다. 노션 쓰기는 하지 않는다(실제 노션 행 확인이 필요하면 사용자에게 먼저 확인한다). 개발 서버가 떠 있으면 build를 하지 않는다. 제외 로그 문구의 기존 접두어는 바꾸지 않는다.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "895d6287-9261-4217-9382-9819ced5dbe7"
+        }
+      ],
+      "createdAt": "2026-11-04T06:20:48.744Z",
+      "updatedAt": "2026-11-04T06:20:48.744Z",
+      "relatedFiles": [
+        {
+          "path": "lib/notion/duration.ts",
+          "type": "TO_MODIFY",
+          "description": "parseDurationToSeconds 자릿수 제한"
+        },
+        {
+          "path": "lib/notion/mapper.ts",
+          "type": "TO_MODIFY",
+          "description": "제외 로그에 사유 추가"
+        },
+        {
+          "path": "lib/notion/repository.ts",
+          "type": "TO_MODIFY",
+          "description": "커서 누락 경고 로그"
+        }
+      ],
+      "implementationGuide": "1) 먼저 duration.ts, mapper.ts, repository.ts를 읽는다. 2) duration.ts는 import 없는 순수 함수 파일을 유지한다. 3) 검증은 P2-6과 같은 방식으로 임시 폴더에 복사본을 두고 Node 24로 직접 실행한다(scratchpad의 p26 폴더 스크립트를 참고하되 새 폴더 p29에 둔다). 4) 결과 표: parseDurationToSeconds 입력별 기대값과 실제값, mapper 시나리오별 로그 문구, repository의 has_more true와 next_cursor null일 때 경고 로그와 정상 순회에서 경고가 없음. 5) tsc, lint, build 순서로 검증하고 프로덕션 서버에서 기존 기록 3건(56:22, 42:13, 1:18:01)이 이전과 같이 목록에 나오고 페이스가 5:38/km, 6:01/km, 6:30/km인지 확인한다.",
+      "verificationCriteria": "12:5, 1:5:03, 45:7은 null이고 5:30, 45:23, 1:05:03, 100:00, 0:30은 기존대로 파싱된다. 기존 규칙(초 59 초과, 총합 0, 형식 오류)은 그대로 null이다. 제외된 행의 로그에 사유가 구분되어 남고 기존 접두어는 유지된다. has_more가 true이고 next_cursor가 없을 때 경고가 나오고 정상 순회에서는 나오지 않는다. 기존 기록 3건이 목록과 상세에 이전과 같이 나온다. tsc, lint, build가 통과한다.",
+      "analysisResult": "Run Log의 Phase 2 데이터 계층 보강. P2-6 검증에서 발견된 세 가지를 고친다. 소요시간 파서가 한 자리 초(12:5)를 조용히 받아들이는 문제, 제외 로그에 사유가 없는 문제, 노션 커서가 누락될 때 경고 없이 잘리는 문제. lib/notion 안에서만 변경하고 기존 구조(Controller, Service, Repository, DTO), 한국어 주석, 세미콜론, 큰따옴표 스타일을 따른다."
     }
   ]
 }
