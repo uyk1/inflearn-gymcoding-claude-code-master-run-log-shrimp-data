@@ -998,7 +998,7 @@
       "name": "P3-6 제외된 기록과 사유를 화면에 안내",
       "description": "P2-10에서 데이터 계층이 돌려주는 excluded(제외된 행의 제목, 사유, 노션 링크)를 화면에 안내한다. 데이터 계층(mapper, service, load, dto)은 P2-10에서 끝났으므로 이 태스크에서는 건드리지 않는다. 변경 범위: (1) components/runs/excluded-notice.tsx 신규: 서버 컴포넌트, details/summary로 접을 수 있는 안내 블록. items가 비어 있으면 null을 반환한다. summary는 'N건이 제외되었습니다', 펼치면 제목(없으면 '제목 없음'), 사유 목록, 노션 원본 링크를 ul/li로 보여 준다. 사용자가 입력한 값(소요시간, 메모 등)은 표시하지 않는다. 사용자가 결정한 사항: 제외 행의 제목은 화면에 보여 준다. (2) app/runs/page.tsx 상단에 안내를 붙인다. (3) app/page.tsx(홈)에는 한 줄 요약과 /runs 링크만 둔다. (4) 360px에서 가로 스크롤이 없고 라이트·다크 모두 읽혀야 한다(긴 제목과 링크 줄바꿈 포함). 기존 디자인 토큰과 components/ui만 사용하고 components/ui는 수정하지 않는다. (5) docs/PRD.md 5장(화면 구성)과 CLAUDE.md 구조 설명에 제외 안내가 있다는 한 줄을 사용자 승인된 범위에서 추가한다.",
       "notes": "화면 담당 태스크이며 데이터 계층 변경은 P2-10이 맡는다(분리 이유: ROADMAP상 데이터 계층은 Phase 2, 화면은 Phase 3). 문서 수정은 사용자가 승인한 범위만 한다. UI는 ui-markup-developer, 연결은 nextjs-developer가 맡을 수 있다. 노션 쓰기는 사용자 확인 후 TEST- 행으로만 하고 끝나면 휴지통으로 보낸다(예: 소요시간 12:5 행, 날짜 없음 행, 아주 긴 제목 행). .env* 파일은 열지 않는다. 개발 서버는 띄우지 않고 프로덕션 서버(3100)로 확인한 뒤 종료한다. 실행 순서: P3-4 이후, P3-5(시각 확인) 전에 진행하면 P3-5가 새 안내 블록까지 함께 본다.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "7d85792f-56b3-452c-820b-a15cf082b31a"
@@ -1008,7 +1008,7 @@
         }
       ],
       "createdAt": "2026-11-04T07:28:27.900Z",
-      "updatedAt": "2026-11-04T07:31:02.140Z",
+      "updatedAt": "2026-11-04T23:56:05.347Z",
       "relatedFiles": [
         {
           "path": "components/runs/excluded-notice.tsx",
