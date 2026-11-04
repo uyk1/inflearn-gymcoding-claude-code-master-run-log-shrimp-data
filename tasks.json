@@ -1116,6 +1116,54 @@
       "verificationCriteria": "(1) tsc와 lint, 빌드 통과. (2) 합성 검증에서 변수 없음, 0, 음수, 소수, 문자열, 빈 문자열은 300, 정상 양의 정수는 그 값이 된다. (3) 변수를 10으로 둔 프로덕션 서버에서 노션 TEST 행 생성 후 목록 반영까지 걸리는 시간이 5분보다 확연히 짧다(약 10초 이내 만료). (4) 변수 없이 시작한 서버는 기존처럼 300초 캐시다(코드상 기본값 확인). (5)홈과 상세의 revalidate 300은 그대로다. (6) TEST 행은 휴지통으로 보내고 in_trash로 확인한다. (7) code-reviewer 리뷰 통과.",
       "summary": "목록 캐시 기간을 환경 변수 RUN_RECORDS_REVALIDATE_SECONDS로 조절할 수 있게 했다. lib/runs/load.ts의 readRevalidateSeconds가 1 이상의 정수면 그 값을, 없으면 300을 쓰고, 값이 있는데 올바르지 않으면 console.warn으로 알리고 300을 쓴다. 홈과 상세의 export const revalidate = 300은 정적 분석 값이라 건드리지 않았다. .env.example에 주석 처리된 설명을 추가하고 CLAUDE.md와 app/runs/page.tsx 주석을 맞췄다. 검증: tsc, lint, 빌드 통과. 합성 12개 항목(없음, 빈 문자열, 공백, 10, 1, 0, -5, 2.5, abc, 10abc, NaN, Infinity) 통과, 경고는 올바르지 않은 값 7개에서만 나오고 없음과 빈 문자열과 공백에서는 나오지 않는다. 실제 확인: 변수 없이 시작한 서버로 300초 캐시 항목을 만든 뒤 변수 10으로 서버를 다시 시작하고 노션 TEST 행을 만들었더니 목록 반영까지 3초 걸렸다(이전 약 4분). 디스크에 남은 기존 캐시가 새 값 적용을 막지 않았다. TEST 행은 휴지통으로 보내 in_trash를 확인했고 남은 행은 3건이다. code-reviewer는 차단 이슈 없음, 권장 1건(잘못된 값 경고)과 문구 보정 2건을 반영했다. 한계: 변수 없는 서버가 300초를 쓰는지는 코드와 합성 검증으로만 확인했고 실제 5분 대기 대조는 하지 않았다. 1e2나 0x10 같은 표기가 정수로 받아들여지는 것은 해롭지 않아 그대로 두었다. Vercel 운영 환경 동작은 배포 전이라 미확인.",
       "completedAt": "2026-11-04T08:05:06.704Z"
+    },
+    {
+      "id": "1bc55f30-d1c8-4ba5-9ed3-24e8038c5f26",
+      "name": "P2-11 노션 날짜를 한국 시간 기준 YYYY-MM-DD로 정규화",
+      "description": "노션 날짜 필드에서 시간 포함을 켜면 값이 2026-11-08T07:00:00.000+09:00 형태로 오는데, lib/notion/mapper.ts가 이를 그대로 넘겨 (1) 기간 필터에서 기간의 마지막 날 기록이 빠지고(이번 주 일요일, 이번 달 말일) (2) 카드와 상세의 날짜가 2026.11.08T07:00:00.000+09:00 (undefined)로 깨진다(P3-2 실제 노션 TEST 행으로 확인됨). 변경 범위: (1) lib/notion/date.ts 신규: normalizeNotionDate(start: string): string | null. 규칙: YYYY-MM-DD 형식이고 실제 달력에 있는 날짜면 그대로 반환. 시간이 포함되고 오프셋(Z 또는 +hh:mm)이 있으면 그 순간을 한국 시간(Asia/Seoul)의 날짜로 바꿔 반환(예: 2026-11-07T23:00:00.000Z는 2026-11-08). 시간이 있지만 오프셋이 없으면 적힌 날짜 부분을 그대로 반환. 그 밖의 형식이나 존재하지 않는 날짜(2026-13-45)는 null. (2) lib/notion/dto.ts: ExcludedReason에 날짜 형식 오류 추가. (3) lib/notion/mapper.ts: readDate 결과를 normalizeNotionDate로 정규화하고, 원본이 있는데 정규화가 null이면 날짜 형식 오류, 원본이 없으면 날짜 없음을 사유로 한다. 로그 문구 형식은 기존과 같고 입력값은 로그에 넣지 않는다. (4) docs/PRD.md 4장 날짜 행에 시간이 포함돼도 한국 시간 기준 날짜로 처리한다는 문장을 사용자 승인된 범위에서 추가하고, CLAUDE.md의 날짜 설명(기간 필터와 날짜 계산 줄)과 shrimp-rules.md를 필요한 만큼 맞춘다. lib/runs/date.ts는 YYYY-MM-DD 전제를 그대로 쓰므로 수정하지 않는다.",
+      "notes": "사용자가 이 방향(정규화를 별도 Phase 2 태스크로 등록)을 승인했다. P3-2에서 실제 노션 TEST 행으로 결함이 확인되었다. P3-2는 이 태스크 뒤에 시간 포함 행으로 이번 주 필터를 다시 확인한다. 노션 쓰기는 사용자 확인 후 TEST- 행으로만 하고 끝나면 휴지통으로 보낸다. 시간 포함 날짜 행은 시간대를 따로 주지 않고 start에 오프셋을 포함해 만든다(time_zone과 오프셋을 함께 주면 노션이 거부함). .env.local은 열지 않는다. 개발 서버는 띄우지 않고 프로덕션 서버(3100)를 변수 RUN_RECORDS_REVALIDATE_SECONDS=10으로 시작해 확인한 뒤 종료한다.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "7d85792f-56b3-452c-820b-a15cf082b31a"
+        }
+      ],
+      "createdAt": "2026-11-04T08:13:40.797Z",
+      "updatedAt": "2026-11-04T08:13:40.797Z",
+      "relatedFiles": [
+        {
+          "path": "lib/notion/date.ts",
+          "type": "CREATE",
+          "description": "노션 날짜 정규화 함수"
+        },
+        {
+          "path": "lib/notion/mapper.ts",
+          "type": "TO_MODIFY",
+          "description": "날짜를 정규화하고 날짜 형식 오류 사유 추가"
+        },
+        {
+          "path": "lib/notion/dto.ts",
+          "type": "TO_MODIFY",
+          "description": "ExcludedReason에 날짜 형식 오류 추가"
+        },
+        {
+          "path": "lib/runs/date.ts",
+          "type": "REFERENCE",
+          "description": "YYYY-MM-DD 전제 (수정하지 않음)"
+        },
+        {
+          "path": "docs/PRD.md",
+          "type": "TO_MODIFY",
+          "description": "4장 날짜 규칙 보강"
+        },
+        {
+          "path": "CLAUDE.md",
+          "type": "TO_MODIFY",
+          "description": "날짜 설명 보정"
+        }
+      ],
+      "implementationGuide": "1) date.ts: const DATE_ONLY = /^\\d{4}-\\d{2}-\\d{2}$/; isRealDate(value)는 Date.UTC로 만든 값을 다시 YYYY-MM-DD로 바꿔 입력과 같은지 비교. 오프셋 판별은 /(Z|[+-]\\d{2}:\\d{2})$/. 한국 날짜는 new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Seoul' }).format(new Date(value)). new Date가 Invalid Date면 null. 2) mapper: const rawDate = readDate(...); const date = rawDate === null ? null : normalizeNotionDate(rawDate); reasons에 rawDate === null이면 날짜 없음, rawDate !== null && date === null이면 날짜 형식 오류. 3) 합성 검증 스크립트는 scratchpad에서 lib 파일을 복사해 실행한다(기존 방식).",
+      "verificationCriteria": "(1) tsc, lint, 빌드 통과. (2) 합성 검증: 2026-11-08은 그대로, 2026-11-08T07:00:00.000+09:00은 2026-11-08, 2026-11-07T23:00:00.000Z는 2026-11-08, 2026-11-07T15:30:00.000Z는 2026-11-08, 2026-11-08T23:30:00.000-05:00은 2026-11-09, 2026-11-08T07:00:00(오프셋 없음)은 2026-11-08, 2026-13-45와 2026-02-30과 garbage와 빈 문자열은 null이며 mapper에서 날짜 형식 오류 또는 날짜 없음으로 제외된다. (3) 실제 노션 TEST 행(시간 포함 2026-11-08 07:00, 날짜 없음)으로 이번 주 필터에 시간 포함 행이 나오고 카드 날짜가 2026.11.08 (일)로 표시된다. (4) 날짜 없음 행은 계속 제외되고 로그가 남는다. (5) 기존 3건과 날짜만 있는 TEST 행의 필터와 정렬이 이전과 같다. (6) TEST 행은 휴지통으로 보내고 in_trash로 확인한다. (7) code-reviewer 리뷰 통과."
     }
   ]
 }
