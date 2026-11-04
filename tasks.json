@@ -770,7 +770,7 @@
         }
       ],
       "createdAt": "2026-11-04T00:42:55.647Z",
-      "updatedAt": "2026-11-04T05:05:20.800Z",
+      "updatedAt": "2026-11-04T05:18:00.311Z",
       "relatedFiles": [
         {
           "path": "app/error.tsx",
@@ -800,7 +800,8 @@
       ],
       "implementationGuide": "1) 공통 전체 화면 컴포넌트를 components/common/에 만든다(제목, 안내문, 액션 영역을 props로 받는 마크업만). error.tsx는 use client이므로 이 컴포넌트가 서버 컴포넌트여도 import해서 쓸 수 있는지 확인한다. 2) global-error.tsx는 Next.js 15 문서(context7)로 규칙을 확인한다(자체 html, body 필요, 테마 토큰이 적용되는지 확인). 3) 시각 확인은 임시 라우트에서 예외를 던져 프로덕션 서버(포트 3100)에서 하고, 확인 후 임시 라우트를 삭제한다. 4) 노션 쓰기는 하지 않는다.",
       "verificationCriteria": "에러 화면에 홈으로 가는 링크가 있다. 루트 레이아웃 오류 때 global-error 화면이 나온다. error와 not-found가 공통 컴포넌트를 쓰고 기존 문구가 그대로 나온다. 상세의 비 404 오류 화면에 목록 링크가 있다. 에러와 404 화면이 라이트와 다크에서 읽히고 360px에서 가로 스크롤이 없다. 다시 시도 버튼을 눌렀을 때 reset이 동작한다. tsc, lint, build가 통과한다.",
-      "analysisResult": "Run Log의 Phase 2 UI 보완. 에러와 404 화면을 완성도 있게 보완한다. 담당은 마크업과 시각 확인이 ui-markup-developer, global-error.tsx 같은 라우팅 파일이 nextjs-developer이다. 기존 구조와 한국어 주석, 세미콜론, 큰따옴표 스타일을 따르고 components/ui는 직접 수정하지 않는다."
+      "analysisResult": "Run Log의 Phase 2 UI 보완. 에러와 404 화면을 완성도 있게 보완한다. 담당은 마크업과 시각 확인이 ui-markup-developer, global-error.tsx 같은 라우팅 파일이 nextjs-developer이다. 기존 구조와 한국어 주석, 세미콜론, 큰따옴표 스타일을 따르고 components/ui는 직접 수정하지 않는다.",
+      "summary": "에러와 404 화면을 보완했다. components/common/status-screen.tsx를 만들어 error.tsx와 not-found.tsx의 중복 구조를 분리하고(훅과 라우터 의존 없음), 에러 화면에 홈으로 링크를 추가했으며, 상세 페이지의 비 404 오류 화면에 목록 링크를 두고 BackLink에 focus-visible 스타일을 더했다. app/global-error.tsx를 새로 만들어 루트 레이아웃 실패 시 자체 html과 body, globals.css, StatusScreen, a 태그 홈 링크, window.location.reload 다시 시도를 쓴다. 중요한 발견과 수정: error.tsx의 다시 시도가 reset만 호출해 서버 컴포넌트 오류를 복구하지 못했다(임시 라우트로 전후 시험해 확인, 공식 문서도 reset은 다시 가져오지 않는다고 설명). 설치된 Next 15.5.28의 error props에는 retry가 없어 startTransition 안에서 router.refresh와 reset을 호출하도록 고쳤고 같은 시험에서 복구됨을 확인했다. 직접 확인: diff 범위, app/layout.tsx 원상 복구(git diff 비어 있고 임시 코드 0건), 임시 라우트 삭제, 포트 비어 있음, env 변경 없음, 신규 파일 BOM 없음, tsc와 lint 재실행 통과, 헤더와 푸터에 h1 없음(이중 h1 없음). 에이전트가 확인: build 통과, 360px 가로 스크롤 없음, 에러와 404 라이트 다크 확인, 레이아웃을 임시로 던지게 해 프로덕션 /runs에서 global-error 화면과 Tailwind 적용과 다시 시도 새로고침 확인. code-reviewer 검토: 차단 이슈 없음, 권장 1건(global-error 다시 시도가 같은 URL 새로고침이라 오류가 계속되면 같은 화면으로 돌아옴, 사용자 클릭 시에만 실행되어 위험 낮음)과 사소 2건은 반영하지 않음. 한계: global-error는 ThemeProvider가 없어 다크 모드와 Geist 폰트가 적용되지 않고 라이트로 보이는 설계상 한계, 에이전트 세션에서 context7를 쓰지 못해 15.x 문서로 패턴을 대조하지 못하고 실제 동작으로 확인했다, Tab 키와 모바일 터치 실제 입력과 라이트 모드의 포커스 링 시각 확인은 하지 못했다, 개발 모드의 global-error 동작은 확인하지 않았다."
     },
     {
       "id": "dc71f936-b142-44f9-b45a-a8d24f8ec01e",
