@@ -763,14 +763,14 @@
       "name": "P2-7 에러와 404 화면 보완",
       "description": "에러와 404 화면의 부족한 점을 보완한다. (1) app/error.tsx에 홈으로 가는 링크를 추가한다(현재는 다시 시도 버튼만 있다). (2) app/global-error.tsx를 추가한다. error.tsx는 루트 레이아웃(헤더, 푸터, 테마) 자체의 오류를 잡지 못하므로 html과 body를 직접 렌더링하는 클라이언트 컴포넌트가 필요하다. (3) error.tsx와 not-found.tsx가 같은 제목, 안내문, 버튼 구조를 따로 쓰고 있어 공통 전체 화면 컴포넌트로 분리한다. (4) 상세 페이지(app/runs/[id]/page.tsx)의 비 404 오류 화면에 기록 목록으로 돌아가는 링크를 둔다. (5) 에러와 404 화면의 다크 모드 시각 확인과 다시 시도 버튼 클릭 동작을 확인한다. P2-3에서 만든 EmptyState와 ErrorMessage는 인라인 문구용이므로 그대로 둔다.",
       "notes": "담당 분리: components/common의 공통 전체 화면 컴포넌트, error.tsx, not-found.tsx, 상세 페이지의 링크 마크업, 시각 확인은 ui-markup-developer. app/global-error.tsx와 라우팅 규칙 확인은 nextjs-developer. 상세 페이지는 마크업만 수정하고 분기 로직은 건드리지 않는다. 개발 서버가 떠 있으면 build를 하지 않는다. 임시 파일은 확인 후 반드시 삭제하고 build가 다시 통과하는지 확인한다.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "11dfc3eb-36c7-47cc-83d9-94cb0a4092d9"
         }
       ],
       "createdAt": "2026-11-04T00:42:55.647Z",
-      "updatedAt": "2026-11-04T00:42:55.647Z",
+      "updatedAt": "2026-11-04T05:05:20.800Z",
       "relatedFiles": [
         {
           "path": "app/error.tsx",
