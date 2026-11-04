@@ -110,10 +110,13 @@
       "dependencies": [
         {
           "taskId": "280d346c-9fc5-49af-9cfc-38ecf635daf8"
+        },
+        {
+          "taskId": "1e75207e-c3ac-4cc1-a703-06c9ec1b259a"
         }
       ],
       "createdAt": "2026-10-30T05:25:51.390Z",
-      "updatedAt": "2026-10-30T05:25:51.390Z",
+      "updatedAt": "2026-11-04T08:01:14.100Z",
       "relatedFiles": [
         {
           "path": "lib/notion/mapper.ts",
