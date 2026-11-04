@@ -1027,6 +1027,50 @@
       ],
       "implementationGuide": "1) mapper의 기존 reasons 배열 생성 로직에서 console.warn 직전에 excluded에 { pageId: page.id, title, reasons, notionUrl: page.url } 를 push하고 null 대신 이 배열도 함께 반환한다. 2) service.listRunRecords가 { records, excluded } 를 반환하도록 하고 호출부(load.ts, 홈, 목록)를 맞춘다. findRunRecord는 records만 사용한다. 3) ExcludedNotice({ items }): items.length===0 이면 null, 아니면 <details><summary>N건이 제외되었습니다</summary><ul>...</ul></details>. 4) 완료 후 PRD 5장(화면 구성)과 CLAUDE.md의 구조 설명에 제외 안내가 있다는 한 줄을 추가해야 하므로 먼저 사용자 승인을 받는다.",
       "verificationCriteria": "(1) tsc와 lint 통과. (2) 실제 노션 TEST 행(소요시간 12:5, 날짜 없음, 제목 없음)을 만들었을 때 목록 상단에 건수와 각 행의 제목·사유·노션 링크가 나오고, 정상 행은 그대로 나온다. 제외 행이 없으면 안내가 그려지지 않는다. (3) 안내에 사용자가 입력한 소요시간·메모 값이 노출되지 않는다. (4) 홈과 목록이 360px에서 가로 스크롤 없이 라이트·다크 모두 읽힌다. (5) 상세(/runs/[id])의 404 동작은 그대로다. (6) TEST 행은 모두 휴지통으로 보내고 in_trash로 확인한다. (7) code-reviewer 리뷰 통과."
+    },
+    {
+      "id": "7d85792f-56b3-452c-820b-a15cf082b31a",
+      "name": "P2-10 제외 행 정보를 데이터 계층에서 반환",
+      "description": "노션 행이 필수값 누락이나 형식 오류로 제외될 때, 제외 사실과 사유를 로그에만 남기지 않고 호출부(화면)에 전달할 수 있도록 데이터 계층의 반환 형태를 바꾼다. 현재 lib/notion/mapper.ts의 toRunRecordDto는 제외 행에 null을 돌려주고 lib/notion/service.ts의 listRunRecords가 filter로 버려 정보가 사라진다. 변경 범위: (1) lib/notion/dto.ts: ExcludedRunDto { pageId: string; title: string | null; reasons: string[]; notionUrl: string } 추가. (2) lib/notion/mapper.ts: 변환 결과를 기록 또는 제외 정보로 구분해 돌려준다. reasons는 기존 로그 사유 문구(제목 없음, 날짜 없음, 거리 없음, 소요시간 없음, 소요시간 형식 오류)를 그대로 재사용하고, 사용자가 입력한 값 자체(소요시간, 메모 등)는 담지 않는다. console.warn 로그는 지금과 같은 문구로 유지한다. (3) lib/notion/service.ts: listRunRecords가 { records, excluded }를 반환한다. findRunRecord는 records만 사용하며 동작(404 포함)을 바꾸지 않는다. (4) lib/runs/load.ts: unstable_cache가 excluded까지 직렬화해 캐시하고, loadRunRecords가 { records, excluded, errorMessage }를 돌려준다. 호출부(app/page.tsx, app/runs/page.tsx)는 타입 오류가 나지 않게 최소한으로만 맞춘다(안내 화면은 P3-6). (5) docs/PRD.md 4장 계산 규칙에 제외된 행의 사유를 화면에서 확인할 수 있다는 한 줄을 사용자 승인된 범위에서 추가하고, CLAUDE.md의 구조 설명 중 mapper와 service 줄을 함께 맞춘다.",
+      "notes": "화면은 만들지 않는다(P3-6). PRD와 CLAUDE.md 수정은 사용자가 승인한 범위(제외 사유를 화면에서 확인할 수 있다는 규칙 추가)만 한다. 사용자가 결정한 사항: 제외 행의 제목은 화면에 보여 준다. 노션 쓰기는 사용자 확인 후 TEST- 행으로만 하고 끝나면 휴지통으로 보낸다. .env* 파일은 열지 않는다. 개발 서버는 띄우지 않고 프로덕션 서버(3100)로 확인한 뒤 종료한다. next build는 서버가 떠 있지 않을 때만 실행한다.",
+      "status": "pending",
+      "dependencies": [],
+      "createdAt": "2026-11-04T07:30:45.039Z",
+      "updatedAt": "2026-11-04T07:30:45.039Z",
+      "relatedFiles": [
+        {
+          "path": "lib/notion/dto.ts",
+          "type": "TO_MODIFY",
+          "description": "ExcludedRunDto 타입 추가"
+        },
+        {
+          "path": "lib/notion/mapper.ts",
+          "type": "TO_MODIFY",
+          "description": "제외 행 정보를 로그와 함께 결과로 반환"
+        },
+        {
+          "path": "lib/notion/service.ts",
+          "type": "TO_MODIFY",
+          "description": "listRunRecords가 records와 excluded를 반환"
+        },
+        {
+          "path": "lib/runs/load.ts",
+          "type": "TO_MODIFY",
+          "description": "캐시와 로더에 excluded 포함"
+        },
+        {
+          "path": "docs/PRD.md",
+          "type": "TO_MODIFY",
+          "description": "4장 제외 규칙에 사유 확인 가능 문구 추가"
+        },
+        {
+          "path": "CLAUDE.md",
+          "type": "TO_MODIFY",
+          "description": "구조 섹션 mapper와 service 설명 맞춤"
+        }
+      ],
+      "implementationGuide": "1) mapper: 기존 reasons 배열을 만든 뒤 reasons가 비어 있지 않으면 console.warn 후 { kind: 'excluded', value: { pageId: page.id, title, reasons, notionUrl: page.url } } 를 반환하고, 정상이면 { kind: 'record', value: dto } 를 반환한다. title은 제목 속성이 비었으면 null. 2) service.listRunRecords: pages.map(toRunResult)로 records와 excluded를 분리해 { records, excluded } 반환. 3) load.ts 캐시 함수의 반환값을 위 객체로 바꾸고 loadRunRecords의 반환 타입에 excluded를 추가한다(노션 실패 시 빈 배열). 4) findRunRecord는 listRunRecords().records에서 id로 찾는다. 5) 검증용 스크립트는 scratchpad에서 lib 파일을 복사해 실행한다(기존 P2-9 방식).",
+      "verificationCriteria": "(1) tsc와 lint 통과. (2) 합성 데이터로 mapper가 정상 행은 record, 제목 없음·날짜 없음·거리 없음·소요시간 없음·소요시간 형식 오류(12:5) 행은 excluded로 분류하고, 사유가 기존 로그 문구와 일치하며 입력값이 reasons에 없음을 확인한다. (3) 한 행에 사유가 여러 개면 reasons에 모두 담긴다. (4) 실제 노션 TEST 행(12:5, 날짜 없음)으로 프로덕션 서버에서 excluded가 채워지고 기존 3건 records는 그대로임을 확인한다(서버 로그 사유도 유지). (5) 상세 /runs/[id]는 제외 행 ID에 404, 정상 행은 그대로 열린다. (6) TEST 행은 휴지통으로 보내고 in_trash로 확인한다. (7) code-reviewer 리뷰 통과."
     }
   ]
 }
