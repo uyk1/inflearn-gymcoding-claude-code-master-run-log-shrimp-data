@@ -799,6 +799,54 @@
       "implementationGuide": "1) 공통 전체 화면 컴포넌트를 components/common/에 만든다(제목, 안내문, 액션 영역을 props로 받는 마크업만). error.tsx는 use client이므로 이 컴포넌트가 서버 컴포넌트여도 import해서 쓸 수 있는지 확인한다. 2) global-error.tsx는 Next.js 15 문서(context7)로 규칙을 확인한다(자체 html, body 필요, 테마 토큰이 적용되는지 확인). 3) 시각 확인은 임시 라우트에서 예외를 던져 프로덕션 서버(포트 3100)에서 하고, 확인 후 임시 라우트를 삭제한다. 4) 노션 쓰기는 하지 않는다.",
       "verificationCriteria": "에러 화면에 홈으로 가는 링크가 있다. 루트 레이아웃 오류 때 global-error 화면이 나온다. error와 not-found가 공통 컴포넌트를 쓰고 기존 문구가 그대로 나온다. 상세의 비 404 오류 화면에 목록 링크가 있다. 에러와 404 화면이 라이트와 다크에서 읽히고 360px에서 가로 스크롤이 없다. 다시 시도 버튼을 눌렀을 때 reset이 동작한다. tsc, lint, build가 통과한다.",
       "analysisResult": "Run Log의 Phase 2 UI 보완. 에러와 404 화면을 완성도 있게 보완한다. 담당은 마크업과 시각 확인이 ui-markup-developer, global-error.tsx 같은 라우팅 파일이 nextjs-developer이다. 기존 구조와 한국어 주석, 세미콜론, 큰따옴표 스타일을 따르고 components/ui는 직접 수정하지 않는다."
+    },
+    {
+      "id": "dc71f936-b142-44f9-b45a-a8d24f8ec01e",
+      "name": "R-2 Phase 4 ROADMAP 갱신",
+      "description": "Phase 4(통계, PWA)가 끝난 뒤 /docs:update-roadmap 4 커맨드로 ROADMAP.md의 Phase 4 상태를 갱신한다. 변경안을 before와 after로 먼저 보여 주고 사용자 승인 후에만 반영한다. 근거(머지된 PR, 완료 처리된 Shrimp 태스크, 이번 실행의 tsc와 lint)가 있는 항목만 체크하고, 데스크톱 Chrome manifest 검증 같은 직접 확인이 끝난 항목만 완료로 쓴다. 로드맵 밖에서 추가된 작업(예: 통계 화면 UI 보완)이 있으면 보고에 적는다.",
+      "notes": "담당: 메인 세션(에이전트 아님). docs/PRD.md와 코드는 수정하지 않는다. 노션 변경이나 개발 서버 실행은 하지 않는다. 직접 확인하지 못한 항목은 구현만 됨으로 보고한다.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "4ce10dbc-fc0c-41e5-b2fd-73137e41aff8"
+        }
+      ],
+      "createdAt": "2026-11-04T00:44:31.157Z",
+      "updatedAt": "2026-11-04T00:44:31.157Z",
+      "relatedFiles": [
+        {
+          "path": "docs/ROADMAP.md",
+          "type": "TO_MODIFY",
+          "description": "Phase 4 상태와 완료 기준 갱신"
+        }
+      ],
+      "implementationGuide": "1) P4-1부터 P4-7까지 Shrimp에서 완료 처리되었는지 list_tasks로 확인한다. 2) /docs:update-roadmap 4를 실행한다. 3) 승인된 줄만 ROADMAP.md에 반영하고 diff로 표기가 깨지지 않았는지 확인한다. 4) 커밋과 PR은 사용자가 요청할 때만 한다.",
+      "verificationCriteria": "ROADMAP의 Phase 4 체크마다 근거가 있고 확인되지 않은 항목은 체크되지 않았다. 변경 줄만 diff에 나타나고 표기가 깨지지 않았다. 사용자 승인 후에만 파일이 수정되었다.",
+      "analysisResult": "Run Log의 Phase 4와 Phase 5 마무리 단계. 각 Phase가 끝날 때 /docs:update-roadmap 커맨드로 ROADMAP.md의 진행 상태를 근거와 함께 갱신한다. 확인하지 않은 항목은 체크하지 않고, 파일 수정은 사용자 승인 후에만 한다."
+    },
+    {
+      "id": "be88aa46-54b4-4d1a-96d2-b2ef1bf32870",
+      "name": "R-3 Phase 5 ROADMAP 갱신과 완료 기록",
+      "description": "Phase 5(최적화 및 배포)가 끝난 뒤 /docs:update-roadmap 5 커맨드로 ROADMAP.md의 Phase 5 상태와 전체 순서 요약 표를 갱신하고 프로젝트 완료 상태를 기록한다. 변경안을 먼저 보여 주고 승인 후에만 반영한다. 배포 URL 키 미노출, 실기기 설치(갤럭시, 아이폰) 같은 항목은 직접 확인 기록이 있을 때만 완료로 쓴다. 마지막으로 모든 Phase 상태가 요약 표와 일치하는지 점검한다.",
+      "notes": "담당: 메인 세션(에이전트 아님). 실기기 확인은 사용자가 직접 한 결과를 근거로 한다. 확인되지 않은 완료 기준은 체크하지 않고 남은 일로 보고한다. docs/PRD.md와 코드는 수정하지 않는다.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "1d96fb9e-6088-44ec-89ee-57f4d0f0bc59"
+        }
+      ],
+      "createdAt": "2026-11-04T00:44:31.157Z",
+      "updatedAt": "2026-11-04T00:44:31.157Z",
+      "relatedFiles": [
+        {
+          "path": "docs/ROADMAP.md",
+          "type": "TO_MODIFY",
+          "description": "Phase 5 상태, 완료 기준, 요약 표 갱신"
+        }
+      ],
+      "implementationGuide": "1) P5-1부터 P5-6까지 Shrimp에서 완료 처리되었는지 list_tasks로 확인한다. 2) /docs:update-roadmap 5를 실행하고 필요하면 전체로도 한 번 실행해 요약 표 일관성을 점검한다. 3) 승인된 줄만 반영하고 diff로 확인한다. 4) 커밋과 PR은 사용자가 요청할 때만 한다.",
+      "verificationCriteria": "Phase 5의 체크마다 근거가 있고 요약 표의 모든 Phase 상태가 본문과 일치한다. 확인되지 않은 항목은 체크되지 않았다. 사용자 승인 후에만 파일이 수정되었다.",
+      "analysisResult": "Run Log의 Phase 4와 Phase 5 마무리 단계. 각 Phase가 끝날 때 /docs:update-roadmap 커맨드로 ROADMAP.md의 진행 상태를 근거와 함께 갱신한다. 확인하지 않은 항목은 체크하지 않고, 파일 수정은 사용자 승인 후에만 한다."
     }
   ]
 }
