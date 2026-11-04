@@ -1087,14 +1087,14 @@
       "name": "P3-7 목록 캐시 기간을 환경 변수로 조절",
       "description": "테스트할 때 노션 변경이 목록에 반영되기까지 최대 5분이 걸려 확인이 늦어지는 문제를 줄인다. lib/runs/load.ts의 unstable_cache revalidate를 환경 변수 RUN_RECORDS_REVALIDATE_SECONDS가 있으면 그 값(양의 정수), 없거나 올바르지 않으면 기본값 300으로 읽는다. 운영 값 300은 PRD와 CLAUDE.md의 규칙이므로 바꾸지 않는다. 홈(app/page.tsx)과 상세(app/runs/[id]/page.tsx)의 export const revalidate = 300은 Next가 정적으로 읽는 값이라 환경 변수를 쓸 수 없으므로 건드리지 않는다. .env.example에 변수 설명을 주석으로 추가한다(값은 비워 두거나 주석 처리). .env.local은 Claude가 편집할 수 없으므로 사용자가 직접 설정한다. CLAUDE.md의 캐시 설명에 테스트용 변수가 있다는 한 줄을 추가한다. 캐시 키 [run-records, v2]는 값의 형태가 바뀌지 않으므로 그대로 둔다.",
       "notes": "사용자가 A 방식(환경 변수)을 선택했다. 개발 편의를 위한 변경이며 운영(Vercel)에는 이 변수를 설정하지 않는다. .env* 파일 중 .env.local은 열지도 편집하지도 않는다. 개발 서버는 띄우지 않고 프로덕션 서버(3100)로 확인한 뒤 종료한다. 노션 쓰기는 사용자 확인 후 TEST- 행으로만 하고 끝나면 휴지통으로 보낸다. P3-2 확인 전에 먼저 진행한다.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "280d346c-9fc5-49af-9cfc-38ecf635daf8"
         }
       ],
       "createdAt": "2026-11-04T08:01:05.851Z",
-      "updatedAt": "2026-11-04T08:01:05.851Z",
+      "updatedAt": "2026-11-04T08:01:17.805Z",
       "relatedFiles": [
         {
           "path": "lib/runs/load.ts",
