@@ -636,7 +636,7 @@
     {
       "id": "11dfc3eb-36c7-47cc-83d9-94cb0a4092d9",
       "name": "P2-5 RunCard 시맨틱과 로딩 스켈레톤 정합",
-      "description": "RunCard의 시맨틱과 접근성을 보완하고 로딩 스켈레톤을 실제 카드와 맞춘다. (1) 거리, 시간, 페이스를 span 나열에서 dl, dt, dd로 바꾼다. (2) 카드 링크에 키보드 포커스 표시가 보이는지 확인하고 필요하면 focus-visible 스타일을 더한다. (3) hover:bg-muted/50이 라이트 모드에서 거의 구분되지 않는지 확인하고 필요하면 조정한다. (4) app/runs/loading.tsx의 자리표시 높이와 구조를 실제 카드(날짜, 제목, 거리·시간·페이스 줄)와 비슷하게 맞춘다. 목록의 ul, li 구조도 검토한다.",
+      "description": "RunCard의 시맨틱과 접근성을 보완하고 로딩 스켈레톤을 실제 카드와 맞춘다. (1) 거리, 시간, 페이스를 span 나열에서 dl, dt, dd로 바꾼다. (2) 카드 링크에 키보드 포커스 표시가 보이는지 확인하고 필요하면 focus-visible 스타일을 더한다. (3) hover:bg-muted/50이 라이트 모드에서 거의 구분되지 않는지 확인하고 필요하면 조정한다. (4) app/runs/loading.tsx의 자리표시 높이와 구조를 실제 카드(날짜, 제목, 거리·시간·페이스 줄)와 비슷하게 맞춘다. (5) app/runs/loading.tsx는 하위 경로인 /runs/[id]에도 적용되어 상세 첫 방문 때 목록 모양 스켈레톤이 보인다. app/runs/[id]/loading.tsx를 만들어 상세 화면(제목, 필드 목록, 버튼) 모양의 자리표시를 둔다. 목록의 ul, li 구조도 검토한다.",
       "notes": "담당: ui-markup-developer. 표시 문자열(페이스 단위)은 P2-4 결과를 따른다. 목록의 ul, li 변경이 필요하면 app/runs/page.tsx의 마크업만 바꾸고 데이터 로직은 건드리지 않는다.",
       "status": "pending",
       "dependencies": [
@@ -645,7 +645,7 @@
         }
       ],
       "createdAt": "2026-10-30T08:44:16.540Z",
-      "updatedAt": "2026-10-30T08:44:16.540Z",
+      "updatedAt": "2026-11-04T00:38:35.732Z",
       "relatedFiles": [
         {
           "path": "components/runs/run-card.tsx",
