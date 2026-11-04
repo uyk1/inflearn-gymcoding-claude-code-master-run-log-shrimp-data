@@ -969,6 +969,64 @@
       "analysisResult": "Run Log의 Phase 2 데이터 계층 보강. P2-6 검증에서 발견된 세 가지를 고친다. 소요시간 파서가 한 자리 초(12:5)를 조용히 받아들이는 문제, 제외 로그에 사유가 없는 문제, 노션 커서가 누락될 때 경고 없이 잘리는 문제. lib/notion 안에서만 변경하고 기존 구조(Controller, Service, Repository, DTO), 한국어 주석, 세미콜론, 큰따옴표 스타일을 따른다.",
       "summary": "P2-6 검증에서 발견된 세 가지를 고쳤다. (1) lib/notion/duration.ts의 parseDurationToSeconds가 첫 구간은 \\d+, 이후 구간은 정확히 \\d{2}만 허용하도록 제한해 12:5, 1:5:03, 45:7, 1:05:3이 null이 된다(12분 50초를 쓰려다 0을 빠뜨린 오타가 틀린 값으로 들어가던 문제). 5:30, 45:23, 1:05:03, 100:00, 0:30과 기존 규칙(초 59 초과, 분 59 초과, 총합 0, 형식 오류)은 그대로다. (2) lib/notion/mapper.ts의 제외 로그가 기존 접두어를 유지하고 뒤에 사유(제목 없음, 날짜 없음, 거리 없음, 소요시간 없음, 소요시간 형식 오류, 복수는 쉼표)를 붙이며 사용자 입력값은 넣지 않는다. (3) lib/notion/repository.ts가 has_more가 true인데 next_cursor가 없을 때 조회 중단 동작은 유지하고 console.warn으로 알린다. 변경은 3개 파일뿐이고 duration.ts는 import 없는 순수 함수 파일을 유지한다. 직접 확인: diff 전체 읽기, 에이전트의 임시 복사본이 저장소 코드와 일치함(duration.ts 완전히 같음, mapper와 repository는 import 별칭과 SDK 대체 줄만 다름), 세 검증 스크립트 재실행 결과가 보고와 같음(파서 25종 전부 기대값 일치, mapper 사유별 로그와 값 미포함 점검 케이스, repository 237건 정상 순회 경고 0건과 커서 누락 시 경고 1건과 반환 100건), BOM 없음, tsc와 lint 재실행 통과, 서버 포트와 python 프로세스 없음. 에이전트가 확인: build 통과, 프로덕션 서버에서 노션 읽기만으로 기존 기록 3건(56:22, 42:13, 1:18:01)이 제외되지 않고 목록에 나오며 페이스 5:38/km, 6:01/km, 6:30/km, 360px 가로 스크롤 없음, 서버 로그에 새 제외 경고 없음. code-reviewer 검토: 차단과 권장 이슈 없음(정규식의 ASCII 숫자 매칭, 사유와 제외 조건의 1대1 대응, 경고의 위치와 오경고 없음 확인), 사소 지적은 0:00이 소요시간 형식 오류로 기록되는 것과 긴 로그 한 줄이며 반영하지 않았다. 한계: 합성 데이터와 목 클라이언트 기반이라 실제 노션 응답에서 12:5가 제외되는 것과 next_cursor 누락 경고는 실제 노션으로 확인하지 못했다. 입력 형식을 좁히는 동작 변경이라 노션에서 12:5처럼 입력한 행은 목록에서 제외되고 로그에 사유가 남는다. PRD 4장은 자릿수를 명시하지 않아 문서 수정이 필요하며 사용자 승인으로 PRD, CLAUDE.md, shrimp-rules.md를 같은 PR에서 반영한다.",
       "completedAt": "2026-11-04T06:27:38.240Z"
+    },
+    {
+      "id": "bce37005-d2f7-4877-ae30-95ec33eb5356",
+      "name": "P3-6 제외된 기록과 사유를 화면에 안내",
+      "description": "노션 행이 필수값 누락이나 형식 오류로 목록에서 빠질 때, 사용자가 화면에서 어떤 행이 왜 빠졌는지 알 수 있게 한다. 현재는 서버 로그(console.warn)에만 남고 화면에는 흔적이 없다. 변경 범위: (1) lib/notion/mapper.ts: 변환 결과를 { records, excluded } 형태로 돌려주도록 바꾼다. excluded 항목은 { pageId, title(없으면 null), reasons: string[], notionUrl } 이다. reasons는 기존 로그의 사유 문구(제목 없음, 날짜 없음, 거리 없음, 소요시간 없음, 소요시간 형식 오류)를 그대로 재사용하고 사용자가 입력한 값 자체는 담지 않는다. console.warn 로그는 유지한다. (2) lib/notion/dto.ts: ExcludedRunDto 타입 추가. (3) service.ts와 lib/runs/load.ts: 목록 조회가 excluded를 함께 반환하고 unstable_cache 직렬화에 문제가 없게 한다. findRunRecord(상세)는 동작을 바꾸지 않는다. (4) components/runs/excluded-notice.tsx: 접을 수 있는 안내 블록. 제외된 건수가 0이면 아무것도 그리지 않는다. 제목(없으면 '제목 없음'), 사유, 노션 원본 링크를 목록으로 보여 준다. 서버 컴포넌트이고 details/summary를 쓴다. (5) app/runs/page.tsx 상단과 홈(app/page.tsx)에 안내를 붙인다. 홈은 한 줄 요약과 /runs 링크만 둔다. 360px에서 가로 스크롤이 없고 라이트·다크 모두 읽혀야 한다. 사용자 결정이 필요한 점: 제외 행의 제목을 공개 화면에 보여도 되는지(기본값: 보여 줌, 이미 목록에 같은 노션 제목이 공개됨).",
+      "notes": "PRD 4장은 제외하고 로그를 남긴다고만 정의하므로 화면 안내 추가는 PRD 보완이 필요하다. 문서 수정은 사용자 승인 후 한다. 노션 쓰기는 사용자 확인 후 TEST- 행으로만 하고 끝나면 휴지통으로 보낸다(예: 소요시간 12:5 행과 날짜 없는 행). .env* 파일은 열지 않는다. 개발 서버는 띄우지 않고 프로덕션 서버(3100)로 확인한 뒤 종료한다. 실행 순서: P3-4 이후, P3-5(시각 확인) 전에 진행하면 P3-5가 새 안내 블록까지 함께 볼 수 있다.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "058a237a-2188-4e7b-8b65-b93c3d6febe2"
+        }
+      ],
+      "createdAt": "2026-11-04T07:28:27.900Z",
+      "updatedAt": "2026-11-04T07:28:27.900Z",
+      "relatedFiles": [
+        {
+          "path": "lib/notion/mapper.ts",
+          "type": "TO_MODIFY",
+          "description": "제외 행 정보를 로그와 함께 결과로 반환"
+        },
+        {
+          "path": "lib/notion/dto.ts",
+          "type": "TO_MODIFY",
+          "description": "ExcludedRunDto 타입 추가"
+        },
+        {
+          "path": "lib/notion/service.ts",
+          "type": "TO_MODIFY",
+          "description": "목록 조회가 records와 excluded를 반환"
+        },
+        {
+          "path": "lib/runs/load.ts",
+          "type": "TO_MODIFY",
+          "description": "캐시된 목록 조회에 excluded 포함"
+        },
+        {
+          "path": "components/runs/excluded-notice.tsx",
+          "type": "CREATE",
+          "description": "제외된 기록 안내 블록"
+        },
+        {
+          "path": "app/runs/page.tsx",
+          "type": "TO_MODIFY",
+          "description": "목록 상단에 안내 표시"
+        },
+        {
+          "path": "app/page.tsx",
+          "type": "TO_MODIFY",
+          "description": "홈에 한 줄 요약과 링크"
+        },
+        {
+          "path": "docs/PRD.md",
+          "type": "REFERENCE",
+          "description": "4장 제외 규칙, 5장 화면 구성 (수정은 승인 후)"
+        }
+      ],
+      "implementationGuide": "1) mapper의 기존 reasons 배열 생성 로직에서 console.warn 직전에 excluded에 { pageId: page.id, title, reasons, notionUrl: page.url } 를 push하고 null 대신 이 배열도 함께 반환한다. 2) service.listRunRecords가 { records, excluded } 를 반환하도록 하고 호출부(load.ts, 홈, 목록)를 맞춘다. findRunRecord는 records만 사용한다. 3) ExcludedNotice({ items }): items.length===0 이면 null, 아니면 <details><summary>N건이 제외되었습니다</summary><ul>...</ul></details>. 4) 완료 후 PRD 5장(화면 구성)과 CLAUDE.md의 구조 설명에 제외 안내가 있다는 한 줄을 추가해야 하므로 먼저 사용자 승인을 받는다.",
+      "verificationCriteria": "(1) tsc와 lint 통과. (2) 실제 노션 TEST 행(소요시간 12:5, 날짜 없음, 제목 없음)을 만들었을 때 목록 상단에 건수와 각 행의 제목·사유·노션 링크가 나오고, 정상 행은 그대로 나온다. 제외 행이 없으면 안내가 그려지지 않는다. (3) 안내에 사용자가 입력한 소요시간·메모 값이 노출되지 않는다. (4) 홈과 목록이 360px에서 가로 스크롤 없이 라이트·다크 모두 읽힌다. (5) 상세(/runs/[id])의 404 동작은 그대로다. (6) TEST 행은 모두 휴지통으로 보내고 in_trash로 확인한다. (7) code-reviewer 리뷰 통과."
     }
   ]
 }
