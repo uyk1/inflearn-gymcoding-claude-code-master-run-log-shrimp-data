@@ -864,7 +864,7 @@
         }
       ],
       "createdAt": "2026-11-04T02:09:07.664Z",
-      "updatedAt": "2026-11-04T05:54:39.697Z",
+      "updatedAt": "2026-11-04T06:03:55.239Z",
       "relatedFiles": [
         {
           "path": "lib/notion/duration.ts",
@@ -894,7 +894,8 @@
       ],
       "implementationGuide": "1) Grep으로 paceText, formatPace, formatPaceLabel 사용처를 모두 찾아 빠짐없이 바꾼다(lib, app, components 전체). 2) duration.ts는 import가 없는 순수 함수 파일이므로 그 성질을 유지한다. 3) 기존 함수 이름 formatPace는 삭제하고 남은 참조가 없는지 확인한다. 4) tsc, lint, build 순서로 검증한다. 5) 순수 함수는 node로 직접 호출해 결과를 기록한다. 6) 프로덕션 서버(포트 3100)에서 기존 노션 행 3건의 카드가 이전과 같은 페이스(5:38/km, 6:01/km, 6:30/km)로 보이는지 확인하고 서버를 종료한다.",
       "verificationCriteria": "paceText와 formatPace의 남은 참조가 없다. 화면 결과가 이전과 같다(정상 행은 m:ss/km, 페이스가 없으면 '-'). 순수 함수 직접 호출 결과가 기록된다(null은 '-', 338은 5:38/km 등). '-' 문자열이 formatPaceLabel 한 곳에만 있다. tsc, lint, build가 통과한다.",
-      "analysisResult": "Run Log의 Phase 2 데이터 계층 정리. 페이스를 문자열 센티널('-')이 아니라 숫자 또는 null로 다루도록 구조를 개선해 타입 안전성을 높인다. 표시 결과는 그대로 유지한다. 담당은 nextjs-developer이며 기존 구조(app은 라우팅, components는 화면, lib는 로직), 한국어 주석, 세미콜론, 큰따옴표 스타일을 따른다."
+      "analysisResult": "Run Log의 Phase 2 데이터 계층 정리. 페이스를 문자열 센티널('-')이 아니라 숫자 또는 null로 다루도록 구조를 개선해 타입 안전성을 높인다. 표시 결과는 그대로 유지한다. 담당은 nextjs-developer이며 기존 구조(app은 라우팅, components는 화면, lib는 로직), 한국어 주석, 세미콜론, 큰따옴표 스타일을 따른다.",
+      "summary": "페이스를 문자열 센티널이 아니라 number 또는 null로 다루도록 구조를 바꿨다. lib/notion/duration.ts의 formatPace를 calcPaceSecondsPerKm(totalSeconds, distanceKm): number | null로 바꾸고(거리가 0 이하이거나 유한한 숫자가 아니면 null, 아니면 Math.round), formatPaceLabel(paceSecondsPerKm: number | null)은 null이면 '-', 아니면 m:ss/km를 돌려준다. DTO의 paceText를 paceSecondsPerKm으로, mapper와 run-card, 상세 페이지의 호출을 맞췄다. 변경은 5개 파일(+17 -17)이고 duration.ts는 import 없는 순수 함수 파일을 유지한다. 직접 확인: 저장소 전체에서 paceText와 formatPace 단독 참조 0건, 페이스 관련 '-' 문자열은 formatPaceLabel 한 곳뿐, BOM 없음, tsc와 lint 재실행 통과, 변경 전후 구현을 같은 입력으로 호출해 결과 일치(calc 338, 361, 390, 거리 0과 음수는 null, label 5:38/km, 6:01/km, 6:30/km, 0:59/km, 60:00/km). 실제 화면 확인(프로덕션 서버, 360px, 노션 TEST 행): 거리 0 TEST 행이 상세 평균 페이스 '-'와 목록 카드 페이스 '-'로 나오고 '-/km'는 없으며, 기존 기록 3건은 5:38/km, 6:01/km, 6:30/km로 이전과 같고 가로 스크롤 없음. TEST 행은 확인 후 휴지통으로 보내 in_trash true와 남은 행 3건, TEST 행 0건을 확인했다. code-reviewer 검토: 차단 이슈 없음, 권장 1건(NaN이 거리 0 이하 검사를 통과해 NaN:NaN/km가 될 수 있음)은 Number.isFinite 가드로 반영하고 NaN과 Infinity가 null로 처리되는 것을 재검증했다. 반영하지 않은 것: 극소 거리(0.001km이면 45000:00/km)는 입력 정책 문제라 이번 리팩터링 범위 밖이며 이전 구현도 같았다, formatDuration과의 분 초 분해 중복은 시간 단위 처리가 달라 묶을 실익이 작다. 한계: 가드를 추가한 뒤에는 build를 다시 돌리지 않고 tsc, lint, 순수 함수 재호출만 확인했다. 후속(P4-2): 통계에서 평균 페이스는 페이스 평균이 아니라 총 시간 나누기 총 거리로 계산하고 null을 제외해야 한다."
     },
     {
       "id": "b031dc12-faaa-44f6-a212-7b04751d4e43",
