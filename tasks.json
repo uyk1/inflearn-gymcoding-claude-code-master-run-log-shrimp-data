@@ -1349,6 +1349,192 @@
       "verificationCriteria": "(1) tsc, lint, 빌드 통과. (2) 합성 검증 통과(범위 없음은 기존과 같고, 범위 밖은 null, 경계 포함, 총 거리와 시간 불변, 스프린트 허용). (3) 실제 노션 TEST 행(거리 0.001km)을 넣어도 페이스 차트가 정상 범위로 읽히고 요약과 거리 차트는 영향이 없다. (4) TEST 행은 휴지통으로 보내고 in_trash로 확인한다.",
       "summary": "통계 화면의 평균 페이스에 허용 범위를 두어 입력 실수 때문에 페이스 차트가 망가지는 문제를 해결했다. lib/runs/stats.ts에 PaceRange와 PLAUSIBLE_PACE_RANGE(60 이상 1800 이하 초/km, 즉 1:00~30:00/km, 양 끝 포함)를 추가하고 buildPeriodStats에 선택 인자 paceRange를 추가했다. 인자가 없으면 기존 동작 그대로이고, 있으면 집계된 평균 페이스가 범위 밖일 때 avgPaceSecondsPerKm만 null로 두며 총 거리, 총 시간, runCount는 그대로다. app/stats/page.tsx가 범위를 넘기고, 요약 카드는 기록이 있는데 페이스가 null이면 허용 범위를 벗어나 표시하지 않는다는 이유를 안내한다. 사용자 결정(제한을 걸되 스프린트 훈련을 고려해 여유를 둔다)에 맞춰 합산 거리 기준(1km 미만)은 스프린트 주간을 숨겨서 쓰지 않고 페이스 값 자체의 범위를 택했다. 검증: tsc, lint, 빌드 통과. 합성 55개 항목(기존 38 + 새 17: 범위 없음은 기존 동작, 0.001km 60초와 0.4km 30분은 null, 스프린트 0.2km 40초와 0.1km 12초는 표시, 경계 60과 1800 포함, 59와 1801 제외, 극소와 정상이 섞인 주는 표시, 합계 불변)이 서버 시간대 서울, UTC, 뉴욕에서 모두 통과했다. 실제 노션 TEST 행 3개(9/15 0.001km, 10/14 0.2km 00:40, 9/23 0.4km 30:00)로 주간 8개와 월간 6개를 독립 계산기(집계 코드 미사용, 허용 범위 규칙을 독립적으로 구현)와 필드 단위로 대조해 모두 일치했고, 극소와 오타성 기간은 페이스만 숨겨지며 거리 합계는 유지되고 스프린트 주는 3:20/km로 표시됨을 확인했다. 페이스 차트가 정상 범위(Y축 4:00~7:00)로 읽히는 것을 360px 라이트와 다크, 주간과 월간으로 확인했고 SVG 글자 대비 최저 6.94였다. 요약 카드의 안내 문구는 모의 데이터 임시 페이지로 숨김 사례에서만 한 번 나오고 정상과 기록 없음에서는 나오지 않음을 확인했다(첫 시도는 검사 스크립트가 빈 문자열을 뽑아 확인이 되지 않았고 방식을 고쳐 다시 확인). TEST 행은 휴지통으로 보냈고 남은 행은 기존 6건이며 임시 페이지는 삭제했다. code-reviewer 차단 없음, 권장 반영. 한계: 범위 안에 드는 오타(5km를 0.5km로 입력 등)는 걸러내지 못하고 CLAUDE.md에 명시했다. 페이스 Y축 눈금 간격이 고르지 않을 수 있다(30초 단위 도메인). 테스트 러너가 없어 합성 검증은 일회성이다. 요약 카드 안내를 실제 노션 행으로 화면에서 본 것은 아니다.",
       "completedAt": "2026-11-05T04:22:02.776Z"
+    },
+    {
+      "id": "caaaa008-0495-420e-bd20-30c7cad023b7",
+      "name": "V2-P0-1 PRD 변경 방식 결정",
+      "description": "관리자 페이지(인증, 웹 입력·수정·삭제)가 docs/PRD.md와 충돌하는 항목을 목록으로 만들고, PRD를 어떻게 바꿀지 사용자가 정하게 한다. 이 태스크에서는 PRD 파일을 수정하지 않는다(반영은 V2-P0-5). 충돌 후보: 6장 MVP 제외의 로그인·인증과 웹에서 기록 입력·수정·삭제, 2장 주요 기능, 5장 화면 구성(/admin 없음), 8장 비기능(노션 키 서버 전용, 쓰기 키 추가), 9장 리스크, 10장 향후 확장.",
+      "notes": "사용자 결정 태스크다. 제출한 PRD를 바꾸는 일일 수 있어 사용자 판단이 필요하다(메모리 admin-page-roadmap-v2). 결정 전에는 PRD를 수정하지 않는다.",
+      "status": "pending",
+      "dependencies": [],
+      "createdAt": "2026-11-05T08:20:04.138Z",
+      "updatedAt": "2026-11-05T08:20:04.138Z",
+      "relatedFiles": [
+        {
+          "path": "docs/PRD.md",
+          "type": "REFERENCE",
+          "description": "충돌 항목 확인 대상, 이 태스크에서는 수정하지 않음"
+        },
+        {
+          "path": "docs/ROADMAP.md",
+          "type": "REFERENCE",
+          "description": "v2 Phase 0 할 작업"
+        },
+        {
+          "path": "docs/roadmaps/ROADMAP-v1.md",
+          "type": "REFERENCE",
+          "description": "v1 MVP 완료 기록과 남은 한계"
+        }
+      ],
+      "implementationGuide": "1) docs/PRD.md 전체와 docs/roadmaps/ROADMAP-v1.md의 MVP 완료 기록을 읽는다. 2) 충돌하는 장과 항목을 표로 정리한다. 3) 옵션을 장단점과 함께 제시한다: A 기존 PRD를 직접 수정(한 문서로 유지, v1 시점의 제출본 내용이 바뀜), B v2용 PRD를 새 파일로 작성하고 v1 PRD는 보관(제출본 보존, 문서가 둘로 나뉨), C 기존 PRD는 두고 v2 범위만 ROADMAP에 적음(변경 최소, PRD와 로드맵이 어긋남). 4) AskUserQuestion으로 사용자가 고르게 한다. 5) 선택 결과와 근거를 이 태스크 notes에 기록한다.",
+      "verificationCriteria": "PRD와 충돌하는 항목이 표로 정리되어 있고, 사용자가 고른 변경 방식과 근거가 notes에 기록되어 있다. docs/PRD.md는 변경되지 않았다.",
+      "analysisResult": "Run Log v2(관리자 페이지 고도화)의 Phase 0 준비 단계. docs/ROADMAP.md(v2) Phase 0의 할 작업 5가지를 결정과 문서 작업으로 나눈다. 이 단계에서는 코드를 바꾸지 않고, docs/PRD.md는 사용자가 방식을 정한 뒤에만 수정한다. 결정이 필요한 항목은 사용자에게 옵션과 근거를 보여 주고 사용자가 고른다. 노션 변경은 하지 않는다(필요하면 사용자 확인 후 TEST- 행만, 끝나면 휴지통과 in_trash 확인). 전역 규칙: 한국어 응답과 문서, 직접 확인하지 않은 것은 확인했다고 쓰지 않는다."
+    },
+    {
+      "id": "0fd4fe0d-ff61-43f1-856e-9d4e8f770954",
+      "name": "V2-P0-2 제외 행 입력 원문 표시 정책 결정",
+      "description": "관리자 화면에서 제외된 행의 입력 원문(날짜, 소요시간 등)을 보여 줄지 정한다. 현재 PRD 4장은 공개 화면에서 제목을 뺀 입력값 원문을 보여 주지 않는다. 제외 행을 고치려면 관리자에게는 무엇이 틀렸는지 보이는 것이 필요하다. 현재 데이터 계층의 ExcludedRunDto는 pageId, title, reasons, notionUrl만 담고 원문이 없으므로, 관리자용 원문 조회 경로가 필요하다는 구현 영향을 함께 정리한다.",
+      "notes": "사용자 결정 태스크다. 코드는 바꾸지 않는다. 원문에는 메모나 장소가 아닌 날짜와 소요시간 같은 입력값이 포함될 수 있어 공개 경로로 새지 않도록 경로 분리가 전제다.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "caaaa008-0495-420e-bd20-30c7cad023b7"
+        }
+      ],
+      "createdAt": "2026-11-05T08:20:04.138Z",
+      "updatedAt": "2026-11-05T08:20:04.138Z",
+      "relatedFiles": [
+        {
+          "path": "lib/notion/dto.ts",
+          "type": "REFERENCE",
+          "description": "ExcludedRunDto 현재 필드"
+        },
+        {
+          "path": "lib/notion/mapper.ts",
+          "type": "REFERENCE",
+          "description": "제외 사유 생성"
+        },
+        {
+          "path": "components/runs/excluded-notice.tsx",
+          "type": "REFERENCE",
+          "description": "공개 제외 안내"
+        },
+        {
+          "path": "docs/PRD.md",
+          "type": "REFERENCE",
+          "description": "4장 계산 규칙의 원문 비공개 규칙"
+        }
+      ],
+      "implementationGuide": "1) lib/notion/dto.ts의 ExcludedRunDto와 lib/notion/mapper.ts의 제외 사유 생성부, components/runs/excluded-notice.tsx를 읽는다. 2) 옵션과 영향을 정리한다: A 관리자(로그인 상태)에게만 입력 원문을 보여 준다(공개 DTO와 분리된 관리자 전용 조회 경로 필요, 인증 뒤 서버에서만 조회), B 원문은 보여 주지 않고 사유만 안내하며 수정 화면에는 노션의 현재 값을 폼 기본값으로 채운다, C 공개 화면에서도 보여 준다(PRD 4장 규칙을 바꾸는 것이라 비권장). 3) 사용자가 고르게 한다. 4) 결과를 notes에 기록하고 Phase 5 완료 기준에 미칠 영향을 적는다.",
+      "verificationCriteria": "사용자가 고른 정책과 근거, 구현 영향(관리자 전용 조회 경로 필요 여부)이 notes에 기록되어 있다. 코드와 PRD는 변경되지 않았다.",
+      "analysisResult": "Run Log v2(관리자 페이지 고도화)의 Phase 0 준비 단계. docs/ROADMAP.md(v2) Phase 0의 할 작업 5가지를 결정과 문서 작업으로 나눈다. 이 단계에서는 코드를 바꾸지 않고, docs/PRD.md는 사용자가 방식을 정한 뒤에만 수정한다. 결정이 필요한 항목은 사용자에게 옵션과 근거를 보여 주고 사용자가 고른다. 노션 변경은 하지 않는다(필요하면 사용자 확인 후 TEST- 행만, 끝나면 휴지통과 in_trash 확인). 전역 규칙: 한국어 응답과 문서, 직접 확인하지 않은 것은 확인했다고 쓰지 않는다."
+    },
+    {
+      "id": "5fccb3ad-fd1b-41b3-a875-d50e0592d81c",
+      "name": "V2-P0-3 상세 화면 노션 직접 조회 처리 방침 결정",
+      "description": "v1에서 알려진 한계인 상세 화면(/runs/[id])의 노션 직접 조회를 v2에서 어떻게 할지 정한다. 상세는 목록 캐시를 거치지 않고 노션 전체 기록을 조회해 존재하지 않는 서로 다른 id마다 노션 호출이 생긴다(README 알려진 한계, v1 P5-1 실측: 서로 다른 가짜 id 3개에 호출 3회). 관리자 쓰기를 넣으면 쓰기 직후 revalidateTag로 캐시를 갱신할 수 있어 선택지가 달라진다.",
+      "notes": "사용자 결정 태스크다. 이 태스크에서는 코드를 바꾸지 않는다. 선택한 방침의 구현은 v2 Phase 2 또는 3에 포함하거나 별도 태스크로 등록한다.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "0fd4fe0d-ff61-43f1-856e-9d4e8f770954"
+        }
+      ],
+      "createdAt": "2026-11-05T08:20:04.138Z",
+      "updatedAt": "2026-11-05T08:20:04.138Z",
+      "relatedFiles": [
+        {
+          "path": "lib/notion/service.ts",
+          "type": "REFERENCE",
+          "description": "findRunRecord"
+        },
+        {
+          "path": "lib/runs/load.ts",
+          "type": "REFERENCE",
+          "description": "unstable_cache와 태그 run-records"
+        },
+        {
+          "path": "app/runs/[id]/page.tsx",
+          "type": "REFERENCE",
+          "description": "상세 페이지 조회 경로"
+        },
+        {
+          "path": "README.md",
+          "type": "REFERENCE",
+          "description": "알려진 한계 문구"
+        }
+      ],
+      "implementationGuide": "1) lib/notion/service.ts의 findRunRecord, lib/runs/load.ts의 unstable_cache, app/runs/[id]/page.tsx를 읽는다. 2) 옵션과 영향을 정리한다: A 상세도 loadRunRecords 캐시를 재사용(노션 호출 증폭 해소, 노션에서 직접 추가한 기록이 상세에서 최대 약 1분 늦게 열릴 수 있고 관리자 쓰기 뒤에는 revalidateTag로 해소, CLAUDE.md의 상세는 직접 조회 설명을 고쳐야 함), B id가 UUID 형식이 아니면 노션을 부르지 않고 404(변경이 작지만 UUID 형식의 임의 값은 막지 못함), C 그대로 두고 배포 로그로 관찰. 3) 사용자가 고르게 한다. 4) 구현이 필요하면 어느 Phase에 넣을지(예: Phase 2 쓰기 계층)를 정해 notes에 적는다.",
+      "verificationCriteria": "사용자가 고른 방침과 근거, 구현 시점(어느 Phase)이 notes에 기록되어 있다. 코드는 변경되지 않았다.",
+      "analysisResult": "Run Log v2(관리자 페이지 고도화)의 Phase 0 준비 단계. docs/ROADMAP.md(v2) Phase 0의 할 작업 5가지를 결정과 문서 작업으로 나눈다. 이 단계에서는 코드를 바꾸지 않고, docs/PRD.md는 사용자가 방식을 정한 뒤에만 수정한다. 결정이 필요한 항목은 사용자에게 옵션과 근거를 보여 주고 사용자가 고른다. 노션 변경은 하지 않는다(필요하면 사용자 확인 후 TEST- 행만, 끝나면 휴지통과 in_trash 확인). 전역 규칙: 한국어 응답과 문서, 직접 확인하지 않은 것은 확인했다고 쓰지 않는다."
+    },
+    {
+      "id": "4f8ada48-f7d6-4df5-a197-a93ab83d5df9",
+      "name": "V2-P0-4 노션 쓰기 키 분리와 테스트 전략 정리",
+      "description": "관리자 쓰기를 위한 노션 키 분리 방식과 테스트 전략을 정한다. 공개 조회는 지금의 읽기 전용 키를 유지하고 관리자 쓰기는 별도 키(서버 전용 환경 변수)를 쓰도록 분리한다. 현재 프로젝트에는 테스트 러너가 없어, 쓰기 기능을 만들기 전에 검증 방식을 정해야 한다.",
+      "notes": "사용자 결정 태스크다. 새 패키지는 사용자 승인 후에만 설치한다. 키 값은 읽거나 출력하지 않고 이름만 다룬다. 노션 쓰기 검증은 사용자 확인 후 TEST- 행만, 끝나면 휴지통과 in_trash 확인 규칙을 유지한다.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "5fccb3ad-fd1b-41b3-a875-d50e0592d81c"
+        }
+      ],
+      "createdAt": "2026-11-05T08:20:04.138Z",
+      "updatedAt": "2026-11-05T08:20:04.138Z",
+      "relatedFiles": [
+        {
+          "path": "lib/notion/client.ts",
+          "type": "REFERENCE",
+          "description": "읽기 클라이언트와 server-only 가드"
+        },
+        {
+          "path": "lib/notion/container.ts",
+          "type": "REFERENCE",
+          "description": "환경 변수 조립"
+        },
+        {
+          "path": ".env.example",
+          "type": "REFERENCE",
+          "description": "변수 이름만 확인, 값은 읽지 않음"
+        },
+        {
+          "path": "package.json",
+          "type": "REFERENCE",
+          "description": "테스트 러너 유무 확인"
+        }
+      ],
+      "implementationGuide": "1) 노션 키: 환경 변수 이름 후보(예: NOTION_ADMIN_API_KEY), server-only 모듈 분리 방식(공개 읽기 경로가 쓰기 모듈을 import하지 못하게), Vercel 환경 변수 등록 계획, 통합 권한 최소 범위(읽기, 삽입, 수정)를 정리한다. 삭제를 휴지통 이동으로 할 때 필요한 권한은 context7 또는 노션 공식 문서로 확인하고 확인하지 못하면 추측이라고 적는다. 개발용 키는 쓰기 권한이 있고 배포용은 읽기 전용이라는 현재 상태를 함께 적는다. 2) 테스트 전략 옵션: A 도입하지 않고 검증 스크립트와 수동 확인(패키지 없음, 회귀 방지 약함), B Node 내장 test runner로 검증 함수만 단위 테스트(새 패키지 없음), C vitest 도입(새 패키지 승인 필요). 3) 사용자가 테스트 전략을 고르게 한다. 4) 결과를 notes에 기록한다.",
+      "verificationCriteria": "쓰기 키 분리 방식(환경 변수 이름, 모듈 분리, 권한 범위)과 사용자가 고른 테스트 전략이 notes에 기록되어 있다. 확인하지 못한 권한 사항은 추측이라고 표시되어 있다. 키 값은 어디에도 기록되지 않았다.",
+      "analysisResult": "Run Log v2(관리자 페이지 고도화)의 Phase 0 준비 단계. docs/ROADMAP.md(v2) Phase 0의 할 작업 5가지를 결정과 문서 작업으로 나눈다. 이 단계에서는 코드를 바꾸지 않고, docs/PRD.md는 사용자가 방식을 정한 뒤에만 수정한다. 결정이 필요한 항목은 사용자에게 옵션과 근거를 보여 주고 사용자가 고른다. 노션 변경은 하지 않는다(필요하면 사용자 확인 후 TEST- 행만, 끝나면 휴지통과 in_trash 확인). 전역 규칙: 한국어 응답과 문서, 직접 확인하지 않은 것은 확인했다고 쓰지 않는다."
+    },
+    {
+      "id": "7c3b9b55-22fc-4270-84d8-8d78901bfa85",
+      "name": "V2-P0-5 Phase 0 결정 반영과 ROADMAP 갱신",
+      "description": "앞선 네 결정을 문서에 반영한다. V2-P0-1에서 사용자가 고른 방식대로 PRD를 변경(또는 새 PRD 작성)하고, 결정이 v2 Phase 1~6의 내용과 완료 기준에 미치는 영향을 ROADMAP에 보정하고, Phase 0 상태를 /docs:update-roadmap 0으로 갱신한다. 모든 문서 수정은 변경안을 before와 after로 먼저 보여 주고 사용자 승인 후에만 한다.",
+      "notes": "코드는 수정하지 않는다. PRD 수정은 V2-P0-1의 결정과 승인 뒤에만 한다. 직접 확인하지 않은 항목은 완료로 쓰지 않는다.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "4f8ada48-f7d6-4df5-a197-a93ab83d5df9"
+        }
+      ],
+      "createdAt": "2026-11-05T08:20:04.138Z",
+      "updatedAt": "2026-11-05T08:20:04.138Z",
+      "relatedFiles": [
+        {
+          "path": "docs/PRD.md",
+          "type": "TO_MODIFY",
+          "description": "V2-P0-1 결정에 따라 수정 또는 새 PRD 작성"
+        },
+        {
+          "path": "docs/ROADMAP.md",
+          "type": "TO_MODIFY",
+          "description": "Phase 0 상태와 결정 영향 보정"
+        },
+        {
+          "path": "CLAUDE.md",
+          "type": "REFERENCE",
+          "description": "바뀌는 설명 확인"
+        },
+        {
+          "path": "README.md",
+          "type": "REFERENCE",
+          "description": "바뀌는 설명 확인"
+        }
+      ],
+      "implementationGuide": "1) V2-P0-1~4의 notes에서 결정 사항을 모은다. 2) PRD 변경안을 선택된 방식대로 작성해 보여 주고 승인 후 반영한다(제출본 보존이 필요하면 새 파일). 3) docs/ROADMAP.md의 Phase 1~6 중 결정 영향이 있는 줄(예: 제외 행 원문 표시, 상세 처리 방침, 테스트 도입, 키 이름)을 변경안으로 보여 주고 승인 후 보정한다. 4) /docs:update-roadmap 0을 실행해 Phase 0 상태와 완료 기준을 증거와 함께 갱신한다(승인 후). 5) CLAUDE.md와 README 중 바뀌는 설명이 있으면 같이 제안한다. 6) 커밋, PR, 머지는 사용자가 요청할 때만 한다.",
+      "verificationCriteria": "PRD와 ROADMAP 변경이 모두 사용자 승인 후에만 반영되었다. Phase 0 완료 기준 각 항목에 근거가 있고 확인되지 않은 항목은 체크되지 않았다. 변경 줄만 diff에 나타나고 표기가 깨지지 않았다.",
+      "analysisResult": "Run Log v2(관리자 페이지 고도화)의 Phase 0 준비 단계. docs/ROADMAP.md(v2) Phase 0의 할 작업 5가지를 결정과 문서 작업으로 나눈다. 이 단계에서는 코드를 바꾸지 않고, docs/PRD.md는 사용자가 방식을 정한 뒤에만 수정한다. 결정이 필요한 항목은 사용자에게 옵션과 근거를 보여 주고 사용자가 고른다. 노션 변경은 하지 않는다(필요하면 사용자 확인 후 TEST- 행만, 끝나면 휴지통과 in_trash 확인). 전역 규칙: 한국어 응답과 문서, 직접 확인하지 않은 것은 확인했다고 쓰지 않는다."
     }
   ]
 }
