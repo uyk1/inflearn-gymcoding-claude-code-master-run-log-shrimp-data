@@ -169,14 +169,14 @@
       "name": "P4-1 recharts 설치와 shadcn chart 호환 확인",
       "description": "recharts를 설치하고 shadcn chart 컴포넌트와 호환되는지 확인한다. 설치는 npm install recharts로 하며, shadcn chart 추가는 npx shadcn@latest add chart로 한다. components/ui 직접 수정은 하지 않는다.",
       "notes": "package.json과 package-lock.json은 훅으로 편집이 차단될 수 있으므로 npm 명령으로만 변경한다. 패키지를 추가하기 전에 dependency-manager 에이전트로 recharts의 React 19, Next.js 15.5 호환성과 shadcn chart(base-nova) 호환을 확인한다. PRD 기술 스택 밖의 패키지는 사용자 확인 없이 설치하지 않는다.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "c7e409ff-25da-426d-94ea-9b49a5435a49"
         }
       ],
       "createdAt": "2026-10-30T05:26:02.252Z",
-      "updatedAt": "2026-11-04T04:53:31.583Z",
+      "updatedAt": "2026-11-05T01:33:24.133Z",
       "relatedFiles": [
         {
           "path": "package.json",
