@@ -1428,14 +1428,14 @@
       "name": "V2-P0-3 상세 화면 노션 직접 조회 처리 방침 결정",
       "description": "v1에서 알려진 한계인 상세 화면(/runs/[id])의 노션 직접 조회를 v2에서 어떻게 할지 정한다. 상세는 목록 캐시를 거치지 않고 노션 전체 기록을 조회해 존재하지 않는 서로 다른 id마다 노션 호출이 생긴다(README 알려진 한계, v1 P5-1 실측: 서로 다른 가짜 id 3개에 호출 3회). 관리자 쓰기를 넣으면 쓰기 직후 revalidateTag로 캐시를 갱신할 수 있어 선택지가 달라진다.",
       "notes": "사용자 결정 태스크다. 이 태스크에서는 코드를 바꾸지 않는다. 선택한 방침의 구현은 v2 Phase 2 또는 3에 포함하거나 별도 태스크로 등록한다.\n\n[참고] V2-P0-1 결정(2026-11-05): PRD는 v2를 새로 작성하고 v1은 docs/prds/PRD-v1.md로 보관한다. 이 태스크의 결정도 v2 PRD의 8장·9장 문구에 반영된다.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "0fd4fe0d-ff61-43f1-856e-9d4e8f770954"
         }
       ],
       "createdAt": "2026-11-05T08:20:04.138Z",
-      "updatedAt": "2026-11-05T08:22:50.300Z",
+      "updatedAt": "2026-11-05T08:26:48.896Z",
       "relatedFiles": [
         {
           "path": "lib/notion/service.ts",
