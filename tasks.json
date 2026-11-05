@@ -376,7 +376,7 @@
         }
       ],
       "createdAt": "2026-10-30T05:26:08.528Z",
-      "updatedAt": "2026-11-05T05:22:33.518Z",
+      "updatedAt": "2026-11-05T05:24:04.718Z",
       "relatedFiles": [
         {
           "path": "app/manifest.ts",
@@ -387,7 +387,8 @@
         }
       ],
       "implementationGuide": "1. npm run dev 또는 npm run build 후 start로 서버를 띄운다. 2. Playwright로 /manifest.webmanifest와 HTML head를 확인한다. 3. 가능하면 Lighthouse 또는 DevTools로 installability를 확인한다.",
-      "verificationCriteria": "manifest 오류 없음, 설치 가능 조건 충족, 아이콘 로드 오류 없음"
+      "verificationCriteria": "manifest 오류 없음, 설치 가능 조건 충족, 아이콘 로드 오류 없음",
+      "summary": "P4-7 완료. main(머지 e2bf01f) 기준 프로덕션 빌드·서버(3100)에서 Chromium DevTools 프로토콜(Application 탭이 쓰는 Page.getAppManifest, Page.getInstallabilityErrors)로 확인. manifest 오류 0건(errors 빈 배열), 설치 가능성 오류 0건(installabilityErrors 빈 배열), manifest 원문: name/short_name Run Log, display standalone, start_url /, scope /, theme·background #000000, 아이콘 3개. 아이콘 3종 모두 200 image/png이고 PNG 헤더 실측 크기가 선언과 일치(192, 512, maskable 512). HTML head에 link rel=manifest(/manifest.webmanifest)와 apple-touch-icon(/apple-touch-icon.png) 확인. 앞선 P4-6 확인에서 실제 beforeinstallprompt 발생도 확인됨. 한계: 실제 Chrome 창의 설치 대화상자와 Lighthouse 점수는 확인하지 않음(Lighthouse는 새 패키지 필요), 실기기는 Phase 5. 서버 종료, 코드 변경 없음."
     },
     {
       "id": "fc0e5007-d9ee-404c-bd0f-5c9cd26dafeb",
