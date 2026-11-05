@@ -271,14 +271,14 @@
       "name": "P4-4 통계 수동 계산 대조와 다크모드 확인",
       "description": "통계 화면의 주간·월간 거리와 평균 페이스가 샘플 기록의 수동 계산 값과 일치하는지 최소 1건 대조하고, 차트가 라이트·다크 모드 모두에서 읽히는지 확인한다.",
       "notes": "다크모드는 ThemeProvider와 theme-toggle 기준으로 전환한다.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "2c32bdfa-eaa3-4760-a936-34e15fc93429"
         }
       ],
       "createdAt": "2026-10-30T05:26:02.252Z",
-      "updatedAt": "2026-10-30T05:26:02.252Z",
+      "updatedAt": "2026-11-05T04:08:48.263Z",
       "relatedFiles": [
         {
           "path": "components/theme-toggle.tsx",
