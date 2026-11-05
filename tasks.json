@@ -888,14 +888,14 @@
       "name": "R-3 Phase 5 ROADMAP 갱신과 완료 기록",
       "description": "Phase 5(최적화 및 배포)가 끝난 뒤 /docs:update-roadmap 5 커맨드로 ROADMAP.md의 Phase 5 상태와 전체 순서 요약 표를 갱신하고 프로젝트 완료 상태를 기록한다. 변경안을 먼저 보여 주고 승인 후에만 반영한다. 배포 URL 키 미노출, 실기기 설치(갤럭시, 아이폰) 같은 항목은 직접 확인 기록이 있을 때만 완료로 쓴다. 마지막으로 모든 Phase 상태가 요약 표와 일치하는지 점검한다.",
       "notes": "담당: 메인 세션(에이전트 아님). 실기기 확인은 사용자가 직접 한 결과를 근거로 한다. 확인되지 않은 완료 기준은 체크하지 않고 남은 일로 보고한다. docs/PRD.md와 코드는 수정하지 않는다.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "1d96fb9e-6088-44ec-89ee-57f4d0f0bc59"
         }
       ],
       "createdAt": "2026-11-04T00:44:31.157Z",
-      "updatedAt": "2026-11-04T00:44:31.157Z",
+      "updatedAt": "2026-11-05T07:39:37.188Z",
       "relatedFiles": [
         {
           "path": "docs/ROADMAP.md",
