@@ -476,7 +476,7 @@
       "id": "69528d04-1f27-43cf-8dea-94e17e6fbf06",
       "name": "P5-4 갤럭시 Chrome 홈 화면 설치 실기기 확인",
       "description": "갤럭시 기기의 Chrome과 Samsung Internet에서 배포 URL을 열고 홈 화면에 추가한 뒤 주소창 없는 독립 창으로 실행되는지 확인한다.",
-      "notes": "사용자 기기에서 수행하는 작업이므로 사용자에게 절차를 안내한다.",
+      "notes": "사용자 기기에서 수행하는 작업이므로 사용자에게 절차를 안내한다.\n\n[2026-11-05 사용자 결정] 현재 갤럭시 기기가 없어 이 태스크는 보류(pending 유지)한다. 완료로 처리하지 않고 ROADMAP에서도 갤럭시 항목은 ✅ 없이 미확인으로 둔다. 기기를 구하면 https://pjt-run-log.vercel.app 으로 확인한다. 안드로이드에서만 볼 수 있는 확인 항목: (1) '앱 설치' 버튼이 실제로 뜨는지(P4-6 리뷰에서 beforeinstallprompt를 하이드레이션 전에 놓칠 가능성 지적, 로컬 Chromium에서는 정상), (2) 설치 후 주소창 없는 독립 창, (3) Samsung Internet 동작, (4) maskable 아이콘이 원형 마스크에서 잘리지 않는지. 아이폰 Safari는 P5-5에서 사용자 확인 완료.",
       "status": "pending",
       "dependencies": [
         {
@@ -484,7 +484,7 @@
         }
       ],
       "createdAt": "2026-10-30T05:26:19.187Z",
-      "updatedAt": "2026-10-30T05:26:19.187Z",
+      "updatedAt": "2026-11-05T06:44:37.726Z",
       "relatedFiles": [
         {
           "path": "app/manifest.ts",
