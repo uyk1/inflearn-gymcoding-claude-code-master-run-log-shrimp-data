@@ -1237,6 +1237,49 @@
       "verificationCriteria": "(1) tsc, lint, 빌드 통과. (2) 홈과 상세와 목록의 revalidate가 60이고 load.ts 기본값이 60이다. (3) 합성 검증 통과(변수 없음과 빈 문자열은 60, 올바른 정수는 그 값, 잘못된 값은 경고 후 60). (4) 실제 노션 TEST 행으로 기본 조건(변수 빈 값)에서 목록은 약 1분 안팎, 홈은 약 2분 안에 나타난다. (5) 문서의 300초와 5분 표기가 새 값과 일치하고 ROADMAP은 수정하지 않았다. (6) TEST 행은 휴지통으로 보내고 in_trash로 확인한다. (7) code-reviewer 리뷰 통과.",
       "summary": "노션 캐시 기본 기간을 300초에서 60초로 단축했다. 홈, 상세, 목록의 export const revalidate를 60으로 바꾸고 lib/runs/load.ts의 DEFAULT_REVALIDATE_SECONDS와 주석, 경고 문구를 맞췄으며 RUN_RECORDS_REVALIDATE_SECONDS는 테스트용으로 더 줄이는 용도로 그대로 둔다. 캐시 키 v2는 값 형태가 같아 유지했다. .env.example, CLAUDE.md, shrimp-rules.md, nextjs-developer 에이전트 정의의 300초와 5분 표기를 맞췄고 ROADMAP은 R-1에서 승인 후 갱신하도록 두었다. 검증: tsc, lint, 빌드 통과, 합성 12개 항목 통과(변수 없음과 빈 값 60, 올바른 정수는 그 값, 잘못된 값 7개에서만 경고). 실제 노션 TEST 행으로 변수를 빈 값으로 빌드하고 시작한 기본 조건에서 목록과 홈 모두 행 생성 후 46초에 반영됨을 확인했다(300초 기본값 때 목록 약 4분). TEST 행은 휴지통으로 보내 in_trash로 확인했고 남은 행은 3건이다. code-reviewer는 차단 이슈 없음, 권장 2건(접속이 꾸준할 때의 상한이라는 조건과 상세는 목록 캐시를 거치지 않는다는 점)을 CLAUDE.md와 shrimp-rules.md에 반영했다. 한계: 반영 시간은 한 번의 측정이고 홈의 최악(ISR 60초와 목록 캐시 60초가 겹친 약 2분, 접속이 없다가 첫 접속)은 실측하지 않았다. 홈과 상세가 목록 캐시를 이중으로 쓰는 구조 정리는 P5-1 범위다. Vercel 환경의 동작은 배포 전이라 미확인.",
       "completedAt": "2026-11-04T08:34:18.380Z"
+    },
+    {
+      "id": "583258c4-41d8-4fec-bba0-c6e85380aa61",
+      "name": "P3-9 카드 통계줄 통일과 outline 버튼 테두리 수정",
+      "description": "P3-5 시각 확인에서 발견된 두 가지를 고친다. (1) 카드 통계줄 통일(사용자 요청, 승인됨): components/runs/run-card.tsx의 거리, 시간, 페이스가 flex-wrap 인라인이라 360px에서 값 길이에 따라 어떤 카드는 한 줄 어떤 카드는 두 줄로 보여 모양이 제각각이다. 값 길이와 무관하게 모든 카드가 같은 구조가 되도록 3열 격자(grid-cols-3)로 바꾸고 각 칸은 라벨(dt)이 위, 값(dd)이 아래에 오게 한다. 홈, 목록, 위 카드가 모두 같은 RunCard를 쓴다. app/runs/loading.tsx의 카드 자리표시도 새 구조(3열)에 맞춰 높이와 모양을 정합한다. 접근성을 위해 dl/dt/dd 구조는 유지한다. 360px과 320px, 768px 이상(홈 3열 카드), 라이트와 다크에서 값이 길어도(예: 12.01 km, 1:18:01, 10:00/km) 가로 스크롤과 줄바꿈 불일치가 없어야 한다. (2) outline 버튼 테두리(사용자 승인 대기): app/page.tsx 41행의 전체 보기 링크와 app/runs/[id]/page.tsx 93행의 노션에서 원본 보기 링크가 buttonVariants를 cn() 없이 직접 호출해 라이트 모드에서 border-transparent가 border-border를 이겨 테두리가 보이지 않는다. 두 호출을 cn(buttonVariants(...))로 감싸 error, not-found, period-tabs와 같은 방식으로 맞춘다. components/ui/button.tsx(shadcn 생성물)는 수정하지 않는다. (2)는 사용자가 수정을 승인하기 전에는 하지 않는다.",
+      "notes": "담당: ui-markup-developer(UI 변경과 시각 확인). 서버는 사용자가 요청하기 전에는 띄우지 않고 프로덕션 서버(3100)로 확인한 뒤 종료한다. 빌드와 서버가 겹치지 않게 한다. 노션 쓰기 없음. P3-5에서 푸터의 스타터 문구(Built with Next.js & shadcn/ui)도 발견했으며 이 태스크 범위가 아니라 P5-7 README 정리 때 함께 다룰 후보다. R-1은 이 태스크 뒤에 한다.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "4ed284a1-be25-4561-8b4a-c9d9a9c9dab2"
+        }
+      ],
+      "createdAt": "2026-11-05T01:00:58.437Z",
+      "updatedAt": "2026-11-05T01:00:58.437Z",
+      "relatedFiles": [
+        {
+          "path": "components/runs/run-card.tsx",
+          "type": "TO_MODIFY",
+          "description": "통계줄을 3열 격자로 통일"
+        },
+        {
+          "path": "app/runs/loading.tsx",
+          "type": "TO_MODIFY",
+          "description": "카드 자리표시를 새 구조에 정합"
+        },
+        {
+          "path": "app/page.tsx",
+          "type": "TO_MODIFY",
+          "description": "전체 보기 링크의 buttonVariants를 cn()으로 (승인 후)"
+        },
+        {
+          "path": "app/runs/[id]/page.tsx",
+          "type": "TO_MODIFY",
+          "description": "노션에서 원본 보기 링크의 buttonVariants를 cn()으로 (승인 후)"
+        },
+        {
+          "path": "components/ui/button.tsx",
+          "type": "REFERENCE",
+          "description": "수정하지 않음"
+        }
+      ],
+      "implementationGuide": "1) RunCard의 dl을 grid grid-cols-3 gap-x-3 로 바꾸고 각 div를 flex-col 또는 block으로 라벨 위 값 아래로 둔다. 값은 text-sm font-medium 등으로 읽히게 하고 whitespace-nowrap 여부는 320px 확인 후 정한다. 2) loading.tsx의 카드 자리표시를 3열 구조로 맞춘다. 3) 기존 노션 3건(홈 3개 카드)으로 360, 320, 768px 라이트와 다크를 확인한다. TEST 행은 만들지 않는다. 4) (2) 승인 후 두 파일에서 buttonVariants 호출을 cn()으로 감싸고 라이트에서 테두리 대비를 측정한다(border-border 대 페이지 배경).",
+      "verificationCriteria": "(1) tsc, lint, 빌드 통과. (2) 홈과 목록의 모든 카드가 값 길이와 무관하게 같은 3열 구조이고 360px과 320px에서 가로 스크롤이 없다. (3) 768px 이상에서 홈 3열 카드와 목록 격자에서도 깨지지 않는다. (4) 라이트와 다크에서 글자 대비 4.5 이상. (5) 로딩 자리표시가 새 카드와 같은 구조다. (6) (승인 후) 라이트에서 outline 버튼 테두리가 보이고 대비를 측정해 기록한다. (7) code-reviewer 리뷰 통과."
     }
   ]
 }
