@@ -301,14 +301,14 @@
       "name": "P4-5 PWA manifest와 아이콘 세트 준비",
       "description": "app/manifest.ts를 작성한다(앱 이름, display standalone, 192와 512 PNG 아이콘). 아이콘 파일은 public 아래에 둔다.",
       "notes": "service worker는 MVP 범위 밖이다.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "188e6b7e-cbf0-406c-ab7b-d09d3621da0b"
         }
       ],
       "createdAt": "2026-10-30T05:26:02.252Z",
-      "updatedAt": "2026-10-30T05:26:02.252Z",
+      "updatedAt": "2026-11-05T04:31:30.402Z",
       "relatedFiles": [
         {
           "path": "app/manifest.ts",
