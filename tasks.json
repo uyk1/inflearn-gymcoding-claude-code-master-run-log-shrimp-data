@@ -450,14 +450,14 @@
       "name": "P5-3 배포 URL 키 미노출 확인",
       "description": "배포 URL의 HTML과 JS 번들에 NOTION_API_KEY 값이나 키 문자열이 노출되지 않는지 확인한다.",
       "notes": "키 값 자체를 로그나 보고서에 쓰지 않는다.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "009c31b3-3b4d-499c-b33d-05e7c4d97bc0"
         }
       ],
       "createdAt": "2026-10-30T05:26:19.187Z",
-      "updatedAt": "2026-10-30T05:26:19.187Z",
+      "updatedAt": "2026-11-05T06:23:50.824Z",
       "relatedFiles": [
         {
           "path": "lib/notion/client.ts",
