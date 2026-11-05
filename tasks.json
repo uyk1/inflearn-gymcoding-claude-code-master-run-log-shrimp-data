@@ -308,7 +308,7 @@
         }
       ],
       "createdAt": "2026-10-30T05:26:02.252Z",
-      "updatedAt": "2026-11-05T04:31:30.402Z",
+      "updatedAt": "2026-11-05T04:32:55.072Z",
       "relatedFiles": [
         {
           "path": "app/manifest.ts",
@@ -326,7 +326,8 @@
         }
       ],
       "implementationGuide": "1. app/manifest.ts에서 MetadataRoute.Manifest를 반환한다. 2. name, short_name, start_url, display standalone, theme_color를 설정한다. 3. icons에 192x192와 512x512 PNG를 넣는다. 4. 아이콘 이미지는 사용자가 제공하거나 생성 후 확인받는다.",
-      "verificationCriteria": "/manifest.webmanifest 응답에 name, display standalone, 192와 512 아이콘이 있음"
+      "verificationCriteria": "/manifest.webmanifest 응답에 name, display standalone, 192와 512 아이콘이 있음",
+      "summary": "P4-5 완료. app/manifest.ts 작성(name/short_name Run Log, start_url /, scope /, display standalone, theme·background #000000, lang ko, 아이콘 192·512 any + 512 maskable). public/에 icon-192.png, icon-512.png, icon-maskable-512.png(85% 축소·검정 여백), apple-touch-icon.png(180) 생성(사용자 제공 1254px 원본을 System.Drawing으로 축소, 새 패키지 없음). 검증: npx tsc --noEmit 통과, eslint app/manifest.ts 통과, 빌드 성공(/manifest.webmanifest 정적 라우트), 프로덕션 서버(3100)에서 /manifest.webmanifest 200 application/manifest+json에 name·display standalone·192/512 아이콘 확인, 아이콘 4종 모두 200 image/png, HTML에 link rel=manifest 자동 삽입 확인, 192 아이콘 육안 확인. 서버 종료 확인. 브라우저(Chrome DevTools) 검증과 apple-touch-icon metadata 연결은 P4-6·P4-7에서 진행. 브랜치 feat/pwa-manifest, 커밋 전."
     },
     {
       "id": "e63c0309-978e-4e59-8210-11faff702cd9",
