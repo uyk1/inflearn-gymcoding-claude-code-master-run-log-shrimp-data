@@ -1468,7 +1468,7 @@
       "id": "4f8ada48-f7d6-4df5-a197-a93ab83d5df9",
       "name": "V2-P0-4 노션 쓰기 키 분리와 테스트 전략 정리",
       "description": "관리자 쓰기를 위한 노션 키 분리 방식과 테스트 전략을 정한다. 공개 조회는 지금의 읽기 전용 키를 유지하고 관리자 쓰기는 별도 키(서버 전용 환경 변수)를 쓰도록 분리한다. 현재 프로젝트에는 테스트 러너가 없어, 쓰기 기능을 만들기 전에 검증 방식을 정해야 한다.",
-      "notes": "사용자 결정 태스크다. 새 패키지는 사용자 승인 후에만 설치한다. 키 값은 읽거나 출력하지 않고 이름만 다룬다. 노션 쓰기 검증은 사용자 확인 후 TEST- 행만, 끝나면 휴지통과 in_trash 확인 규칙을 유지한다.",
+      "notes": "사용자 결정 태스크다. 새 패키지는 사용자 승인 후에만 설치한다. 키 값은 읽거나 출력하지 않고 이름만 다룬다. 노션 쓰기 검증은 사용자 확인 후 TEST- 행만, 끝나면 휴지통과 in_trash 확인 규칙을 유지한다.\n\n[결정 2026-11-05 - 쓰기 키 분리] 설계안 그대로 확정: (1) 통합 2개. 공개 조회는 지금의 읽기 전용 통합과 NOTION_API_KEY를 유지하고, 관리자 쓰기는 새 통합(Read content + Insert content + Update content)을 만들어 서버 전용 환경 변수 NOTION_ADMIN_API_KEY(접두사 없음, Vercel Sensitive)로 쓴다. NOTION_DATA_SOURCE_ID는 공용. (2) 모듈 분리: lib/notion/admin/ 아래에 쓰기용 클라이언트·저장소·서비스를 두고 import 'server-only' 가드를 건다. eslint.config.mjs에 no-restricted-imports 규칙을 추가해 app/admin/**와 lib/notion/admin/** 밖에서 @/lib/notion/admin/* import를 금지한다(새 패키지 없음). 배포 후 P5-3 방식의 패턴 검색으로 공개 번들에 환경 변수 이름이 없는지 확인한다. (3) Vercel: 쓰기 키는 Production에만 등록하고 Preview에는 등록하지 않는다(PR 미리보기 배포가 운영 노션에 쓰지 못하게). Preview에서 관리자 쓰기는 설정 오류 메시지로 처리. (4) 로컬: 쓰기 권한이 있는 개발용 키를 .env.local의 NOTION_ADMIN_API_KEY로 쓸 수 있다(사용자가 직접 입력, 값은 대화·저장소에 기록하지 않음). (5) 모든 관리자 쓰기 진입점(서버 액션, 페이지)은 Phase 1의 서버 측 세션 확인을 먼저 호출한다.\n[권한 근거(context7 노션 공식 문서)] 휴지통 삭제는 PATCH /v1/pages/{id}에 in_trash true, Update content 권한이 없으면 403, 영구 삭제 API는 없고 in_trash false로 복구 가능(확인됨). 속성 수정도 Update content(확인됨). 페이지 생성 POST /v1/pages의 Insert content 권한은 마크다운 가이드에 필요 권한으로 표기되어 있으나 일반 페이지 생성 요구사항 페이지는 직접 확인하지 못해 추측 수준. 호출 제한 평균 초당 3회는 이번 조회로 확인하지 못해 추측(이전 지식). archived는 API 버전 2026-03-11에서 제거, SDK 기본 버전 2025-09-03에서는 in_trash가 동작(v1 TEST 정리에서 사용해 확인).\n[현재 상태] 개발용 키는 쓰기 권한 있음, 배포용 키는 읽기 전용(사용자 보고, 값은 읽지 않음).\n[결정 2026-11-05 - 테스트 전략] 옵션 B 확정: Node 내장 node --test로 순수 함수 단위 테스트(새 패키지 없음). 이 PC의 Node 24.20.0에서 .ts 테스트 파일이 플래그 없이 실행됨을 직접 확인(probe 테스트 pass 1). duration.ts와 date.ts는 import가 없어 바로 테스트 가능. @/ 별칭은 Node가 해석하지 못하므로 테스트 대상 모듈(예: 쓰기 입력 검증 zod 스키마)은 런타임 import를 상대 경로로 쓴다. README의 Node 요구(20.18.1 이상)와 타입 제거 실행 요구 버전의 차이를 도입 시점에 정리한다(확인한 것은 24.20.0뿐). package.json에 test 스크립트(node --test) 추가는 Phase 2 작업에 포함. 컴포넌트 테스트가 필요해지면 그때 vitest 도입을 별도 승인으로 검토. 노션 입출력은 기존 규칙(사용자 확인 후 TEST- 행, 휴지통과 in_trash 확인)으로 검증.",
       "status": "in_progress",
       "dependencies": [
         {
@@ -1476,7 +1476,7 @@
         }
       ],
       "createdAt": "2026-11-05T08:20:04.138Z",
-      "updatedAt": "2026-11-05T08:32:17.975Z",
+      "updatedAt": "2026-11-05T08:34:50.145Z",
       "relatedFiles": [
         {
           "path": "lib/notion/client.ts",
