@@ -1290,6 +1290,39 @@
       "verificationCriteria": "(1) tsc, lint, 빌드 통과. (2) 홈과 목록의 모든 카드가 값 길이와 무관하게 같은 3열 구조이고 360px과 320px에서 가로 스크롤이 없다. (3) 768px 이상에서 홈 3열 카드와 목록 격자에서도 깨지지 않는다. (4) 라이트와 다크에서 글자 대비 4.5 이상. (5) 로딩 자리표시가 새 카드와 같은 구조다. (6) (승인 후) 라이트에서 outline 버튼 테두리가 보이고 대비를 측정해 기록한다. (7) code-reviewer 리뷰 통과.",
       "summary": "P3-5 시각 확인에서 나온 두 가지를 고쳤다. (1) 카드 통계줄 통일(사용자 요청): components/runs/run-card.tsx의 거리, 시간, 페이스를 flex-wrap에서 grid-cols-3으로 바꾸고 칸마다 라벨(dt) 위, 값(dd) 아래, dl/dt/dd 시맨틱 유지, whitespace-nowrap과 tabular-nums를 적용했다. app/runs/loading.tsx의 카드 자리표시도 같은 3열 구조로 맞췄다. ui-markup-developer가 320, 360, 768, 1024px 라이트와 다크 16개 조합에서 모든 카드가 3열이고 통계 영역 높이 40px로 같으며 넘침과 가로 스크롤이 없고 대비 4.74 이상임을 확인했다. 직접 확인: 임시 지연 페이지로 실제 로딩 자리표시를 띄워 실제 카드 134px, 자리표시 카드 134px, 통계 영역 3열 40px로 일치하고 6개 모두 같은 높이임을 수치로 확인했다(임시 페이지는 삭제, 정리 후 빌드 통과). 홈의 라이트와 다크 스크린샷도 눈으로 확인했다. (2) outline 버튼 테두리(사용자 승인): app/page.tsx의 전체 보기와 app/runs/[id]/page.tsx의 노션에서 원본 보기의 buttonVariants 직접 호출을 cn()으로 감싸 cva의 border-transparent와 border-border 충돌을 정리했고 라이트 테두리 대비가 1.0에서 1.26(다른 구분선과 같음)으로 바뀌었다. 모든 buttonVariants 호출이 cn()을 거친다. components/ui는 수정하지 않았다. code-reviewer 차단 이슈 없음, 권장을 반영했다: 거리 표시가 노션 원시 number라 10.123456789 같은 긴 값이 칸을 넘길 수 있어 lib/notion/duration.ts에 formatDistanceLabel(소수 둘째 자리까지, 불필요한 0 없음)을 추가해 카드와 상세에 적용했고(합성 14개 항목 통과, 기존 10.01, 7.01, 12.01 km 표시는 변하지 않음을 프로덕션 화면으로 확인), run-card와 loading의 높이 연동 주석과 cn 제거 금지 주석을 추가했다. 검증: tsc, lint, 빌드 통과. 한계: 긴 소수나 세 자리 거리의 실제 노션 행은 만들지 않아 합성으로만 확인했다. 320px보다 좁은 화면과 실기기, 터치 환경은 미확인. 푸터의 스타터 문구는 P5-7 후보로 남김.",
       "completedAt": "2026-11-05T01:10:00.207Z"
+    },
+    {
+      "id": "8641833d-e0fe-4525-8298-78ef305196c2",
+      "name": "P4-8 비현실적인 평균 페이스를 통계에서 표시하지 않기",
+      "description": "P4-4 검증에서 실제 노션 행(거리 0.001km, 1분)으로 한 기간의 평균 페이스가 60000초/km가 되어 페이스 차트가 망가지는 것을 확인했다(정상 기록이 맨 위 한 줄에 눌리고 Y축 눈금 글자가 잘림). 사용자가 '제한을 걸되 스프린트 훈련도 있을 수 있으니 여유를 두자'고 결정했다. 합산 거리 기준(1km 미만)은 스프린트 주간을 숨기므로 쓰지 않고, 페이스 값 자체의 허용 범위를 넉넉하게 둔다. 변경: (1) lib/runs/stats.ts에 PaceRange 타입과 PLAUSIBLE_PACE_RANGE(최소 60초/km=1:00, 최대 1800초/km=30:00)를 추가하고 buildPeriodStats에 선택 인자 paceRange를 추가한다. 인자가 없으면 기존 동작 그대로이고, 있으면 집계된 평균 페이스가 범위 밖일 때 avgPaceSecondsPerKm만 null로 둔다(총 거리와 총 시간과 runCount는 그대로). 경계값은 포함한다. (2) app/stats/page.tsx가 PLAUSIBLE_PACE_RANGE를 넘긴다. 요약 카드의 평균 페이스도 같은 값이라 범위 밖이면 -로 표시된다. (3) CLAUDE.md의 통계 집계 설명에 범위 제한을 한 줄 반영한다. 미래 날짜 기록 처리(이번 달 안의 미래 날짜가 월간 합계에 들어감)는 이 태스크 범위가 아니며 사용자 결정을 아직 받지 않았다.",
+      "notes": "P4-4가 이 태스크 뒤에 마무리된다. 사용자 결정: 제한을 걸되 스프린트 훈련을 고려해 여유를 둔다. 노션 쓰기는 사용자 확인 후 TEST- 행으로만 하고 끝나면 휴지통으로 보낸다. .env.local은 열지 않는다. 서버는 프로덕션 서버(3100)로 확인한 뒤 종료한다.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "2c32bdfa-eaa3-4760-a936-34e15fc93429"
+        }
+      ],
+      "createdAt": "2026-11-05T04:14:43.464Z",
+      "updatedAt": "2026-11-05T04:14:43.464Z",
+      "relatedFiles": [
+        {
+          "path": "lib/runs/stats.ts",
+          "type": "TO_MODIFY",
+          "description": "페이스 허용 범위와 선택 인자"
+        },
+        {
+          "path": "app/stats/page.tsx",
+          "type": "TO_MODIFY",
+          "description": "범위를 넘겨 호출"
+        },
+        {
+          "path": "CLAUDE.md",
+          "type": "TO_MODIFY",
+          "description": "통계 집계 설명에 범위 제한 한 줄"
+        }
+      ],
+      "implementationGuide": "1) stats.ts: export type PaceRange = { minSecondsPerKm: number; maxSecondsPerKm: number }; export const PLAUSIBLE_PACE_RANGE: PaceRange = { minSecondsPerKm: 60, maxSecondsPerKm: 1800 }; 함수 isPlausiblePace(pace, range). buildPeriodStats의 마지막 인자로 paceRange?: PaceRange. 반환 매핑에서 pace가 null이 아니고 범위가 있으며 범위 밖이면 null. 2) page.tsx에서 buildPeriodStats(..., PLAUSIBLE_PACE_RANGE). 3) 합성 검증: 범위 없음이면 기존과 같음, 0.001km 60초는 60000이라 null, 스프린트 0.2km 40초는 200이라 표시, 0.4km 1800초는 4500이라 null, 경계 60과 1800 포함, 59와 1801 제외, 정상 기록은 표시, 총 거리와 총 시간은 불변. 4) 실제 노션 TEST 행(0.001km)으로 차트가 정상 범위로 돌아오는지 확인한다(노션 쓰기는 사용자 확인 후, 끝나면 휴지통).",
+      "verificationCriteria": "(1) tsc, lint, 빌드 통과. (2) 합성 검증 통과(범위 없음은 기존과 같고, 범위 밖은 null, 경계 포함, 총 거리와 시간 불변, 스프린트 허용). (3) 실제 노션 TEST 행(거리 0.001km)을 넣어도 페이스 차트가 정상 범위로 읽히고 요약과 거리 차트는 영향이 없다. (4) TEST 행은 휴지통으로 보내고 in_trash로 확인한다."
     }
   ]
 }
