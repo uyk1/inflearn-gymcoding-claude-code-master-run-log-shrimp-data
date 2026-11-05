@@ -1250,7 +1250,7 @@
         }
       ],
       "createdAt": "2026-11-05T01:00:58.437Z",
-      "updatedAt": "2026-11-05T01:01:10.091Z",
+      "updatedAt": "2026-11-05T01:09:55.469Z",
       "relatedFiles": [
         {
           "path": "components/runs/run-card.tsx",
@@ -1279,7 +1279,8 @@
         }
       ],
       "implementationGuide": "1) RunCard의 dl을 grid grid-cols-3 gap-x-3 로 바꾸고 각 div를 flex-col 또는 block으로 라벨 위 값 아래로 둔다. 값은 text-sm font-medium 등으로 읽히게 하고 whitespace-nowrap 여부는 320px 확인 후 정한다. 2) loading.tsx의 카드 자리표시를 3열 구조로 맞춘다. 3) 기존 노션 3건(홈 3개 카드)으로 360, 320, 768px 라이트와 다크를 확인한다. TEST 행은 만들지 않는다. 4) (2) 승인 후 두 파일에서 buttonVariants 호출을 cn()으로 감싸고 라이트에서 테두리 대비를 측정한다(border-border 대 페이지 배경).",
-      "verificationCriteria": "(1) tsc, lint, 빌드 통과. (2) 홈과 목록의 모든 카드가 값 길이와 무관하게 같은 3열 구조이고 360px과 320px에서 가로 스크롤이 없다. (3) 768px 이상에서 홈 3열 카드와 목록 격자에서도 깨지지 않는다. (4) 라이트와 다크에서 글자 대비 4.5 이상. (5) 로딩 자리표시가 새 카드와 같은 구조다. (6) (승인 후) 라이트에서 outline 버튼 테두리가 보이고 대비를 측정해 기록한다. (7) code-reviewer 리뷰 통과."
+      "verificationCriteria": "(1) tsc, lint, 빌드 통과. (2) 홈과 목록의 모든 카드가 값 길이와 무관하게 같은 3열 구조이고 360px과 320px에서 가로 스크롤이 없다. (3) 768px 이상에서 홈 3열 카드와 목록 격자에서도 깨지지 않는다. (4) 라이트와 다크에서 글자 대비 4.5 이상. (5) 로딩 자리표시가 새 카드와 같은 구조다. (6) (승인 후) 라이트에서 outline 버튼 테두리가 보이고 대비를 측정해 기록한다. (7) code-reviewer 리뷰 통과.",
+      "summary": "P3-5 시각 확인에서 나온 두 가지를 고쳤다. (1) 카드 통계줄 통일(사용자 요청): components/runs/run-card.tsx의 거리, 시간, 페이스를 flex-wrap에서 grid-cols-3으로 바꾸고 칸마다 라벨(dt) 위, 값(dd) 아래, dl/dt/dd 시맨틱 유지, whitespace-nowrap과 tabular-nums를 적용했다. app/runs/loading.tsx의 카드 자리표시도 같은 3열 구조로 맞췄다. ui-markup-developer가 320, 360, 768, 1024px 라이트와 다크 16개 조합에서 모든 카드가 3열이고 통계 영역 높이 40px로 같으며 넘침과 가로 스크롤이 없고 대비 4.74 이상임을 확인했다. 직접 확인: 임시 지연 페이지로 실제 로딩 자리표시를 띄워 실제 카드 134px, 자리표시 카드 134px, 통계 영역 3열 40px로 일치하고 6개 모두 같은 높이임을 수치로 확인했다(임시 페이지는 삭제, 정리 후 빌드 통과). 홈의 라이트와 다크 스크린샷도 눈으로 확인했다. (2) outline 버튼 테두리(사용자 승인): app/page.tsx의 전체 보기와 app/runs/[id]/page.tsx의 노션에서 원본 보기의 buttonVariants 직접 호출을 cn()으로 감싸 cva의 border-transparent와 border-border 충돌을 정리했고 라이트 테두리 대비가 1.0에서 1.26(다른 구분선과 같음)으로 바뀌었다. 모든 buttonVariants 호출이 cn()을 거친다. components/ui는 수정하지 않았다. code-reviewer 차단 이슈 없음, 권장을 반영했다: 거리 표시가 노션 원시 number라 10.123456789 같은 긴 값이 칸을 넘길 수 있어 lib/notion/duration.ts에 formatDistanceLabel(소수 둘째 자리까지, 불필요한 0 없음)을 추가해 카드와 상세에 적용했고(합성 14개 항목 통과, 기존 10.01, 7.01, 12.01 km 표시는 변하지 않음을 프로덕션 화면으로 확인), run-card와 loading의 높이 연동 주석과 cn 제거 금지 주석을 추가했다. 검증: tsc, lint, 빌드 통과. 한계: 긴 소수나 세 자리 거리의 실제 노션 행은 만들지 않아 합성으로만 확인했다. 320px보다 좁은 화면과 실기기, 터치 환경은 미확인. 푸터의 스타터 문구는 P5-7 후보로 남김."
     }
   ]
 }
