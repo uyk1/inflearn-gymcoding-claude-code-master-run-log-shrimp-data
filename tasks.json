@@ -502,14 +502,14 @@
       "name": "P5-5 아이폰 Safari 홈 화면 설치 실기기 확인",
       "description": "아이폰 Safari에서 배포 URL을 열고 공유 메뉴의 홈 화면에 추가로 설치한 뒤 독립 창으로 실행되는지, apple-touch-icon이 표시되는지 확인한다.",
       "notes": "사용자 기기에서 수행하는 작업이므로 사용자에게 절차를 안내한다.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "c516acd6-8854-4ed7-8229-797bf827f4d5"
         }
       ],
       "createdAt": "2026-10-30T05:26:19.187Z",
-      "updatedAt": "2026-10-30T05:26:19.187Z",
+      "updatedAt": "2026-11-05T06:41:01.899Z",
       "relatedFiles": [
         {
           "path": "app/layout.tsx",
