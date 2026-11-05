@@ -369,14 +369,14 @@
       "name": "P4-7 PWA manifest 데스크톱 Chrome 검증",
       "description": "데스크톱 Chrome 개발자 도구의 Application 탭에서 manifest 항목에 오류가 없는지 확인한다. 설치 가능성 판정과 아이콘 표시를 확인한다.",
       "notes": "실기기 확인은 Phase 5에서 한다.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "e63c0309-978e-4e59-8210-11faff702cd9"
         }
       ],
       "createdAt": "2026-10-30T05:26:08.528Z",
-      "updatedAt": "2026-10-30T05:26:08.528Z",
+      "updatedAt": "2026-11-05T05:22:33.518Z",
       "relatedFiles": [
         {
           "path": "app/manifest.ts",
