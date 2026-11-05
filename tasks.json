@@ -696,7 +696,7 @@
       "name": "P3-5 홈과 상세 360px, 라이트·다크 시각 확인",
       "description": "홈(/)과 상세(/runs/[id])를 360px에서 가로 스크롤이 없는지, 라이트와 다크 모두에서 글자와 배경 대비가 읽히는지 playwright로 직접 확인한다. /runs, 404, error, loading은 이번 세션에서 이미 확인했으므로 대상이 아니다. 확인에 실패한 항목은 임의로 고치지 않고 보고하며 수정은 사용자와 정한다.",
       "notes": "담당: ui-markup-developer(playwright). 스크린샷은 저장소에 남기지 않는다. 상세 확인에는 기존 노션 행 3건 중 하나를 쓰고 TEST 행은 만들지 않는다. 확인하지 못한 항목은 미수행으로 보고한다.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "058a237a-2188-4e7b-8b65-b93c3d6febe2"
@@ -706,7 +706,7 @@
         }
       ],
       "createdAt": "2026-10-30T08:44:33.903Z",
-      "updatedAt": "2026-11-04T08:29:40.590Z",
+      "updatedAt": "2026-11-05T00:57:48.732Z",
       "relatedFiles": [
         {
           "path": "app/page.tsx",
