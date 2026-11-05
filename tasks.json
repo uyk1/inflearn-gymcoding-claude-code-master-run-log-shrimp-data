@@ -696,7 +696,7 @@
       "name": "P3-5 홈과 상세 360px, 라이트·다크 시각 확인",
       "description": "홈(/)과 상세(/runs/[id])를 360px에서 가로 스크롤이 없는지, 라이트와 다크 모두에서 글자와 배경 대비가 읽히는지 playwright로 직접 확인한다. /runs, 404, error, loading은 이번 세션에서 이미 확인했으므로 대상이 아니다. 확인에 실패한 항목은 임의로 고치지 않고 보고하며 수정은 사용자와 정한다.",
       "notes": "담당: ui-markup-developer(playwright). 스크린샷은 저장소에 남기지 않는다. 상세 확인에는 기존 노션 행 3건 중 하나를 쓰고 TEST 행은 만들지 않는다. 확인하지 못한 항목은 미수행으로 보고한다.",
-      "status": "in_progress",
+      "status": "completed",
       "dependencies": [
         {
           "taskId": "058a237a-2188-4e7b-8b65-b93c3d6febe2"
@@ -706,7 +706,7 @@
         }
       ],
       "createdAt": "2026-10-30T08:44:33.903Z",
-      "updatedAt": "2026-11-05T01:00:32.889Z",
+      "updatedAt": "2026-11-05T01:00:37.179Z",
       "relatedFiles": [
         {
           "path": "app/page.tsx",
@@ -722,7 +722,8 @@
       "implementationGuide": "1) 프로덕션 서버(포트 3100)를 띄운다. 2) browser_resize 360x800, browser_navigate, browser_evaluate로 scrollWidth와 clientWidth를 비교한다. 3) browser_emulate_media 또는 테마 전환으로 라이트, 다크 스크린샷을 눈으로 확인한다. 4) 서버를 종료한다.",
       "verificationCriteria": "홈과 상세 각각 360px에서 가로 스크롤이 없다. 라이트와 다크 스크린샷에서 글자가 읽힌다. 확인하지 못한 항목은 미수행으로 기록한다.",
       "analysisResult": "Run Log의 Phase 2 UI 보완과 Phase 3 마무리. 담당 에이전트를 nextjs-developer(lib, 라우팅, 데이터)와 ui-markup-developer(components 마크업, 스타일, 시각 확인)로 나눈다. 확인하지 않은 항목은 완료로 쓰지 않는다.",
-      "summary": "홈과 상세(기존 노션 기록 한 건)를 최신 main(ca1cabd)의 프로덕션 서버로 360px에서 라이트와 다크 모두 확인했다. 가로 스크롤은 없고 화면 오른쪽 밖으로 나간 요소도 없다. 화면의 모든 글자 요소를 대상으로 반투명 배경 합성까지 포함해 대비를 계산했고 홈은 38개 요소가 라이트 최저 4.54 다크 최저 6.87, 상세는 30개 요소가 라이트 최저 4.74 다크 최저 7.66으로 모두 4.5 이상(큰 글자 3 이상)이며 미달은 0건이다. 스크린샷 4장(홈과 상세의 라이트와 다크)도 눈으로 확인해 글자가 읽힌다. 노션은 건드리지 않았고 TEST 행은 만들지 않았다. 확인 중 발견한 문제(검증 기준 밖의 시각 품질 이슈, 임의 수정하지 않고 보고): (1) 라이트 모드에서 outline 변형 버튼(상세의 노션에서 원본 보기, 홈의 전체 보기)의 테두리가 보이지 않는다. buttonVariants를 cn() 없이 직접 호출해 기본의 border-transparent와 outline의 border-border가 충돌 정리되지 않고 투명 테두리가 이긴다(다크는 dark:border-input이 우선해 보임). cn()으로 감싼 error, not-found, period-tabs 호출은 영향 없음. 영향 위치 app/page.tsx 41행과 app/runs/[id]/page.tsx 93행. (2) 사용자가 지적한 카드 통계줄 불일치: 거리 시간 페이스가 360px에서 값 길이에 따라 한 줄 또는 두 줄로 줄바꿈되어 카드마다 모양이 다르다. 한계: 터치 기기와 실기기, 320px은 이번에 보지 않았다. 푸터에 스타터 킷 문구(Built with Next.js & shadcn/ui)가 남아 있음을 발견했으며 P5-7 README 정리와 함께 다룰 후보로 기록한다."
+      "summary": "홈과 상세(기존 노션 기록 한 건)를 최신 main(ca1cabd)의 프로덕션 서버로 360px에서 라이트와 다크 모두 확인했다. 가로 스크롤은 없고 화면 오른쪽 밖으로 나간 요소도 없다. 화면의 모든 글자 요소를 대상으로 반투명 배경 합성까지 포함해 대비를 계산했고 홈은 38개 요소가 라이트 최저 4.54 다크 최저 6.87, 상세는 30개 요소가 라이트 최저 4.74 다크 최저 7.66으로 모두 4.5 이상(큰 글자 3 이상)이며 미달은 0건이다. 스크린샷 4장(홈과 상세의 라이트와 다크)도 눈으로 확인해 글자가 읽힌다. 노션은 건드리지 않았고 TEST 행은 만들지 않았다. 확인 중 발견한 문제(검증 기준 밖의 시각 품질 이슈, 임의 수정하지 않고 보고): (1) 라이트 모드에서 outline 변형 버튼(상세의 노션에서 원본 보기, 홈의 전체 보기)의 테두리가 보이지 않는다. buttonVariants를 cn() 없이 직접 호출해 기본의 border-transparent와 outline의 border-border가 충돌 정리되지 않고 투명 테두리가 이긴다(다크는 dark:border-input이 우선해 보임). cn()으로 감싼 error, not-found, period-tabs 호출은 영향 없음. 영향 위치 app/page.tsx 41행과 app/runs/[id]/page.tsx 93행. (2) 사용자가 지적한 카드 통계줄 불일치: 거리 시간 페이스가 360px에서 값 길이에 따라 한 줄 또는 두 줄로 줄바꿈되어 카드마다 모양이 다르다. 한계: 터치 기기와 실기기, 320px은 이번에 보지 않았다. 푸터에 스타터 킷 문구(Built with Next.js & shadcn/ui)가 남아 있음을 발견했으며 P5-7 README 정리와 함께 다룰 후보로 기록한다.",
+      "completedAt": "2026-11-05T01:00:37.167Z"
     },
     {
       "id": "895d6287-9261-4217-9382-9819ced5dbe7",
