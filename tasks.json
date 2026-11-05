@@ -536,7 +536,7 @@
         }
       ],
       "createdAt": "2026-10-30T05:26:19.187Z",
-      "updatedAt": "2026-11-05T06:44:48.497Z",
+      "updatedAt": "2026-11-05T06:46:18.371Z",
       "relatedFiles": [
         {
           "path": "docs/ROADMAP.md",
@@ -547,7 +547,8 @@
         }
       ],
       "implementationGuide": "1. P5-4와 P5-5에서 나온 문제 목록을 정리한다. 2. 각 문제를 최소 수정으로 고친다. 3. npx tsc --noEmit, npm run lint, npm run build를 통과시킨다.",
-      "verificationCriteria": "아이폰 실기기 문제 없음(갤럭시는 P5-4 보류로 미확인임을 명시), tsc와 lint와 build 통과"
+      "verificationCriteria": "아이폰 실기기 문제 없음(갤럭시는 P5-4 보류로 미확인임을 명시), tsc와 lint와 build 통과",
+      "summary": "P5-6 완료(수정할 문제 없음, 코드 변경 없음). 실기기 발견 문제 목록: 아이폰 Safari(P5-5, 사용자 보고)에서 이상 없음, 갤럭시는 P5-4 보류로 미확인(기기 없음, 사용자 결정으로 보류 유지, 완료 아님). 완료 기준 대조: (1) 배포 URL에서 목록·상세 열림과 키 미노출은 P5-2·P5-3에서 curl로 확인(키 패턴·변수 이름·SDK 포함·소스맵·헤더 모두 0). (2) 노션 호출이 revalidate 주기 안에서 반복되지 않는지는 로컬 프로덕션 서버에서 실측(P5-1: 25요청에 1회, 60초 경과 후 +2회)했으나 Vercel 배포 로그로는 확인하지 못함(미확인). (3) 아이폰 Safari 설치·독립 창은 사용자 보고로 확인, 갤럭시는 미확인. (4) 모바일 가로 스크롤은 배포 주소(https://pjt-run-log.vercel.app)에서 playwright로 /, /runs, 상세, /stats, /stats?view=month를 360px와 320px에서 직접 측정해 10건 모두 가로 스크롤 없음(scrollWidth=clientWidth), 폭을 넘는 요소 0개. 추가 증거: 배포 주소에서 브라우저 콘솔에 beforeinstallprompt preventDefault 처리 정보 메시지가 각 페이지마다 기록되어 HTTPS 배포에서 설치 이벤트가 발생하고 앱 코드가 수신함(데스크톱 Chromium 기준, 안드로이드 실기기는 아님). 명령 검증: npx tsc --noEmit 통과, npm run lint 통과, npm run build 성공(서버가 떠 있지 않은 상태에서 실행). 서버 없음, 작업 트리는 shrimp_data 포인터만 변경."
     },
     {
       "id": "058a237a-2188-4e7b-8b65-b93c3d6febe2",
