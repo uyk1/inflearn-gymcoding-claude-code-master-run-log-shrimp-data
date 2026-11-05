@@ -1243,14 +1243,14 @@
       "name": "P3-9 카드 통계줄 통일과 outline 버튼 테두리 수정",
       "description": "P3-5 시각 확인에서 발견된 두 가지를 고친다. (1) 카드 통계줄 통일(사용자 요청, 승인됨): components/runs/run-card.tsx의 거리, 시간, 페이스가 flex-wrap 인라인이라 360px에서 값 길이에 따라 어떤 카드는 한 줄 어떤 카드는 두 줄로 보여 모양이 제각각이다. 값 길이와 무관하게 모든 카드가 같은 구조가 되도록 3열 격자(grid-cols-3)로 바꾸고 각 칸은 라벨(dt)이 위, 값(dd)이 아래에 오게 한다. 홈, 목록, 위 카드가 모두 같은 RunCard를 쓴다. app/runs/loading.tsx의 카드 자리표시도 새 구조(3열)에 맞춰 높이와 모양을 정합한다. 접근성을 위해 dl/dt/dd 구조는 유지한다. 360px과 320px, 768px 이상(홈 3열 카드), 라이트와 다크에서 값이 길어도(예: 12.01 km, 1:18:01, 10:00/km) 가로 스크롤과 줄바꿈 불일치가 없어야 한다. (2) outline 버튼 테두리(사용자 승인 대기): app/page.tsx 41행의 전체 보기 링크와 app/runs/[id]/page.tsx 93행의 노션에서 원본 보기 링크가 buttonVariants를 cn() 없이 직접 호출해 라이트 모드에서 border-transparent가 border-border를 이겨 테두리가 보이지 않는다. 두 호출을 cn(buttonVariants(...))로 감싸 error, not-found, period-tabs와 같은 방식으로 맞춘다. components/ui/button.tsx(shadcn 생성물)는 수정하지 않는다. (2)는 사용자가 수정을 승인하기 전에는 하지 않는다.",
       "notes": "담당: ui-markup-developer(UI 변경과 시각 확인). 서버는 사용자가 요청하기 전에는 띄우지 않고 프로덕션 서버(3100)로 확인한 뒤 종료한다. 빌드와 서버가 겹치지 않게 한다. 노션 쓰기 없음. P3-5에서 푸터의 스타터 문구(Built with Next.js & shadcn/ui)도 발견했으며 이 태스크 범위가 아니라 P5-7 README 정리 때 함께 다룰 후보다. R-1은 이 태스크 뒤에 한다.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "4ed284a1-be25-4561-8b4a-c9d9a9c9dab2"
         }
       ],
       "createdAt": "2026-11-05T01:00:58.437Z",
-      "updatedAt": "2026-11-05T01:00:58.437Z",
+      "updatedAt": "2026-11-05T01:01:10.091Z",
       "relatedFiles": [
         {
           "path": "components/runs/run-card.tsx",
