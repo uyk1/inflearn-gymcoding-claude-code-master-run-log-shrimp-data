@@ -1387,14 +1387,14 @@
       "name": "V2-P0-2 제외 행 입력 원문 표시 정책 결정",
       "description": "관리자 화면에서 제외된 행의 입력 원문(날짜, 소요시간 등)을 보여 줄지 정한다. 현재 PRD 4장은 공개 화면에서 제목을 뺀 입력값 원문을 보여 주지 않는다. 제외 행을 고치려면 관리자에게는 무엇이 틀렸는지 보이는 것이 필요하다. 현재 데이터 계층의 ExcludedRunDto는 pageId, title, reasons, notionUrl만 담고 원문이 없으므로, 관리자용 원문 조회 경로가 필요하다는 구현 영향을 함께 정리한다.",
       "notes": "사용자 결정 태스크다. 코드는 바꾸지 않는다. 원문에는 메모나 장소가 아닌 날짜와 소요시간 같은 입력값이 포함될 수 있어 공개 경로로 새지 않도록 경로 분리가 전제다.\n\n[결정 2026-11-05] 옵션 B 확정: 제외 목록에는 사유만 보여 주고, 입력 원문(예: 소요시간 12:5)은 로그인한 관리자가 수정 화면을 열었을 때 입력칸에만 채워 보여 준다. 공개 화면에는 원문을 보여 주지 않는다(PRD 4장 규칙 유지).\n[구현 영향] (1) lib/notion/dto.ts의 ExcludedRunDto와 loadRunRecords의 unstable_cache(홈·목록·통계 공유)는 바꾸지 않는다. 원문을 공개 DTO나 공유 캐시에 넣지 않는다. (2) 수정 화면을 열 때 인증 확인 후 서버에서 해당 페이지 한 건을 노션에서 직접 조회하는 관리자 전용 경로가 필요하다(캐시하지 않음). (3) 그 단건 조회는 id 형식 검사와, 해당 페이지가 러닝 기록 data source 소속인지 확인을 포함해야 한다(임의 id로 통합이 접근 가능한 다른 노션 페이지를 읽는 것 방지). (4) lib/notion/mapper.ts의 readTitle, readDate, readRichText 등은 export되어 있지 않아 단건 조회에서 재사용하려면 공유 모듈로 분리해야 하며, 쓰기 쪽 검증 규칙 공유(Phase 2)와 함께 처리한다. (5) 이 방식은 제외 행 전체의 원문을 한꺼번에 가져오는 경로가 필요 없어 A보다 구현과 노출면이 작다.\n[Phase 5 영향] 완료 기준에 원문은 공개 화면에 나오지 않고 수정 화면 입력칸에서만 보인다는 것, 단건 조회가 다른 data source의 페이지를 거부한다는 것을 넣는다(반영은 V2-P0-5).",
-      "status": "in_progress",
+      "status": "completed",
       "dependencies": [
         {
           "taskId": "caaaa008-0495-420e-bd20-30c7cad023b7"
         }
       ],
       "createdAt": "2026-11-05T08:20:04.138Z",
-      "updatedAt": "2026-11-05T08:26:19.583Z",
+      "updatedAt": "2026-11-05T08:26:23.236Z",
       "relatedFiles": [
         {
           "path": "lib/notion/dto.ts",
@@ -1420,7 +1420,8 @@
       "implementationGuide": "1) lib/notion/dto.ts의 ExcludedRunDto와 lib/notion/mapper.ts의 제외 사유 생성부, components/runs/excluded-notice.tsx를 읽는다. 2) 옵션과 영향을 정리한다: A 관리자(로그인 상태)에게만 입력 원문을 보여 준다(공개 DTO와 분리된 관리자 전용 조회 경로 필요, 인증 뒤 서버에서만 조회), B 원문은 보여 주지 않고 사유만 안내하며 수정 화면에는 노션의 현재 값을 폼 기본값으로 채운다, C 공개 화면에서도 보여 준다(PRD 4장 규칙을 바꾸는 것이라 비권장). 3) 사용자가 고르게 한다. 4) 결과를 notes에 기록하고 Phase 5 완료 기준에 미칠 영향을 적는다.",
       "verificationCriteria": "사용자가 고른 정책과 근거, 구현 영향(관리자 전용 조회 경로 필요 여부)이 notes에 기록되어 있다. 코드와 PRD는 변경되지 않았다.",
       "analysisResult": "Run Log v2(관리자 페이지 고도화)의 Phase 0 준비 단계. docs/ROADMAP.md(v2) Phase 0의 할 작업 5가지를 결정과 문서 작업으로 나눈다. 이 단계에서는 코드를 바꾸지 않고, docs/PRD.md는 사용자가 방식을 정한 뒤에만 수정한다. 결정이 필요한 항목은 사용자에게 옵션과 근거를 보여 주고 사용자가 고른다. 노션 변경은 하지 않는다(필요하면 사용자 확인 후 TEST- 행만, 끝나면 휴지통과 in_trash 확인). 전역 규칙: 한국어 응답과 문서, 직접 확인하지 않은 것은 확인했다고 쓰지 않는다.",
-      "summary": "V2-P0-2 완료(결정 태스크, 코드·PRD 변경 없음). lib/notion/dto.ts, lib/notion/mapper.ts, components/runs/excluded-notice.tsx를 읽고 현재 구조를 확인: ExcludedRunDto는 pageId·title·reasons·notionUrl만 담고 원문(durationRaw, rawDate)은 mapper 안에서 변수로만 쓰이고 버려짐, 제외 정보는 unstable_cache(홈·목록·통계 공유)에 들어 있어 원문을 넣으면 공개 화면 캐시에 입력값이 섞임, 공개 안내는 서버 컴포넌트로 제목·사유만 그림. 핵심 관찰: 수정 폼에는 원문이 필요하므로 결정은 어디에 보여 줄지의 문제. 옵션 A(관리자 목록과 폼 모두), B(수정 폼 입력칸에만), C(공개 화면에서도)를 노출 범위와 구현 영향 표로 제시했고 사용자가 B를 선택. 구현 영향: 공개 DTO와 공유 캐시는 변경하지 않고, 수정 화면을 열 때 인증 후 서버에서 해당 페이지 한 건을 노션에서 직접 조회(캐시 없음), 단건 조회에 id 형식 검사와 러닝 기록 data source 소속 확인을 포함(임의 페이지 읽기 방지), mapper의 읽기 함수는 export되어 있지 않아 공유 모듈로 분리 필요(Phase 2와 함께). Phase 5 완료 기준에 원문은 공개 화면에 나오지 않고 수정 화면 입력칸에서만 보인다는 것, 단건 조회가 다른 data source의 페이지를 거부한다는 것을 추가할 예정(V2-P0-5에서 승인 후 반영). 결정과 구현 영향을 이 태스크 notes, V2-P0-5 notes, 메모리(admin-page-roadmap-v2)에 기록."
+      "summary": "V2-P0-2 완료(결정 태스크, 코드·PRD 변경 없음). lib/notion/dto.ts, lib/notion/mapper.ts, components/runs/excluded-notice.tsx를 읽고 현재 구조를 확인: ExcludedRunDto는 pageId·title·reasons·notionUrl만 담고 원문(durationRaw, rawDate)은 mapper 안에서 변수로만 쓰이고 버려짐, 제외 정보는 unstable_cache(홈·목록·통계 공유)에 들어 있어 원문을 넣으면 공개 화면 캐시에 입력값이 섞임, 공개 안내는 서버 컴포넌트로 제목·사유만 그림. 핵심 관찰: 수정 폼에는 원문이 필요하므로 결정은 어디에 보여 줄지의 문제. 옵션 A(관리자 목록과 폼 모두), B(수정 폼 입력칸에만), C(공개 화면에서도)를 노출 범위와 구현 영향 표로 제시했고 사용자가 B를 선택. 구현 영향: 공개 DTO와 공유 캐시는 변경하지 않고, 수정 화면을 열 때 인증 후 서버에서 해당 페이지 한 건을 노션에서 직접 조회(캐시 없음), 단건 조회에 id 형식 검사와 러닝 기록 data source 소속 확인을 포함(임의 페이지 읽기 방지), mapper의 읽기 함수는 export되어 있지 않아 공유 모듈로 분리 필요(Phase 2와 함께). Phase 5 완료 기준에 원문은 공개 화면에 나오지 않고 수정 화면 입력칸에서만 보인다는 것, 단건 조회가 다른 data source의 페이지를 거부한다는 것을 추가할 예정(V2-P0-5에서 승인 후 반영). 결정과 구현 영향을 이 태스크 notes, V2-P0-5 notes, 메모리(admin-page-roadmap-v2)에 기록.",
+      "completedAt": "2026-11-05T08:26:23.233Z"
     },
     {
       "id": "5fccb3ad-fd1b-41b3-a875-d50e0592d81c",
