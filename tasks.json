@@ -855,14 +855,14 @@
       "name": "R-2 Phase 4 ROADMAP 갱신",
       "description": "Phase 4(통계, PWA)가 끝난 뒤 /docs:update-roadmap 4 커맨드로 ROADMAP.md의 Phase 4 상태를 갱신한다. 변경안을 before와 after로 먼저 보여 주고 사용자 승인 후에만 반영한다. 근거(머지된 PR, 완료 처리된 Shrimp 태스크, 이번 실행의 tsc와 lint)가 있는 항목만 체크하고, 데스크톱 Chrome manifest 검증 같은 직접 확인이 끝난 항목만 완료로 쓴다. 로드맵 밖에서 추가된 작업(예: 통계 화면 UI 보완)이 있으면 보고에 적는다.",
       "notes": "담당: 메인 세션(에이전트 아님). docs/PRD.md와 코드는 수정하지 않는다. 노션 변경이나 개발 서버 실행은 하지 않는다. 직접 확인하지 못한 항목은 구현만 됨으로 보고한다.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "4ce10dbc-fc0c-41e5-b2fd-73137e41aff8"
         }
       ],
       "createdAt": "2026-11-04T00:44:31.157Z",
-      "updatedAt": "2026-11-04T00:44:31.157Z",
+      "updatedAt": "2026-11-05T05:26:23.201Z",
       "relatedFiles": [
         {
           "path": "docs/ROADMAP.md",
