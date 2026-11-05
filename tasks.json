@@ -335,14 +335,14 @@
       "name": "P4-6 apple-touch-icon metadata와 설치 안내 문구",
       "description": "layout metadata에 apple-touch-icon 링크를 연결하고, 안드로이드는 설치 버튼, 아이폰은 공유 후 홈 화면에 추가 안내 문구를 표시한다. 설치 버튼은 beforeinstallprompt 이벤트를 사용하는 클라이언트 컴포넌트로 만든다.",
       "notes": "ThemeProvider와 suppressHydrationWarning 유지. 테마 의존 UI는 mounted 가드를 쓴다. 담당 분리: app/layout.tsx의 metadata와 설치 버튼의 이벤트 로직(beforeinstallprompt, 기기 구분)은 nextjs-developer. 안내 문구와 버튼의 마크업, 스타일, 라이트·다크, 360px 확인은 ui-markup-developer. 아이폰 안내 문구는 PRD 6장의 공유 후 홈 화면에 추가 표현을 따른다.",
-      "status": "in_progress",
+      "status": "completed",
       "dependencies": [
         {
           "taskId": "db8b803c-3e5f-46fe-89bc-a998ba747905"
         }
       ],
       "createdAt": "2026-10-30T05:26:08.528Z",
-      "updatedAt": "2026-11-05T05:07:21.902Z",
+      "updatedAt": "2026-11-05T05:07:25.727Z",
       "relatedFiles": [
         {
           "path": "app/layout.tsx",
@@ -361,7 +361,8 @@
       ],
       "implementationGuide": "1. app/layout.tsx의 metadata.icons.apple에 apple-touch-icon 경로를 지정한다. 2. components/install 아래에 클라이언트 컴포넌트를 둔다. 3. navigator.userAgent로 iOS와 안드로이드를 구분하고, 기본 설치 프롬프트는 이벤트 저장 후 버튼으로 호출한다. 4. 이미 standalone 모드면 안내를 숨긴다.",
       "verificationCriteria": "HTML head에 apple-touch-icon 링크 포함, 안드로이드와 아이폰 각각에 맞는 안내가 보임, 하이드레이션 경고 없음",
-      "summary": "P4-6 완료(커밋 전, 브랜치 feat/pwa-install-guide). app/layout.tsx metadata.icons.apple에 /apple-touch-icon.png 연결, 푸터 위에 InstallGuide 배치. components/install/install-guide.tsx 신규(클라이언트): mounted 가드로 서버 HTML에는 안내 없음(하이드레이션 불일치 방지), beforeinstallprompt를 preventDefault 후 저장해 '앱 설치' 버튼으로 prompt() 호출(한 번 쓰면 비움), appinstalled 시 숨김, iOS(UA 및 iPadOS 터치 판별)는 'Safari에서 공유 → 홈 화면에 추가' 안내, standalone 실행 중이면 숨김. break-keep으로 한글 줄바꿈 보정. 검증: tsc·eslint·빌드 통과. 프로덕션 서버에서 HTML head에 apple-touch-icon 링크 확인, SSR HTML에는 안내 문구 0건. 브라우저: 실제 Chromium에서 beforeinstallprompt가 발생하고 버튼 표시됨(설치 가능 판정의 간접 증거, P4-7에서 DevTools로 재확인), 합성 이벤트로 defaultPrevented·prompt 호출·클릭 후 버튼 사라짐 확인, iOS UA+이벤트 차단 시 iOS 안내만 표시, navigator.standalone=true 시 둘 다 숨김, 360px 가로 스크롤 없음, 라이트·다크 화면 육안 확인, 콘솔 오류 없음. 한계: 실제 아이폰 Safari와 갤럭시 기기는 미확인(Phase 5 실기기). 서버 종료 확인, 임시 스크린샷 삭제."
+      "summary": "P4-6 완료(커밋 전, 브랜치 feat/pwa-install-guide). app/layout.tsx metadata.icons.apple에 /apple-touch-icon.png 연결, 푸터 위에 InstallGuide 배치. components/install/install-guide.tsx 신규(클라이언트): mounted 가드로 서버 HTML에는 안내 없음(하이드레이션 불일치 방지), beforeinstallprompt를 preventDefault 후 저장해 '앱 설치' 버튼으로 prompt() 호출(한 번 쓰면 비움), appinstalled 시 숨김, iOS(UA 및 iPadOS 터치 판별)는 'Safari에서 공유 → 홈 화면에 추가' 안내, standalone 실행 중이면 숨김. break-keep으로 한글 줄바꿈 보정. 검증: tsc·eslint·빌드 통과. 프로덕션 서버에서 HTML head에 apple-touch-icon 링크 확인, SSR HTML에는 안내 문구 0건. 브라우저: 실제 Chromium에서 beforeinstallprompt가 발생하고 버튼 표시됨(설치 가능 판정의 간접 증거, P4-7에서 DevTools로 재확인), 합성 이벤트로 defaultPrevented·prompt 호출·클릭 후 버튼 사라짐 확인, iOS UA+이벤트 차단 시 iOS 안내만 표시, navigator.standalone=true 시 둘 다 숨김, 360px 가로 스크롤 없음, 라이트·다크 화면 육안 확인, 콘솔 오류 없음. 한계: 실제 아이폰 Safari와 갤럭시 기기는 미확인(Phase 5 실기기). 서버 종료 확인, 임시 스크린샷 삭제.",
+      "completedAt": "2026-11-05T05:07:25.722Z"
     },
     {
       "id": "4ce10dbc-fc0c-41e5-b2fd-73137e41aff8",
