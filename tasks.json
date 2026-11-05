@@ -1387,14 +1387,14 @@
       "name": "V2-P0-2 제외 행 입력 원문 표시 정책 결정",
       "description": "관리자 화면에서 제외된 행의 입력 원문(날짜, 소요시간 등)을 보여 줄지 정한다. 현재 PRD 4장은 공개 화면에서 제목을 뺀 입력값 원문을 보여 주지 않는다. 제외 행을 고치려면 관리자에게는 무엇이 틀렸는지 보이는 것이 필요하다. 현재 데이터 계층의 ExcludedRunDto는 pageId, title, reasons, notionUrl만 담고 원문이 없으므로, 관리자용 원문 조회 경로가 필요하다는 구현 영향을 함께 정리한다.",
       "notes": "사용자 결정 태스크다. 코드는 바꾸지 않는다. 원문에는 메모나 장소가 아닌 날짜와 소요시간 같은 입력값이 포함될 수 있어 공개 경로로 새지 않도록 경로 분리가 전제다.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "caaaa008-0495-420e-bd20-30c7cad023b7"
         }
       ],
       "createdAt": "2026-11-05T08:20:04.138Z",
-      "updatedAt": "2026-11-05T08:20:04.138Z",
+      "updatedAt": "2026-11-05T08:24:10.384Z",
       "relatedFiles": [
         {
           "path": "lib/notion/dto.ts",
