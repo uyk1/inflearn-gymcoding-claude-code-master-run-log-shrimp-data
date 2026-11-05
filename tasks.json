@@ -855,14 +855,14 @@
       "name": "R-2 Phase 4 ROADMAP 갱신",
       "description": "Phase 4(통계, PWA)가 끝난 뒤 /docs:update-roadmap 4 커맨드로 ROADMAP.md의 Phase 4 상태를 갱신한다. 변경안을 before와 after로 먼저 보여 주고 사용자 승인 후에만 반영한다. 근거(머지된 PR, 완료 처리된 Shrimp 태스크, 이번 실행의 tsc와 lint)가 있는 항목만 체크하고, 데스크톱 Chrome manifest 검증 같은 직접 확인이 끝난 항목만 완료로 쓴다. 로드맵 밖에서 추가된 작업(예: 통계 화면 UI 보완)이 있으면 보고에 적는다.",
       "notes": "담당: 메인 세션(에이전트 아님). docs/PRD.md와 코드는 수정하지 않는다. 노션 변경이나 개발 서버 실행은 하지 않는다. 직접 확인하지 못한 항목은 구현만 됨으로 보고한다.",
-      "status": "in_progress",
+      "status": "completed",
       "dependencies": [
         {
           "taskId": "4ce10dbc-fc0c-41e5-b2fd-73137e41aff8"
         }
       ],
       "createdAt": "2026-11-04T00:44:31.157Z",
-      "updatedAt": "2026-11-05T05:27:48.877Z",
+      "updatedAt": "2026-11-05T05:27:53.595Z",
       "relatedFiles": [
         {
           "path": "docs/ROADMAP.md",
@@ -873,7 +873,8 @@
       "implementationGuide": "1) P4-1부터 P4-7까지 Shrimp에서 완료 처리되었는지 list_tasks로 확인한다. 2) /docs:update-roadmap 4를 실행한다. 3) 승인된 줄만 ROADMAP.md에 반영하고 diff로 표기가 깨지지 않았는지 확인한다. 4) 커밋과 PR은 사용자가 요청할 때만 한다.",
       "verificationCriteria": "ROADMAP의 Phase 4 체크마다 근거가 있고 확인되지 않은 항목은 체크되지 않았다. 변경 줄만 diff에 나타나고 표기가 깨지지 않았다. 사용자 승인 후에만 파일이 수정되었다.",
       "analysisResult": "Run Log의 Phase 4와 Phase 5 마무리 단계. 각 Phase가 끝날 때 /docs:update-roadmap 커맨드로 ROADMAP.md의 진행 상태를 근거와 함께 갱신한다. 확인하지 않은 항목은 체크하지 않고, 파일 수정은 사용자 승인 후에만 한다.",
-      "summary": "R-2 완료(커밋 전, 브랜치 docs/roadmap-phase4). /docs:update-roadmap 4 실행: Shrimp에서 P4-1~P4-8 완료 확인, 머지된 PR #35·#37·#38·#39·#40·#41 확인, 이번 실행의 npx tsc --noEmit과 npm run lint 통과(빌드는 규칙상 미실행, P4-7 직전 main 빌드 성공). before→after 변경안을 먼저 제시하고 AskUserQuestion으로 '모두 적용' 승인을 받은 뒤에만 docs/ROADMAP.md를 수정. 반영: Phase 4 상태 ✅ 완료(2026-11-05 확인), 할 작업 7개와 로드맵 밖 추가 1개(P4-8, PR #39)에 ✅와 PR 근거, 완료 기준 6개 모두 ✅와 확인 근거(수동 대조, 대비, manifest, apple-touch-icon, DevTools 오류 0건, 설치 안내), 요약 표 4행 ✅ 완료·3일 (완료). 마지막 완료 기준(설치 안내)은 데스크톱 브라우저의 iOS 환경 모사로 확인했고 실기기는 Phase 5라고 문구에 명시. diff는 삭제 15줄·추가 16줄로 의도한 줄만 바뀌고 줄바꿈 형식 유지, Phase 5와 다른 파일은 변경 없음. 미확인으로 남김: /stats 빈 상태 안내 화면(노션을 비울 수 없어 코드로만 확인), 갤럭시·아이폰 실기기(Phase 5)."
+      "summary": "R-2 완료(커밋 전, 브랜치 docs/roadmap-phase4). /docs:update-roadmap 4 실행: Shrimp에서 P4-1~P4-8 완료 확인, 머지된 PR #35·#37·#38·#39·#40·#41 확인, 이번 실행의 npx tsc --noEmit과 npm run lint 통과(빌드는 규칙상 미실행, P4-7 직전 main 빌드 성공). before→after 변경안을 먼저 제시하고 AskUserQuestion으로 '모두 적용' 승인을 받은 뒤에만 docs/ROADMAP.md를 수정. 반영: Phase 4 상태 ✅ 완료(2026-11-05 확인), 할 작업 7개와 로드맵 밖 추가 1개(P4-8, PR #39)에 ✅와 PR 근거, 완료 기준 6개 모두 ✅와 확인 근거(수동 대조, 대비, manifest, apple-touch-icon, DevTools 오류 0건, 설치 안내), 요약 표 4행 ✅ 완료·3일 (완료). 마지막 완료 기준(설치 안내)은 데스크톱 브라우저의 iOS 환경 모사로 확인했고 실기기는 Phase 5라고 문구에 명시. diff는 삭제 15줄·추가 16줄로 의도한 줄만 바뀌고 줄바꿈 형식 유지, Phase 5와 다른 파일은 변경 없음. 미확인으로 남김: /stats 빈 상태 안내 화면(노션을 비울 수 없어 코드로만 확인), 갤럭시·아이폰 실기기(Phase 5).",
+      "completedAt": "2026-11-05T05:27:53.588Z"
     },
     {
       "id": "be88aa46-54b4-4d1a-96d2-b2ef1bf32870",
