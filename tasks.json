@@ -1435,7 +1435,7 @@
         }
       ],
       "createdAt": "2026-11-05T08:20:04.138Z",
-      "updatedAt": "2026-11-05T08:28:28.183Z",
+      "updatedAt": "2026-11-05T08:28:46.700Z",
       "relatedFiles": [
         {
           "path": "lib/notion/service.ts",
@@ -1460,7 +1460,8 @@
       ],
       "implementationGuide": "1) lib/notion/service.ts의 findRunRecord, lib/runs/load.ts의 unstable_cache, app/runs/[id]/page.tsx를 읽는다. 2) 옵션과 영향을 정리한다: A 상세도 loadRunRecords 캐시를 재사용(노션 호출 증폭 해소, 노션에서 직접 추가한 기록이 상세에서 최대 약 1분 늦게 열릴 수 있고 관리자 쓰기 뒤에는 revalidateTag로 해소, CLAUDE.md의 상세는 직접 조회 설명을 고쳐야 함), B id가 UUID 형식이 아니면 노션을 부르지 않고 404(변경이 작지만 UUID 형식의 임의 값은 막지 못함), C 그대로 두고 배포 로그로 관찰. 3) 사용자가 고르게 한다. 4) 구현이 필요하면 어느 Phase에 넣을지(예: Phase 2 쓰기 계층)를 정해 notes에 적는다.",
       "verificationCriteria": "사용자가 고른 방침과 근거, 구현 시점(어느 Phase)이 notes에 기록되어 있다. 코드는 변경되지 않았다.",
-      "analysisResult": "Run Log v2(관리자 페이지 고도화)의 Phase 0 준비 단계. docs/ROADMAP.md(v2) Phase 0의 할 작업 5가지를 결정과 문서 작업으로 나눈다. 이 단계에서는 코드를 바꾸지 않고, docs/PRD.md는 사용자가 방식을 정한 뒤에만 수정한다. 결정이 필요한 항목은 사용자에게 옵션과 근거를 보여 주고 사용자가 고른다. 노션 변경은 하지 않는다(필요하면 사용자 확인 후 TEST- 행만, 끝나면 휴지통과 in_trash 확인). 전역 규칙: 한국어 응답과 문서, 직접 확인하지 않은 것은 확인했다고 쓰지 않는다."
+      "analysisResult": "Run Log v2(관리자 페이지 고도화)의 Phase 0 준비 단계. docs/ROADMAP.md(v2) Phase 0의 할 작업 5가지를 결정과 문서 작업으로 나눈다. 이 단계에서는 코드를 바꾸지 않고, docs/PRD.md는 사용자가 방식을 정한 뒤에만 수정한다. 결정이 필요한 항목은 사용자에게 옵션과 근거를 보여 주고 사용자가 고른다. 노션 변경은 하지 않는다(필요하면 사용자 확인 후 TEST- 행만, 끝나면 휴지통과 in_trash 확인). 전역 규칙: 한국어 응답과 문서, 직접 확인하지 않은 것은 확인했다고 쓰지 않는다.",
+      "summary": "V2-P0-3 완료(결정 태스크, 코드·문서 변경 없음). lib/notion/service.ts, lib/runs/load.ts, app/runs/[id]/page.tsx와 revalidateTag/Path 사용처를 읽고 현재 구조 확인: findRunRecord는 listRunRecords()로 노션 전체를 순회한 뒤 find하며 unstable_cache를 거치지 않음, 상세는 revalidate 60이라 같은 주소는 60초에 1회지만 서로 다른 id마다 호출이 생김(v1 P5-1 실측 가짜 id 3종 호출 3회), revalidateTag/Path 호출처는 아직 없고 태그 run-records만 준비됨. 옵션 A(상세도 공유 캐시 사용), B(id 형식 검사), C(그대로 관찰)를 효과와 단점 표로 제시, 사용자가 A를 선택하고 구현 시점은 Phase 2 첫 작업으로 정함. 근거: A는 호출 증폭을 근본적으로 없애고 상세·목록 데이터 불일치도 해소, B는 A와 함께 써도 추가 이득이 거의 없음. 동작 변화: 노션 앱에서 직접 바꾼 내용은 상세에서 약 1~2분 늦게 반영, 관리자 쓰기 뒤에는 revalidateTag로 즉시 갱신. 구현 범위(lib/runs/load.ts 단건 조회 추가, 상세 페이지가 이를 사용, CLAUDE.md와 README 문구 수정, 호출 계수로 확인, 약 0.25일)를 이 태스크 notes에 기록하고 V2-P0-5 notes에 ROADMAP Phase 2 첫 항목·완료 기준 추가·예상 시간 2.25일 보정·개요 한계 항목 표기와 PRD 8·9장 문구 반영 계획을 기록, 메모리(admin-page-roadmap-v2) 갱신. V2-P0-2의 수정 화면용 단건 직접 조회는 인증 뒤 관리자 경로라 별개임을 명시."
     },
     {
       "id": "4f8ada48-f7d6-4df5-a197-a93ab83d5df9",
