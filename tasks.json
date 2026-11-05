@@ -176,7 +176,7 @@
         }
       ],
       "createdAt": "2026-10-30T05:26:02.252Z",
-      "updatedAt": "2026-11-05T01:33:24.133Z",
+      "updatedAt": "2026-11-05T01:44:01.761Z",
       "relatedFiles": [
         {
           "path": "package.json",
@@ -194,7 +194,8 @@
         }
       ],
       "implementationGuide": "1. context7로 recharts와 shadcn chart 문서를 확인한다. 2. npm install recharts를 실행한다. 3. npx shadcn@latest add chart를 실행한다. 4. 생성된 components/ui/chart.tsx가 빌드되는지 확인한다.",
-      "verificationCriteria": "recharts 설치 완료, npx tsc --noEmit 통과, chart 컴포넌트 생성 확인"
+      "verificationCriteria": "recharts 설치 완료, npx tsc --noEmit 통과, chart 컴포넌트 생성 확인",
+      "summary": "recharts 3.8.0과 react-is 19.1.0을 설치하고 shadcn chart 컴포넌트(components/ui/chart.tsx)를 추가해 호환을 확인했다. 설치 전 dependency-manager가 context7과 shadcn 레지스트리로 호환성을 조사했고 사용자가 설치 범위(recharts 3.8.0 + react-is 19.1.0)를 승인했다. 설치 중 shadcn CLI(4.23.0)가 레지스트리의 자리표시자 cn을 같은 이름의 별개 npm 패키지(cn 0.5.2)로 설치해 즉시 npm uninstall로 제거했고 package.json 변경은 승인 범위인 recharts와 react-is 2개뿐임을 확인했다. 같은 CLI가 기존 card.tsx를 덮어쓸지 묻다가 비대화형 실행이 중단되어 chart.tsx가 만들어지지 않아, shadcn view로 받은 레지스트리 원문을 그대로 저장하고 import 경로 한 줄(from cn을 from @/lib/utils로)만 바꿔 작성했다(원문과 다른 줄은 1줄, card.tsx는 변경 없음). 검증: npm ls로 react-is 19.1.0과 react 19.1.0 정합 확인, tsc, lint, 빌드 통과, 추가된 36개 패키지 중 취약한 것 0건(npm audit 13건은 모두 이전부터 있던 next 내부 postcss 등 도구 체인). 임시 차트 페이지(use client, BarChart, ChartContainer)로 실제 렌더링을 확인했다: 서버 HTML에 SVG 포함, 하이드레이션 경고와 콘솔 오류 없음, 360px에서 328x200 렌더링과 가로 스크롤 없음, 막대 3개, CSS 변수와 ChartConfig 색 및 툴팁 라벨 적용, 다크 모드 전환 동작, 차트 코드가 차트 경로에만 번들됨(해당 경로 First Load JS 244 kB, 공통 번들 147 kB 불변). 임시 페이지는 삭제했고 재빌드 후 흔적 없음. 발견한 호환 문제(P4-3 notes에 기록): chart.tsx의 축 글자 색 선택자가 recharts 3.x 구조와 맞지 않아 눈금 글자가 기본 #666으로 남아 다크에서 3.45:1로 부족, 기존 chart 색 토큰이 무채색이라 계열 구분 어려움, accessibilityLayer로 tabindex 0이 붙으나 포커스 표시가 숨겨짐. 한계: 직접 작성한 코드가 없는 생성 파일과 의존성 변경이라 code-reviewer는 돌리지 않았고 조사는 dependency-manager가 설치 전에 수행했다. recharts 3.10.1(최신)과의 타입 호환은 확인하지 않았다. 실기기와 터치 환경, 번들 크기의 최종 영향은 P4-3 이후 확인한다."
     },
     {
       "id": "02ee111e-6683-499a-b52c-24dc65c9b669",
