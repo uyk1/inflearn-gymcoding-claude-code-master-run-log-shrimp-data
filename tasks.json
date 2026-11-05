@@ -244,7 +244,7 @@
         }
       ],
       "createdAt": "2026-10-30T05:26:02.252Z",
-      "updatedAt": "2026-11-05T01:59:13.825Z",
+      "updatedAt": "2026-11-05T02:15:30.456Z",
       "relatedFiles": [
         {
           "path": "app/stats/page.tsx",
@@ -262,7 +262,8 @@
         }
       ],
       "implementationGuide": "1. app/stats/page.tsx를 서버 컴포넌트로 작성한다. 2. components/stats 아래에 recharts 기반 클라이언트 차트를 둔다. 3. 세미콜론과 큰따옴표, 2칸 들여쓰기, cn 사용을 따른다. 4. 모바일 폭에서 가로 스크롤이 없도록 반응형 컨테이너를 쓴다.",
-      "verificationCriteria": "차트가 렌더링되고 빌드 통과, 모바일 폭 가로 스크롤 없음, 'use client' 범위가 차트로 한정됨"
+      "verificationCriteria": "차트가 렌더링되고 빌드 통과, 모바일 폭 가로 스크롤 없음, 'use client' 범위가 차트로 한정됨",
+      "summary": "통계 화면(/stats)과 차트를 구현했다. app/stats/page.tsx는 서버 컴포넌트로 searchParams의 view(week 또는 month, 잘못된 값은 주간)에 따라 loadRunRecords와 P4-2의 buildPeriodStats로 주간 8주 또는 월간 6개월을 집계하고 요약 카드(이번 주 또는 이번 달), 거리 막대 차트, 평균 페이스 선 차트를 보여 준다. 에러와 빈 상태는 공통 컴포넌트를 재사용하고 제외된 기록은 목록과 같은 ExcludedNotice로 안내한다. components/stats에는 서버 컴포넌트 2개(주간 월간 탭, 요약)와 use client 차트 2개(distance-chart, pace-chart)가 있고 recharts는 이 두 파일에서만 import되어 First Load JS가 /stats만 253 kB이며 다른 라우트 135 kB와 공통 번들 147 kB는 그대로다. 헤더에 통계 메뉴를 추가했다. 사용자 결정(요약 카드와 탭과 차트 2개, 무채색 유지하고 형태로 구분, 페이스 이상값 처리 안 함, 주간 8주 월간 6개월)을 반영했다. P4-1에서 발견한 recharts 3.x와 shadcn chart 호환 문제는 chart.tsx를 수정하지 않고 XAxis와 YAxis에 tick fill을 직접 주어 해결했고 다크의 선 색은 chart-3이 대비 부족해 muted-foreground로 바꿨다. 차트에 role group, aria-label, sr-only 요약 연결과 키보드 포커스 링을 넣었다. 검증: tsc, lint, 빌드 통과. 실제 노션 데이터(사용자가 11월 2일 기록 3건을 추가해 이번 주 5.05, 0.78, 5.06km, 26:45, 04:11, 30:42)로 이번 주 요약이 손계산 10.89km, 3698초(1:01:38), 5:40/km와 일치했고 주간 막대 9/28주 12.01, 10/5주 17.02, 11/2주 10.89, 월간 10월 29.03과 이번 달 10.89, 페이스 선이 기록 없는 주에서 끊김, 빠른 쪽이 위로 표시됨을 확인했다. 360, 320, 1024px 라이트 다크에서 가로 스크롤 없음, 1024px에서 두 차트 2열, 다크 글자 요소 대비 4.5 이상(SVG 글자 최저 6.94, 막대 3.78, 선 6.94). 코드 리뷰 차단 없음, 권장을 반영했다(들여쓰기 수정, 포맷 함수를 format.ts로 이동, 접근성 연결, 제외 안내 추가, searchParams 타입 확장, CLAUDE.md와 shrimp-rules.md 갱신). 한계: 기록이 없을 때와 표시 기간에 기록이 없을 때의 안내 화면, /stats에 추가한 제외 안내의 실제 표시는 노션 행을 만들지 않아 코드 재사용으로만 확인했다. 마우스 hover와 Tab 키 이동은 도구 제약으로 클릭과 focus 호출로 대체했다. 막대 차트 Y축 최대는 4의 배수로 올려 큰 값에서 마지막 눈금 간격이 다를 수 있다. 실기기 확인은 Phase 5."
     },
     {
       "id": "188e6b7e-cbf0-406c-ab7b-d09d3621da0b",
