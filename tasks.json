@@ -423,14 +423,14 @@
       "name": "P5-2 배포 환경 변수 등록과 배포",
       "description": "배포 플랫폼에 NOTION_API_KEY와 NOTION_DATA_SOURCE_ID를 등록하고 프로덕션 배포를 한다. 실제 값은 플랫폼 콘솔에만 입력하며 저장소에 기록하지 않는다.",
       "notes": "플랫폼 선택과 계정 로그인은 사용자 결정이 필요하다. 배포 전에 security-checker 에이전트로 읽기 전용 점검을 한다(NEXT_PUBLIC_ 오남용, 비밀값 노출, 의존성 취약점, 입력 검증). 점검에서 나온 문제는 수정하지 않고 보고하며, 해결 후에 배포한다.\n\n[2026-11-04 사용자 결정 반영]\n- 배포 플랫폼은 Vercel로 확정했다(구현 가이드 1번 \"플랫폼 확정\"은 완료). 계정 로그인과 환경 변수 입력은 사용자가 직접 한다.\n- NOTION_API_KEY, NOTION_DATA_SOURCE_ID는 Vercel 프로젝트 환경 변수에만 입력하고 저장소에는 기록하지 않는다. NEXT_PUBLIC_ 접두사를 붙이지 않는다.\n- 노션 통합의 쓰기 권한은 개발 기간 동안 허용해 둔 상태이므로, 배포 직전에 운영용 키의 권한을 읽기 전용으로 줄일지 사용자에게 다시 묻는다(키 유출 시 쓰기 권한이 위험). 답을 받기 전에는 배포하지 않는다.\n- Vercel 설정과 환경 변수 관련 사항은 context7 또는 공식 문서로 확인한 뒤 진행한다. 캐시(unstable_cache, ISR)가 revalidate 300대로 동작하는지는 P5-1 및 배포 로그에서 확인하고, 캐시 값 형태를 바꾸면 lib/runs/load.ts의 키 버전(v2)을 올린다.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "b031dc12-faaa-44f6-a212-7b04751d4e43"
         }
       ],
       "createdAt": "2026-10-30T05:26:19.187Z",
-      "updatedAt": "2026-11-04T07:48:34.724Z",
+      "updatedAt": "2026-11-05T05:56:29.264Z",
       "relatedFiles": [
         {
           "path": ".env.example",
