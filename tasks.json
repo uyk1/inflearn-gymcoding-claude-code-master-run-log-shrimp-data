@@ -532,14 +532,11 @@
       "status": "pending",
       "dependencies": [
         {
-          "taskId": "69528d04-1f27-43cf-8dea-94e17e6fbf06"
-        },
-        {
           "taskId": "f6b3a947-95c2-4980-9c21-4ab6388be4cd"
         }
       ],
       "createdAt": "2026-10-30T05:26:19.187Z",
-      "updatedAt": "2026-10-30T05:51:06.709Z",
+      "updatedAt": "2026-11-05T06:44:41.466Z",
       "relatedFiles": [
         {
           "path": "docs/ROADMAP.md",
@@ -550,7 +547,7 @@
         }
       ],
       "implementationGuide": "1. P5-4와 P5-5에서 나온 문제 목록을 정리한다. 2. 각 문제를 최소 수정으로 고친다. 3. npx tsc --noEmit, npm run lint, npm run build를 통과시킨다.",
-      "verificationCriteria": "실기기 문제 없음, tsc와 lint와 build 통과"
+      "verificationCriteria": "아이폰 실기기 문제 없음(갤럭시는 P5-4 보류로 미확인임을 명시), tsc와 lint와 build 통과"
     },
     {
       "id": "058a237a-2188-4e7b-8b65-b93c3d6febe2",
