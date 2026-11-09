@@ -1626,7 +1626,7 @@
         }
       ],
       "createdAt": "2026-11-09T01:19:13.612Z",
-      "updatedAt": "2026-11-09T01:51:27.413Z",
+      "updatedAt": "2026-11-09T01:54:03.920Z",
       "relatedFiles": [
         {
           "path": "middleware.ts",
@@ -1651,7 +1651,8 @@
       ],
       "implementationGuide": "middleware.ts에 matcher: ['/admin/:path*']를 두고 /admin/login은 통과시킨다. app/admin/layout.tsx 또는 보호용 헬퍼 requireAdmin()에서 cookies()로 세션을 검증해 실패 시 redirect한다. 쓰기 동작(서버 액션)은 항상 requireAdmin()을 먼저 호출하는 규칙을 주석으로 남긴다.",
       "verificationCriteria": "비로그인으로 /admin 접속 시 로그인 화면으로 이동. 비로그인으로 서버 액션을 직접 호출해도 서버에서 거부됨. 공개 화면(/, /runs, 상세, /stats)의 응답과 캐시 동작이 달라지지 않음(빌드 표 확인). tsc와 lint 통과.",
-      "analysisResult": "v2 Phase 1(인증): 관리자 페이지를 위한 인증을 환경 변수 비밀번호 + 서명된 쿠키 세션 방식으로 구현한다. 새 패키지 없이 Node 내장 crypto만 쓴다. 인증 없이 쓰기 기능을 배포하지 않는다. 공개 화면(/, /runs, 상세, /stats)의 동작과 캐시는 바꾸지 않는다. 비밀값은 저장소와 클라이언트 번들에 두지 않고 .env.example에는 이름만 추가한다. .env* 파일의 값은 읽거나 출력하지 않는다. 기준 문서는 docs/ROADMAP.md의 Phase 1과 docs/PRD.md 8장이다. 응답과 에러 처리는 프로젝트의 AppError와 레이어 구조를 따르고 주석과 문서는 한국어로 쓴다."
+      "analysisResult": "v2 Phase 1(인증): 관리자 페이지를 위한 인증을 환경 변수 비밀번호 + 서명된 쿠키 세션 방식으로 구현한다. 새 패키지 없이 Node 내장 crypto만 쓴다. 인증 없이 쓰기 기능을 배포하지 않는다. 공개 화면(/, /runs, 상세, /stats)의 동작과 캐시는 바꾸지 않는다. 비밀값은 저장소와 클라이언트 번들에 두지 않고 .env.example에는 이름만 추가한다. .env* 파일의 값은 읽거나 출력하지 않는다. 기준 문서는 docs/ROADMAP.md의 Phase 1과 docs/PRD.md 8장이다. 응답과 에러 처리는 프로젝트의 AppError와 레이어 구조를 따르고 주석과 문서는 한국어로 쓴다.",
+      "summary": "V2-P1-3 완료(커밋 전, main 위 변경). 추가: middleware.ts(matcher /admin과 /admin/:path*, /admin/login은 통과, 세션 쿠키를 lib/auth/token.ts의 Web Crypto 검증으로 확인해 실패 시 /admin/login으로 307, 비밀값이 없으면 false라 닫힌 쪽으로 실패), lib/auth/require-admin.ts(server-only, 유효한 세션이 없으면 로그인으로 redirect, 쓰기 동작의 첫 줄에서 호출한다는 규칙을 주석에 기록), app/admin/(protected)/layout.tsx(라우트 그룹으로 로그인 화면을 제외한 관리자 전체에서 requireAdmin 재확인, 주소는 그대로), app/admin/(protected)/page.tsx(git mv로 이동 후 requireAdmin 사용, 레이아웃은 클라이언트 이동 때 재실행되지 않을 수 있어 페이지에서도 확인). 새 패키지 없음. Edge 런타임 제약은 Web Crypto 모듈 분리(V2-P1-1)로 해결. 검증: npm run build 통과(Middleware 39.5kB, 빌드 표에서 /는 정적+ISR, /runs와 /stats는 동적, /runs/[id]는 SSG로 v1과 동일), tsc와 lint 통과(이전 .next 타입 캐시 오류는 빌드로 재생성해 해소). 프로덕션 서버(3100, 임시 비밀번호는 프로세스 환경 변수로만 주입, 종료 후 포트 정리 확인)에서 curl: 비로그인 /admin, /admin/runs/new, 변조 쿠키, 가짜 Next-Action 서버 액션 POST가 모두 307로 /admin/login 이동. 공개 /, /runs, /stats는 200이고 Set-Cookie 없음, /는 s-maxage 캐시, /runs와 /stats는 no-store로 변화 없음. 브라우저: 비로그인 /admin은 로그인으로 이동, 로그인 후 /admin 표시, 공개 홈 정상, 로그아웃 후 /admin 직접 접근은 로그인으로 이동, 360px 가로 스크롤 없음. 미확인 또는 한계: (1) 현재 쓰기 서버 액션이 없어 '비로그인으로 쓰기 액션 호출 거부'는 가짜 액션 POST를 미들웨어가 막는 것만 확인했고 requireAdmin 단독 방어(미들웨어를 우회한 호출)는 쓰기 액션이 생기는 Phase 2에서 확인해야 한다. (2) loginAction과 logoutAction은 비로그인에서도 호출 가능하게 둠(의도). 참고: 홈 Revalidate 10s는 사용자 .env.local의 테스트용 RUN_RECORDS_REVALIDATE_SECONDS 때문이며 운영은 60초. 없는 상세 id가 HTTP 200에 404 화면을 보여 주는 동작은 배포된 v1에서도 같은 기존 동작이라 이번 변경과 무관."
     },
     {
       "id": "bfddf038-2f4f-44a7-864a-769ca3e97a60",
