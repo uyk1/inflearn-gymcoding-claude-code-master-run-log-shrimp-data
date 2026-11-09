@@ -1554,7 +1554,7 @@
       "status": "in_progress",
       "dependencies": [],
       "createdAt": "2026-11-09T01:19:13.611Z",
-      "updatedAt": "2026-11-09T01:20:00.958Z",
+      "updatedAt": "2026-11-09T01:23:01.291Z",
       "relatedFiles": [
         {
           "path": "lib/auth/session.ts",
@@ -1574,7 +1574,8 @@
       ],
       "implementationGuide": "lib/auth/ 아래에 server-only 모듈을 만든다. 예: session.ts에 createSessionToken(now), verifySessionToken(token, now): boolean, verifyPassword(input): boolean을 둔다. 토큰은 payload(만료 epoch)와 HMAC-SHA256 서명을 base64url로 이어 붙인다. 환경 변수가 없으면 AppError로 실패시키고 값을 로그에 남기지 않는다. 쿠키 이름과 만료 상수는 한곳에 둔다.",
       "verificationCriteria": "npx tsc --noEmit과 npm run lint 통과. 서명 변조·만료·빈 값 토큰이 거부되고 올바른 토큰은 통과함을 임시 스크립트로 확인. 비밀값이 저장소 파일에 없음. .env.example에 이름만 있음.",
-      "analysisResult": "v2 Phase 1(인증): 관리자 페이지를 위한 인증을 환경 변수 비밀번호 + 서명된 쿠키 세션 방식으로 구현한다. 새 패키지 없이 Node 내장 crypto만 쓴다. 인증 없이 쓰기 기능을 배포하지 않는다. 공개 화면(/, /runs, 상세, /stats)의 동작과 캐시는 바꾸지 않는다. 비밀값은 저장소와 클라이언트 번들에 두지 않고 .env.example에는 이름만 추가한다. .env* 파일의 값은 읽거나 출력하지 않는다. 기준 문서는 docs/ROADMAP.md의 Phase 1과 docs/PRD.md 8장이다. 응답과 에러 처리는 프로젝트의 AppError와 레이어 구조를 따르고 주석과 문서는 한국어로 쓴다."
+      "analysisResult": "v2 Phase 1(인증): 관리자 페이지를 위한 인증을 환경 변수 비밀번호 + 서명된 쿠키 세션 방식으로 구현한다. 새 패키지 없이 Node 내장 crypto만 쓴다. 인증 없이 쓰기 기능을 배포하지 않는다. 공개 화면(/, /runs, 상세, /stats)의 동작과 캐시는 바꾸지 않는다. 비밀값은 저장소와 클라이언트 번들에 두지 않고 .env.example에는 이름만 추가한다. .env* 파일의 값은 읽거나 출력하지 않는다. 기준 문서는 docs/ROADMAP.md의 Phase 1과 docs/PRD.md 8장이다. 응답과 에러 처리는 프로젝트의 AppError와 레이어 구조를 따르고 주석과 문서는 한국어로 쓴다.",
+      "summary": "V2-P1-1 완료(커밋 전, main 위 변경). lib/auth/에 세 파일을 만들었다. token.ts는 어떤 모듈도 import하지 않는 순수 모듈로, Web Crypto(HMAC-SHA256)로 createSessionToken(secret, expiresAtMs)과 verifySessionToken(secret, token, nowMs)를 제공한다(base64url(만료 epoch).base64url(서명), 서명 검증은 crypto.subtle.verify의 상수 시간 비교). Edge 미들웨어와 Node 양쪽에서 같은 코드로 동작하도록 Node crypto 대신 Web Crypto를 택했다(새 패키지 없음, V2-P1-3의 Edge 제약 선해결). constants.ts는 쿠키 이름(run-log-admin)과 유지 시간(7일)을 한곳에 둔다. session.ts는 server-only이며 verifyPassword(SHA-256 해시끼리 timingSafeEqual), issueSessionToken, isValidSessionToken, sessionCookieOptions(httpOnly, secure는 production만, sameSite lax, path /, maxAge)를 제공하고 환경 변수가 없으면 값 없이 AppError(AUTH_NOT_CONFIGURED)만 던진다. .env.example에 ADMIN_PASSWORD, ADMIN_SESSION_SECRET 이름과 설명 주석만 추가했다(값 없음). 검증: npx tsc --noEmit과 eslint lib/auth 통과. 임시 폴더에서 node --test로 token.ts 6건 통과(정상, 만료 경계와 이후, 다른 비밀값, 만료 연장 페이로드 변조, 서명 변조, 빈 값·형식 오류). git grep로 저장소에 인증 비밀값 없음 확인. 미확인: session.ts는 server-only 때문에 Next 밖에서 실행되지 않아 verifyPassword와 환경 변수 오류 경로는 V2-P1-2의 실제 로그인에서 확인한다. 사용자가 .env.local에 두 값을 직접 넣어야 로그인이 동작한다."
     },
     {
       "id": "69e92e6b-2ffb-452d-8038-d0173a1b7a25",
