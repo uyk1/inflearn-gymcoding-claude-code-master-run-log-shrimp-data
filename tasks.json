@@ -1820,14 +1820,14 @@
       "name": "V2-P2-4 입력 검증과 노션 속성 변환",
       "description": "웹 입력 DTO(RunInputDto)와 zod 4 스키마를 만든다. 제목은 trim 후 비어 있지 않고 최대 길이 제한, 날짜는 YYYY-MM-DD 달력 검증(normalizeNotionDate 재사용), 거리는 0보다 큰 숫자(읽기보다 엄격해도 읽기 규칙의 부분집합), 소요시간은 parseDurationToSeconds 재사용(12:5 같은 입력은 거부), 장소와 메모는 길이 제한, 강도는 EASY/NORMAL/HARD 중 선택 또는 없음, 태그는 개수와 길이 제한이며 쉼표 금지, 클라이언트 키(web-UUID 형식)를 받는다. RunInputDto를 노션 속성 객체로 바꾸는 순수 함수 toNotionProperties를 만든다(출처는 수동 고정, 외부ID는 클라이언트 키). 모듈은 확장자 있는 상대 경로 import만 쓴다.",
       "notes": "핵심 단위 테스트: 스키마를 통과한 입력을 toNotionProperties로 바꿔 가짜 노션 페이지 객체로 만들고 toRunMapResult에 넣으면 제외되지 않고 정상 기록이 되어야 한다. 잘못된 입력(12:5, 2026-13-45, 빈 제목, 거리 0 이하)은 거부된다.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "64294ba6-045e-4f3d-9567-10a0319bf072"
         }
       ],
       "createdAt": "2026-11-09T04:27:28.312Z",
-      "updatedAt": "2026-11-09T04:27:28.312Z",
+      "updatedAt": "2026-11-09T04:59:39.701Z",
       "relatedFiles": [
         {
           "path": "lib/notion/admin/input.ts",
