@@ -1583,14 +1583,14 @@
       "name": "V2-P1-2 로그인·로그아웃 화면과 실패 횟수 제한",
       "description": "/admin/login 화면과 서버 액션으로 로그인·로그아웃을 구현한다. 폼은 프로젝트 패턴(useForm + zodResolver + Controller + Field/FieldError)을 따르고 모바일 우선으로 만든다. 로그인 성공 시 세션 쿠키를 설정하고 /admin으로 이동하며, 로그아웃은 쿠키를 지운다. 실패 횟수 제한을 둔다(예: 일정 시간 안에 N회 실패 시 잠시 차단). 서버리스 환경이라 메모리 기반 제한의 한계를 주석과 보고에 정직하게 적는다. 오류 메시지는 비밀번호가 틀렸는지 설정 오류인지 구분하지 않는 일반 문구를 쓰고 내부 정보를 노출하지 않는다. 입력값과 비밀번호는 로그에 남기지 않는다.",
       "notes": "zod 4 문법 사용. 폼 패턴은 CLAUDE.md 참고. 새 패키지 설치 금지.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "cf60c270-ea84-4695-a0cf-7d67d43e02ed"
         }
       ],
       "createdAt": "2026-11-09T01:19:13.612Z",
-      "updatedAt": "2026-11-09T01:19:13.612Z",
+      "updatedAt": "2026-11-09T01:36:09.823Z",
       "relatedFiles": [
         {
           "path": "app/admin/login/page.tsx",
