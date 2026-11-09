@@ -1808,6 +1808,128 @@
       "implementationGuide": "먼저 tsconfig 플래그와 .ts import가 tsc와 npm run build에서 통과하는지 작은 변경으로 확인한다. 분리 전후 toRunMapResult 결과가 같음을 가짜 페이지 객체로 테스트한다.",
       "verificationCriteria": "npm test 통과(매퍼 동작 동일, token과 rate-limit 포함). npx tsc --noEmit, npm run lint, npm run build 통과하고 공개 화면 렌더링 방식 불변.",
       "analysisResult": "v2 Phase 2(쓰기 계층): 화면 없이 서버 코드로 러닝 기록을 노션에 만들 수 있는 쓰기 계층을 만든다. 읽기와 같은 검증 규칙을 공유해 입력이 통과하면 목록에서 제외되지 않게 한다. 결정: 쓰기 전용 키 NOTION_ADMIN_API_KEY와 lib/notion/admin/ 분리, 출처는 기존 옵션 수동, 외부ID에 web-UUID 멱등 키로 중복 방지, 테스트는 node --test(새 패키지 없음, 테스트 대상은 확장자 있는 상대 경로 import). 쓰기 진입점은 POST /api/admin/runs Route Handler이며 미들웨어 밖이라 핸들러 안의 세션과 Origin 확인이 유일한 방어다. 노션 쓰기 검증은 사용자 확인 후 TEST- 행만 쓰고 끝나면 휴지통으로 보내 in_trash를 확인한다. .env* 값은 읽거나 출력하지 않는다. 기준 문서는 docs/ROADMAP.md Phase 2와 docs/PRD.md. 한국어 주석과 문서, 새 패키지 설치 금지."
+    },
+    {
+      "id": "755d5622-bde1-49c2-ae22-3c3c9a258224",
+      "name": "V2-P2-4 입력 검증과 노션 속성 변환",
+      "description": "웹 입력 DTO(RunInputDto)와 zod 4 스키마를 만든다. 제목은 trim 후 비어 있지 않고 최대 길이 제한, 날짜는 YYYY-MM-DD 달력 검증(normalizeNotionDate 재사용), 거리는 0보다 큰 숫자(읽기보다 엄격해도 읽기 규칙의 부분집합), 소요시간은 parseDurationToSeconds 재사용(12:5 같은 입력은 거부), 장소와 메모는 길이 제한, 강도는 EASY/NORMAL/HARD 중 선택 또는 없음, 태그는 개수와 길이 제한이며 쉼표 금지, 클라이언트 키(web-UUID 형식)를 받는다. RunInputDto를 노션 속성 객체로 바꾸는 순수 함수 toNotionProperties를 만든다(출처는 수동 고정, 외부ID는 클라이언트 키). 모듈은 확장자 있는 상대 경로 import만 쓴다.",
+      "notes": "핵심 단위 테스트: 스키마를 통과한 입력을 toNotionProperties로 바꿔 가짜 노션 페이지 객체로 만들고 toRunMapResult에 넣으면 제외되지 않고 정상 기록이 되어야 한다. 잘못된 입력(12:5, 2026-13-45, 빈 제목, 거리 0 이하)은 거부된다.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "64294ba6-045e-4f3d-9567-10a0319bf072"
+        }
+      ],
+      "createdAt": "2026-11-09T04:27:28.312Z",
+      "updatedAt": "2026-11-09T04:27:28.312Z",
+      "relatedFiles": [
+        {
+          "path": "lib/notion/admin/input.ts",
+          "type": "CREATE",
+          "description": "zod 스키마와 RunInputDto"
+        },
+        {
+          "path": "lib/notion/admin/to-properties.ts",
+          "type": "CREATE",
+          "description": "노션 속성 변환"
+        },
+        {
+          "path": "lib/notion/mapper.ts",
+          "type": "REFERENCE",
+          "description": "읽기 규칙 대조"
+        },
+        {
+          "path": "lib/notion/duration.ts",
+          "type": "DEPENDENCY",
+          "description": "소요시간 검증 재사용"
+        },
+        {
+          "path": "lib/notion/date.ts",
+          "type": "DEPENDENCY",
+          "description": "날짜 검증 재사용"
+        }
+      ],
+      "implementationGuide": "lib/notion/admin/input.ts에 스키마와 타입, lib/notion/admin/to-properties.ts에 변환 함수를 둔다. properties.ts의 RUN_PROPERTY 이름을 사용한다. 소요시간은 입력 문자열 그대로 저장한다.",
+      "verificationCriteria": "npm test 통과(통과 입력의 왕복 테스트, 거부 입력 테스트 포함). tsc와 lint 통과.",
+      "analysisResult": "v2 Phase 2(쓰기 계층): 화면 없이 서버 코드로 러닝 기록을 노션에 만들 수 있는 쓰기 계층을 만든다. 읽기와 같은 검증 규칙을 공유해 입력이 통과하면 목록에서 제외되지 않게 한다. 결정: 쓰기 전용 키 NOTION_ADMIN_API_KEY와 lib/notion/admin/ 분리, 출처는 기존 옵션 수동, 외부ID에 web-UUID 멱등 키로 중복 방지, 테스트는 node --test(새 패키지 없음, 테스트 대상은 확장자 있는 상대 경로 import). 쓰기 진입점은 POST /api/admin/runs Route Handler이며 미들웨어 밖이라 핸들러 안의 세션과 Origin 확인이 유일한 방어다. 노션 쓰기 검증은 사용자 확인 후 TEST- 행만 쓰고 끝나면 휴지통으로 보내 in_trash를 확인한다. .env* 값은 읽거나 출력하지 않는다. 기준 문서는 docs/ROADMAP.md Phase 2와 docs/PRD.md. 한국어 주석과 문서, 새 패키지 설치 금지."
+    },
+    {
+      "id": "c31bfe5a-62c1-44db-b8c1-9dc2ae5f4c60",
+      "name": "V2-P2-5 쓰기 Repository와 Service",
+      "description": "lib/notion/admin/repository.ts에 페이지 생성, 수정, 휴지통 이동(in_trash true), 외부ID로 기존 페이지 찾기(data source query rich_text equals)를 만든다. lib/notion/admin/service.ts의 createRun은 입력을 검증하고 외부ID가 이미 있으면 새로 만들지 않고 기존 기록을 돌려주며, 없으면 생성한다. 수정과 휴지통 이동 메서드도 만든다(실제 노션 확인은 Phase 4). 노션 실패는 AppError NOTION_WRITE_FAILED 502로 바꾸고 로그에는 name, code, status만 남겨 입력값과 키를 남기지 않는다. 키는 admin client에서만 읽는다.",
+      "notes": "노션 조회가 방금 만든 행을 짧게 못 볼 수 있어 중복 방지는 연타 정도를 막는 수준이다. 입력 1건은 읽기 1회와 쓰기 1회.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "755d5622-bde1-49c2-ae22-3c3c9a258224"
+        }
+      ],
+      "createdAt": "2026-11-09T04:27:28.312Z",
+      "updatedAt": "2026-11-09T04:27:28.312Z",
+      "relatedFiles": [
+        {
+          "path": "lib/notion/admin/repository.ts",
+          "type": "CREATE",
+          "description": "쓰기 Repository"
+        },
+        {
+          "path": "lib/notion/admin/service.ts",
+          "type": "CREATE",
+          "description": "쓰기 Service"
+        },
+        {
+          "path": "lib/notion/admin/client.ts",
+          "type": "DEPENDENCY",
+          "description": "쓰기 클라이언트"
+        },
+        {
+          "path": "lib/errors.ts",
+          "type": "REFERENCE",
+          "description": "AppError"
+        }
+      ],
+      "implementationGuide": "create는 notion.pages.create에 parent data_source_id와 properties를 넘긴다. update는 notion.pages.update, 휴지통은 in_trash true. 의존성은 생성자 주입(레이어드: Controller, Service, Repository, DTO).",
+      "verificationCriteria": "가짜 노션 클라이언트로 생성, 중복 키일 때 기존 반환, 수정, 휴지통 호출 형태를 단위 테스트. 노션 실패가 AppError로 바뀌고 로그에 입력값이 없음. tsc와 lint 통과.",
+      "analysisResult": "v2 Phase 2(쓰기 계층): 화면 없이 서버 코드로 러닝 기록을 노션에 만들 수 있는 쓰기 계층을 만든다. 읽기와 같은 검증 규칙을 공유해 입력이 통과하면 목록에서 제외되지 않게 한다. 결정: 쓰기 전용 키 NOTION_ADMIN_API_KEY와 lib/notion/admin/ 분리, 출처는 기존 옵션 수동, 외부ID에 web-UUID 멱등 키로 중복 방지, 테스트는 node --test(새 패키지 없음, 테스트 대상은 확장자 있는 상대 경로 import). 쓰기 진입점은 POST /api/admin/runs Route Handler이며 미들웨어 밖이라 핸들러 안의 세션과 Origin 확인이 유일한 방어다. 노션 쓰기 검증은 사용자 확인 후 TEST- 행만 쓰고 끝나면 휴지통으로 보내 in_trash를 확인한다. .env* 값은 읽거나 출력하지 않는다. 기준 문서는 docs/ROADMAP.md Phase 2와 docs/PRD.md. 한국어 주석과 문서, 새 패키지 설치 금지."
+    },
+    {
+      "id": "262df07b-f0b5-415c-bff3-7a254bdb3101",
+      "name": "V2-P2-6 관리자 쓰기 API 라우트와 통합 확인",
+      "description": "app/api/admin/runs/route.ts에 POST를 만든다. 세션이 없으면 401 apiFailure(핸들러 안의 확인이 유일한 방어이므로 lib/auth의 세션 검증을 직접 호출), Origin 헤더가 앱과 다르면 거부, JSON 파싱 실패와 검증 실패는 400 apiFailure(필드별 사유, 입력값 비노출), 성공은 apiSuccess로 생성된 기록의 id를 돌려주고 revalidateTag run-records를 호출한다. 서비스 오류는 AppError의 code와 status를 apiFailure로 변환하고 내부 정보는 숨긴다. 이 라우트가 apiSuccess와 apiFailure의 첫 실사용이다. 확인은 사용자 확인을 받은 뒤 TEST- 행으로만 하고 끝나면 휴지통으로 보내 in_trash를 확인한다.",
+      "notes": "노션 쓰기 전에 사용자 확인 필수. NOTION_ADMIN_API_KEY가 .env.local에 있어야 한다(사용자가 직접 설정). 이 단계로 Phase 1의 남은 기준(비로그인 쓰기 직접 호출 거부와 requireAdmin 단독 방어)도 확인한다.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "c31bfe5a-62c1-44db-b8c1-9dc2ae5f4c60"
+        }
+      ],
+      "createdAt": "2026-11-09T04:27:28.312Z",
+      "updatedAt": "2026-11-09T04:27:28.312Z",
+      "relatedFiles": [
+        {
+          "path": "app/api/admin/runs/route.ts",
+          "type": "CREATE",
+          "description": "POST 라우트 핸들러"
+        },
+        {
+          "path": "lib/auth/session.ts",
+          "type": "TO_MODIFY",
+          "description": "boolean 세션 확인 헬퍼 추가 가능"
+        },
+        {
+          "path": "lib/api/response.ts",
+          "type": "DEPENDENCY",
+          "description": "apiSuccess, apiFailure"
+        },
+        {
+          "path": "lib/notion/admin/service.ts",
+          "type": "DEPENDENCY",
+          "description": "쓰기 Service"
+        }
+      ],
+      "implementationGuide": "app/api/admin/runs/route.ts는 얇게 유지하고 서비스 호출만 한다. 세션 확인 헬퍼는 requireAdmin과 달리 redirect 대신 boolean을 돌려주는 함수를 lib/auth에 둔다. 확인은 임시 비밀번호로 띄운 서버와 사용자 승인 후 노션 TEST- 행으로 한다.",
+      "verificationCriteria": "비로그인 401과 노션 행 불변. 잘못된 입력(12:5, 없는 날짜) 400이고 행 수 불변. 올바른 입력이 생성되어 공개 목록에 제외 없이 표시. 같은 키로 두 번 보내도 행이 하나. 성공과 실패 응답이 apiSuccess, apiFailure 형식. 쓰기 키가 클라이언트 번들에 없음. 테스트 행은 휴지통으로 보내 in_trash 확인. npm test, tsc, lint, build 통과.",
+      "analysisResult": "v2 Phase 2(쓰기 계층): 화면 없이 서버 코드로 러닝 기록을 노션에 만들 수 있는 쓰기 계층을 만든다. 읽기와 같은 검증 규칙을 공유해 입력이 통과하면 목록에서 제외되지 않게 한다. 결정: 쓰기 전용 키 NOTION_ADMIN_API_KEY와 lib/notion/admin/ 분리, 출처는 기존 옵션 수동, 외부ID에 web-UUID 멱등 키로 중복 방지, 테스트는 node --test(새 패키지 없음, 테스트 대상은 확장자 있는 상대 경로 import). 쓰기 진입점은 POST /api/admin/runs Route Handler이며 미들웨어 밖이라 핸들러 안의 세션과 Origin 확인이 유일한 방어다. 노션 쓰기 검증은 사용자 확인 후 TEST- 행만 쓰고 끝나면 휴지통으로 보내 in_trash를 확인한다. .env* 값은 읽거나 출력하지 않는다. 기준 문서는 docs/ROADMAP.md Phase 2와 docs/PRD.md. 한국어 주석과 문서, 새 패키지 설치 금지."
     }
   ]
 }
