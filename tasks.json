@@ -1686,10 +1686,10 @@
       "name": "V2-P2-1 상세 화면을 공유 캐시로 전환",
       "description": "상세 화면(app/runs/[id]/page.tsx)이 노션을 직접 조회하지 않고 lib/runs/load.ts의 unstable_cache 공유 캐시에서 기록을 찾게 한다. load.ts에 loadRunRecord(id)를 추가하고 상세 페이지가 사용한다. 존재하지 않는 id는 notFound, 노션 실패는 기존처럼 오류 화면과 목록 링크를 보여 준다. 더 쓰이지 않는 service.findRunRecord는 사용처를 확인한 뒤 정리한다. CLAUDE.md의 상세는 직접 조회 문장과 README 알려진 한계 절을 현재 구현에 맞게 고친다(문서 수정은 변경안을 먼저 보여 주고 승인 후).",
       "notes": "V2-P0-3에서 상세도 공유 캐시를 쓰기로 결정함. 노션에서 직접 바꾼 내용은 상세에서 최대 1~2분 늦게 반영된다.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [],
       "createdAt": "2026-11-09T04:27:03.940Z",
-      "updatedAt": "2026-11-09T04:27:03.940Z",
+      "updatedAt": "2026-11-09T04:27:59.670Z",
       "relatedFiles": [
         {
           "path": "lib/runs/load.ts",
