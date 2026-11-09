@@ -1551,10 +1551,10 @@
       "name": "V2-P1-1 세션 모듈 구현 (비밀번호 확인, 서명 쿠키)",
       "description": "환경 변수 비밀번호를 확인하고 서명된 HttpOnly 쿠키 세션을 발급·검증하는 서버 전용 모듈을 만든다. 새 패키지는 설치하지 않고 Node 내장 crypto만 쓴다. 비밀번호 비교는 timingSafeEqual 같은 상수 시간 비교를 쓴다. 세션 값은 만료 시각을 포함해 HMAC 서명하고 검증 시 서명과 만료를 모두 확인한다. 쿠키 속성은 HttpOnly, Secure(운영), SameSite=Lax 이상, Path=/, 만료 설정을 둔다. 인증 환경 변수 이름(예: ADMIN_PASSWORD, ADMIN_SESSION_SECRET)을 정하고 .env.example에는 이름과 설명 주석만 추가한다. 값은 코드와 저장소에 기록하지 않는다. 이 단계에서는 화면과 라우트를 만들지 않는다. 가능한 순수 함수(서명 생성·검증)는 이후 단위 테스트가 가능하도록 상대 경로 import만 쓰고 분리한다.",
       "notes": "인증 방식 결정: 환경 변수 비밀번호 + 쿠키 세션(사용자 선택, 간단하게 가기로 함). .env.local은 Claude가 편집할 수 없으므로 사용자가 직접 값을 설정한다.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [],
       "createdAt": "2026-11-09T01:19:13.611Z",
-      "updatedAt": "2026-11-09T01:19:13.611Z",
+      "updatedAt": "2026-11-09T01:20:00.958Z",
       "relatedFiles": [
         {
           "path": "lib/auth/session.ts",
