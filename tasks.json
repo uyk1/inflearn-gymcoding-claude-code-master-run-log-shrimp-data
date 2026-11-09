@@ -1545,6 +1545,133 @@
       "analysisResult": "Run Log v2(관리자 페이지 고도화)의 Phase 0 준비 단계. docs/ROADMAP.md(v2) Phase 0의 할 작업 5가지를 결정과 문서 작업으로 나눈다. 이 단계에서는 코드를 바꾸지 않고, docs/PRD.md는 사용자가 방식을 정한 뒤에만 수정한다. 결정이 필요한 항목은 사용자에게 옵션과 근거를 보여 주고 사용자가 고른다. 노션 변경은 하지 않는다(필요하면 사용자 확인 후 TEST- 행만, 끝나면 휴지통과 in_trash 확인). 전역 규칙: 한국어 응답과 문서, 직접 확인하지 않은 것은 확인했다고 쓰지 않는다.",
       "summary": "V2-P0-5 완료(문서 작업, 코드 변경 없음, 모든 문서 변경은 변경안을 보여 주고 사용자 승인 후 반영). 1차(PR #50, 머지 bfa2a5e): V2-P0-1 결정(방식 B)에 따라 docs/PRD.md를 docs/prds/PRD-v1.md로 git mv(rename 이력 유지, 안내 한 줄만 추가)하고 docs/PRD.md를 관리자 페이지까지 포함한 자기완결적 v2로 새로 작성(1~10장 번호 유지, 4장 필드와 소요시간·날짜·페이스 규칙 11개 줄은 v1과 글자 그대로 동일함을 자동 대조로 확인). V2-P0-2~4 결정을 PRD(3·4·6·8·9장)와 ROADMAP v2에 반영: Phase 2에 상세 공유 캐시·쓰기 키 모듈(lib/notion/admin/)과 ESLint 제한·mapper 읽기 함수 공유 모듈화·node --test 추가(2.25일, 합계 11.25일), Phase 5 원문 정책 구체화, Phase 6 쓰기 키는 Production에만 등록. CLAUDE.md와 README 참조를 v2(현재)와 v1(보관)로 갱신, 커밋은 이동과 작성 둘로 나눠 git log --follow로 v1 이력 추적 확인. 2차(PR #51, 머지 628b213): /docs:update-roadmap 0으로 Phase 0을 ✅ 완료(2026-11-05 확인)로 갱신하고 할 작업 5개와 완료 기준 2개에 근거 기록, 요약 표 갱신(9줄 추가·9줄 삭제). 사용자 질문(추측으로 남긴 두 가지를 확인할 방법이 있는가)에 따라 노션 공식 문서를 추가 조회해 확인: 페이지 생성은 Insert content, 속성 수정과 휴지통 이동은 Update content, 읽기는 Read content(Insert만으로는 읽기 불가라 관리자 통합은 세 권한 모두 필요), 호출 제한은 연결별로 일반 플랜 분당 180회(평균 초당 3회)이고 사용자의 노션은 무료 플랜이며 데이터 소스 조회는 별도로 연결당 초당 약 3회, 노션 JS SDK가 429의 Retry-After를 기다려 자동 재시도. 이로써 추측 표시 항목이 없어졌고 v1 한계의 위험은 즉시 오류보다 지연에 가깝다고 정정. 메모리(admin-page-roadmap-v2, roadmap-progress-tracking)에 결정과 확인 결과 기록. 검증: npx tsc --noEmit 통과, 끊어진 참조 없음, CRLF 유지, 비밀값 패턴 없음, 본문 상태와 요약 표 일치. 남은 것: Phase 1 이후는 미착수(Shrimp 태스크 미등록), 웹 입력의 출처 값과 외부ID 중복 방지 사용 여부는 Phase 2에서 결정, shrimp_data 서브모듈 포인터는 밀려 있음.",
       "completedAt": "2026-11-05T08:49:42.684Z"
+    },
+    {
+      "id": "cf60c270-ea84-4695-a0cf-7d67d43e02ed",
+      "name": "V2-P1-1 세션 모듈 구현 (비밀번호 확인, 서명 쿠키)",
+      "description": "환경 변수 비밀번호를 확인하고 서명된 HttpOnly 쿠키 세션을 발급·검증하는 서버 전용 모듈을 만든다. 새 패키지는 설치하지 않고 Node 내장 crypto만 쓴다. 비밀번호 비교는 timingSafeEqual 같은 상수 시간 비교를 쓴다. 세션 값은 만료 시각을 포함해 HMAC 서명하고 검증 시 서명과 만료를 모두 확인한다. 쿠키 속성은 HttpOnly, Secure(운영), SameSite=Lax 이상, Path=/, 만료 설정을 둔다. 인증 환경 변수 이름(예: ADMIN_PASSWORD, ADMIN_SESSION_SECRET)을 정하고 .env.example에는 이름과 설명 주석만 추가한다. 값은 코드와 저장소에 기록하지 않는다. 이 단계에서는 화면과 라우트를 만들지 않는다. 가능한 순수 함수(서명 생성·검증)는 이후 단위 테스트가 가능하도록 상대 경로 import만 쓰고 분리한다.",
+      "notes": "인증 방식 결정: 환경 변수 비밀번호 + 쿠키 세션(사용자 선택, 간단하게 가기로 함). .env.local은 Claude가 편집할 수 없으므로 사용자가 직접 값을 설정한다.",
+      "status": "pending",
+      "dependencies": [],
+      "createdAt": "2026-11-09T01:19:13.611Z",
+      "updatedAt": "2026-11-09T01:19:13.611Z",
+      "relatedFiles": [
+        {
+          "path": "lib/auth/session.ts",
+          "type": "CREATE",
+          "description": "세션 토큰 발급·검증과 비밀번호 확인"
+        },
+        {
+          "path": ".env.example",
+          "type": "TO_MODIFY",
+          "description": "인증 환경 변수 이름과 설명 주석 추가"
+        },
+        {
+          "path": "lib/errors.ts",
+          "type": "REFERENCE",
+          "description": "AppError 사용 방식"
+        }
+      ],
+      "implementationGuide": "lib/auth/ 아래에 server-only 모듈을 만든다. 예: session.ts에 createSessionToken(now), verifySessionToken(token, now): boolean, verifyPassword(input): boolean을 둔다. 토큰은 payload(만료 epoch)와 HMAC-SHA256 서명을 base64url로 이어 붙인다. 환경 변수가 없으면 AppError로 실패시키고 값을 로그에 남기지 않는다. 쿠키 이름과 만료 상수는 한곳에 둔다.",
+      "verificationCriteria": "npx tsc --noEmit과 npm run lint 통과. 서명 변조·만료·빈 값 토큰이 거부되고 올바른 토큰은 통과함을 임시 스크립트로 확인. 비밀값이 저장소 파일에 없음. .env.example에 이름만 있음.",
+      "analysisResult": "v2 Phase 1(인증): 관리자 페이지를 위한 인증을 환경 변수 비밀번호 + 서명된 쿠키 세션 방식으로 구현한다. 새 패키지 없이 Node 내장 crypto만 쓴다. 인증 없이 쓰기 기능을 배포하지 않는다. 공개 화면(/, /runs, 상세, /stats)의 동작과 캐시는 바꾸지 않는다. 비밀값은 저장소와 클라이언트 번들에 두지 않고 .env.example에는 이름만 추가한다. .env* 파일의 값은 읽거나 출력하지 않는다. 기준 문서는 docs/ROADMAP.md의 Phase 1과 docs/PRD.md 8장이다. 응답과 에러 처리는 프로젝트의 AppError와 레이어 구조를 따르고 주석과 문서는 한국어로 쓴다."
+    },
+    {
+      "id": "69e92e6b-2ffb-452d-8038-d0173a1b7a25",
+      "name": "V2-P1-2 로그인·로그아웃 화면과 실패 횟수 제한",
+      "description": "/admin/login 화면과 서버 액션으로 로그인·로그아웃을 구현한다. 폼은 프로젝트 패턴(useForm + zodResolver + Controller + Field/FieldError)을 따르고 모바일 우선으로 만든다. 로그인 성공 시 세션 쿠키를 설정하고 /admin으로 이동하며, 로그아웃은 쿠키를 지운다. 실패 횟수 제한을 둔다(예: 일정 시간 안에 N회 실패 시 잠시 차단). 서버리스 환경이라 메모리 기반 제한의 한계를 주석과 보고에 정직하게 적는다. 오류 메시지는 비밀번호가 틀렸는지 설정 오류인지 구분하지 않는 일반 문구를 쓰고 내부 정보를 노출하지 않는다. 입력값과 비밀번호는 로그에 남기지 않는다.",
+      "notes": "zod 4 문법 사용. 폼 패턴은 CLAUDE.md 참고. 새 패키지 설치 금지.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "cf60c270-ea84-4695-a0cf-7d67d43e02ed"
+        }
+      ],
+      "createdAt": "2026-11-09T01:19:13.612Z",
+      "updatedAt": "2026-11-09T01:19:13.612Z",
+      "relatedFiles": [
+        {
+          "path": "app/admin/login/page.tsx",
+          "type": "CREATE",
+          "description": "로그인 화면"
+        },
+        {
+          "path": "app/admin/actions.ts",
+          "type": "CREATE",
+          "description": "로그인·로그아웃 서버 액션"
+        },
+        {
+          "path": "lib/auth/session.ts",
+          "type": "DEPENDENCY",
+          "description": "세션 모듈"
+        }
+      ],
+      "implementationGuide": "app/admin/login/page.tsx(서버 컴포넌트)와 로그인 폼 클라이언트 컴포넌트, app/admin/actions.ts의 loginAction/logoutAction을 만든다. 서버 액션에서 zod로 입력을 검증하고 verifyPassword 후 쿠키를 설정한다. 실패 제한은 클라이언트 IP 또는 쿠키 기준 카운터로 구현하고 한계를 문서화한다. components/ui는 수정하지 않는다.",
+      "verificationCriteria": "올바른 비밀번호로 로그인하면 쿠키가 설정되고 /admin으로 이동, 틀리면 일반 오류 문구. 반복 실패 시 제한이 걸림. 로그아웃하면 쿠키가 지워짐. 360px에서 가로 스크롤 없고 라이트·다크 모두 읽힘. tsc와 lint 통과.",
+      "analysisResult": "v2 Phase 1(인증): 관리자 페이지를 위한 인증을 환경 변수 비밀번호 + 서명된 쿠키 세션 방식으로 구현한다. 새 패키지 없이 Node 내장 crypto만 쓴다. 인증 없이 쓰기 기능을 배포하지 않는다. 공개 화면(/, /runs, 상세, /stats)의 동작과 캐시는 바꾸지 않는다. 비밀값은 저장소와 클라이언트 번들에 두지 않고 .env.example에는 이름만 추가한다. .env* 파일의 값은 읽거나 출력하지 않는다. 기준 문서는 docs/ROADMAP.md의 Phase 1과 docs/PRD.md 8장이다. 응답과 에러 처리는 프로젝트의 AppError와 레이어 구조를 따르고 주석과 문서는 한국어로 쓴다."
+    },
+    {
+      "id": "e89c9891-d456-4741-b26a-83f10c2ffb10",
+      "name": "V2-P1-3 /admin 보호 (미들웨어 1차 차단과 서버 측 재확인)",
+      "description": "/admin 이하를 보호한다. 미들웨어(middleware.ts)로 세션 쿠키가 없거나 유효하지 않으면 /admin/login으로 보내 1차 차단하고, 관리자 페이지 레이아웃과 서버 액션에서 서버 측으로 세션을 다시 확인한다. 미들웨어만 믿지 않는다. /admin/login 자체는 차단 대상에서 제외한다. 미들웨어는 공개 경로(/, /runs, /stats, 상세)에 영향을 주지 않도록 matcher를 /admin 이하로 한정한다. 로그인 후에 보이는 최소한의 /admin 홈(로그아웃 버튼 포함)을 만들어 보호를 확인할 대상으로 쓴다. 미들웨어가 Edge 런타임이므로 crypto 사용 제약을 확인하고 필요하면 Web Crypto로 검증 로직을 맞춘다.",
+      "notes": "Next 15.5 middleware는 Edge 런타임. Node crypto를 쓰는 session.ts를 그대로 import하면 실패할 수 있으므로 Web Crypto 호환 여부를 먼저 확인한다.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "69e92e6b-2ffb-452d-8038-d0173a1b7a25"
+        }
+      ],
+      "createdAt": "2026-11-09T01:19:13.612Z",
+      "updatedAt": "2026-11-09T01:19:13.612Z",
+      "relatedFiles": [
+        {
+          "path": "middleware.ts",
+          "type": "CREATE",
+          "description": "/admin 1차 차단"
+        },
+        {
+          "path": "app/admin/layout.tsx",
+          "type": "CREATE",
+          "description": "서버 측 세션 재확인"
+        },
+        {
+          "path": "app/admin/page.tsx",
+          "type": "CREATE",
+          "description": "로그인 후 최소 관리자 홈"
+        },
+        {
+          "path": "lib/auth/session.ts",
+          "type": "DEPENDENCY",
+          "description": "세션 검증"
+        }
+      ],
+      "implementationGuide": "middleware.ts에 matcher: ['/admin/:path*']를 두고 /admin/login은 통과시킨다. app/admin/layout.tsx 또는 보호용 헬퍼 requireAdmin()에서 cookies()로 세션을 검증해 실패 시 redirect한다. 쓰기 동작(서버 액션)은 항상 requireAdmin()을 먼저 호출하는 규칙을 주석으로 남긴다.",
+      "verificationCriteria": "비로그인으로 /admin 접속 시 로그인 화면으로 이동. 비로그인으로 서버 액션을 직접 호출해도 서버에서 거부됨. 공개 화면(/, /runs, 상세, /stats)의 응답과 캐시 동작이 달라지지 않음(빌드 표 확인). tsc와 lint 통과.",
+      "analysisResult": "v2 Phase 1(인증): 관리자 페이지를 위한 인증을 환경 변수 비밀번호 + 서명된 쿠키 세션 방식으로 구현한다. 새 패키지 없이 Node 내장 crypto만 쓴다. 인증 없이 쓰기 기능을 배포하지 않는다. 공개 화면(/, /runs, 상세, /stats)의 동작과 캐시는 바꾸지 않는다. 비밀값은 저장소와 클라이언트 번들에 두지 않고 .env.example에는 이름만 추가한다. .env* 파일의 값은 읽거나 출력하지 않는다. 기준 문서는 docs/ROADMAP.md의 Phase 1과 docs/PRD.md 8장이다. 응답과 에러 처리는 프로젝트의 AppError와 레이어 구조를 따르고 주석과 문서는 한국어로 쓴다."
+    },
+    {
+      "id": "bfddf038-2f4f-44a7-864a-769ca3e97a60",
+      "name": "V2-P1-4 인증 보안 점검과 쿠키 속성 확인",
+      "description": "Phase 1 완료 기준을 직접 확인한다. security-checker 서브에이전트로 읽기 전용 점검을 하고, 개발 서버 또는 프로덕션 빌드에서 세션 쿠키의 HttpOnly, SameSite, Secure(운영 설정), 만료 속성을 응답 헤더로 직접 확인한다. 비로그인 /admin 리다이렉트, 비로그인 서버 액션 거부, 로그인 실패 제한, 공개 화면 동작과 캐시 불변, 인증 비밀값이 저장소와 클라이언트 번들에 없는지(패턴 검색), npx tsc --noEmit과 npm run lint를 확인하고 결과를 확인됨/구현만 됨/미확인으로 구분해 보고한다. 문제가 발견되면 임의로 고치지 말고 보고해 사용자와 정한다. ROADMAP 갱신은 사용자 승인 후 별도로 한다. 비밀번호 값은 읽거나 출력하지 않는다.",
+      "notes": "개발 서버가 떠 있으면 npm run build가 .next를 깨므로 순서에 주의한다. 완료 후 서버가 남아 있지 않게 정리한다.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "e89c9891-d456-4741-b26a-83f10c2ffb10"
+        }
+      ],
+      "createdAt": "2026-11-09T01:19:13.612Z",
+      "updatedAt": "2026-11-09T01:19:13.612Z",
+      "relatedFiles": [
+        {
+          "path": "docs/ROADMAP.md",
+          "type": "REFERENCE",
+          "description": "Phase 1 완료 기준"
+        }
+      ],
+      "implementationGuide": "1) security-checker 호출. 2) 프로덕션 빌드를 임시 포트로 띄워 curl로 Set-Cookie 헤더와 리다이렉트를 확인(비밀번호는 환경 변수로만 주입하고 출력하지 않음). 3) .next 클라이언트 번들과 저장소에서 인증 변수 이름·값 패턴 검색. 4) 공개 경로 빌드 표와 응답 확인. 5) 서버 프로세스 정리.",
+      "verificationCriteria": "ROADMAP Phase 1의 완료 기준 7개 항목을 각각 확인됨/구현만 됨/미확인으로 근거와 함께 보고. 치명·높음 보안 이슈가 없거나 발견 사항이 보고됨.",
+      "analysisResult": "v2 Phase 1(인증): 관리자 페이지를 위한 인증을 환경 변수 비밀번호 + 서명된 쿠키 세션 방식으로 구현한다. 새 패키지 없이 Node 내장 crypto만 쓴다. 인증 없이 쓰기 기능을 배포하지 않는다. 공개 화면(/, /runs, 상세, /stats)의 동작과 캐시는 바꾸지 않는다. 비밀값은 저장소와 클라이언트 번들에 두지 않고 .env.example에는 이름만 추가한다. .env* 파일의 값은 읽거나 출력하지 않는다. 기준 문서는 docs/ROADMAP.md의 Phase 1과 docs/PRD.md 8장이다. 응답과 에러 처리는 프로젝트의 AppError와 레이어 구조를 따르고 주석과 문서는 한국어로 쓴다."
     }
   ]
 }
