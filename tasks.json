@@ -1619,14 +1619,14 @@
       "name": "V2-P1-3 /admin 보호 (미들웨어 1차 차단과 서버 측 재확인)",
       "description": "/admin 이하를 보호한다. 미들웨어(middleware.ts)로 세션 쿠키가 없거나 유효하지 않으면 /admin/login으로 보내 1차 차단하고, 관리자 페이지 레이아웃과 서버 액션에서 서버 측으로 세션을 다시 확인한다. 미들웨어만 믿지 않는다. /admin/login 자체는 차단 대상에서 제외한다. 미들웨어는 공개 경로(/, /runs, /stats, 상세)에 영향을 주지 않도록 matcher를 /admin 이하로 한정한다. 로그인 후에 보이는 최소한의 /admin 홈(로그아웃 버튼 포함)을 만들어 보호를 확인할 대상으로 쓴다. 미들웨어가 Edge 런타임이므로 crypto 사용 제약을 확인하고 필요하면 Web Crypto로 검증 로직을 맞춘다.",
       "notes": "Next 15.5 middleware는 Edge 런타임. Node crypto를 쓰는 session.ts를 그대로 import하면 실패할 수 있으므로 Web Crypto 호환 여부를 먼저 확인한다.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "69e92e6b-2ffb-452d-8038-d0173a1b7a25"
         }
       ],
       "createdAt": "2026-11-09T01:19:13.612Z",
-      "updatedAt": "2026-11-09T01:19:13.612Z",
+      "updatedAt": "2026-11-09T01:51:27.413Z",
       "relatedFiles": [
         {
           "path": "middleware.ts",
