@@ -1590,7 +1590,7 @@
         }
       ],
       "createdAt": "2026-11-09T01:19:13.612Z",
-      "updatedAt": "2026-11-09T01:36:09.823Z",
+      "updatedAt": "2026-11-09T01:39:51.698Z",
       "relatedFiles": [
         {
           "path": "app/admin/login/page.tsx",
@@ -1610,7 +1610,8 @@
       ],
       "implementationGuide": "app/admin/login/page.tsx(서버 컴포넌트)와 로그인 폼 클라이언트 컴포넌트, app/admin/actions.ts의 loginAction/logoutAction을 만든다. 서버 액션에서 zod로 입력을 검증하고 verifyPassword 후 쿠키를 설정한다. 실패 제한은 클라이언트 IP 또는 쿠키 기준 카운터로 구현하고 한계를 문서화한다. components/ui는 수정하지 않는다.",
       "verificationCriteria": "올바른 비밀번호로 로그인하면 쿠키가 설정되고 /admin으로 이동, 틀리면 일반 오류 문구. 반복 실패 시 제한이 걸림. 로그아웃하면 쿠키가 지워짐. 360px에서 가로 스크롤 없고 라이트·다크 모두 읽힘. tsc와 lint 통과.",
-      "analysisResult": "v2 Phase 1(인증): 관리자 페이지를 위한 인증을 환경 변수 비밀번호 + 서명된 쿠키 세션 방식으로 구현한다. 새 패키지 없이 Node 내장 crypto만 쓴다. 인증 없이 쓰기 기능을 배포하지 않는다. 공개 화면(/, /runs, 상세, /stats)의 동작과 캐시는 바꾸지 않는다. 비밀값은 저장소와 클라이언트 번들에 두지 않고 .env.example에는 이름만 추가한다. .env* 파일의 값은 읽거나 출력하지 않는다. 기준 문서는 docs/ROADMAP.md의 Phase 1과 docs/PRD.md 8장이다. 응답과 에러 처리는 프로젝트의 AppError와 레이어 구조를 따르고 주석과 문서는 한국어로 쓴다."
+      "analysisResult": "v2 Phase 1(인증): 관리자 페이지를 위한 인증을 환경 변수 비밀번호 + 서명된 쿠키 세션 방식으로 구현한다. 새 패키지 없이 Node 내장 crypto만 쓴다. 인증 없이 쓰기 기능을 배포하지 않는다. 공개 화면(/, /runs, 상세, /stats)의 동작과 캐시는 바꾸지 않는다. 비밀값은 저장소와 클라이언트 번들에 두지 않고 .env.example에는 이름만 추가한다. .env* 파일의 값은 읽거나 출력하지 않는다. 기준 문서는 docs/ROADMAP.md의 Phase 1과 docs/PRD.md 8장이다. 응답과 에러 처리는 프로젝트의 AppError와 레이어 구조를 따르고 주석과 문서는 한국어로 쓴다.",
+      "summary": "V2-P1-2 완료(커밋 전, main 위 변경). 추가: lib/auth/rate-limit.ts(순수 모듈, 키별 15분 안 5회 실패 시 차단, 키 1000개 상한, 서버리스 메모리 기반의 한계를 주석에 명시), app/admin/actions.ts(loginAction은 zod 검증, 제한 확인, verifyPassword, 쿠키 설정 후 /admin 이동, 설정 오류와 비밀번호 오류를 같은 일반 문구로 반환하고 로그에는 오류 코드만 남김, logoutAction은 쿠키 삭제 후 /admin/login 이동), components/admin/login-form.tsx(useForm+zodResolver+Controller+Field/FieldError 패턴), logout-button.tsx, app/admin/login/page.tsx(noindex), app/admin/page.tsx(임시 관리자 홈: 세션이 유효하지 않으면 로그인으로 보내고 로그아웃 버튼을 보여 줌. 전체 보호는 V2-P1-3에서 미들웨어와 레이아웃으로 옮김). 새 패키지 없음. 검증(임시 비밀번호와 비밀값을 서버 프로세스 환경 변수로만 주입한 개발 서버 3100, 종료 후 포트 정리 확인, .env 값은 읽지 않음): tsc와 npm run lint 통과, rate-limit 단위 5건 통과, 브라우저에서 빈 입력은 필드 오류, 틀린 비밀번호는 일반 문구, 올바른 비밀번호는 /admin 이동과 쿠키 설정(HttpOnly true, SameSite Lax, Path /, 7일, secure는 개발이라 false), 로그아웃 시 쿠키 삭제와 로그인 이동, 로그아웃 후 /admin은 로그인으로 이동, 5회 실패 후 6번째 시도와 올바른 비밀번호도 '15분 뒤' 안내로 차단, 변조 쿠키로 /admin 접근 시 로그인으로 이동, 360px 가로 스크롤 없음, 라이트와 다크 스크린샷 확인. 미확인: 실제 .env.local 값으로의 로그인(사용자 확인 필요), 운영 Secure 쿠키는 V2-P1-4, 서버리스 다중 인스턴스에서의 제한 효과. 참고: 스크린샷 때의 hydration 경고는 Playwright가 입력칸에 caret-color 스타일을 주입한 것이라 앱 문제가 아님."
     },
     {
       "id": "e89c9891-d456-4741-b26a-83f10c2ffb10",
