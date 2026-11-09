@@ -1660,14 +1660,14 @@
       "name": "V2-P1-4 인증 보안 점검과 쿠키 속성 확인",
       "description": "Phase 1 완료 기준을 직접 확인한다. security-checker 서브에이전트로 읽기 전용 점검을 하고, 개발 서버 또는 프로덕션 빌드에서 세션 쿠키의 HttpOnly, SameSite, Secure(운영 설정), 만료 속성을 응답 헤더로 직접 확인한다. 비로그인 /admin 리다이렉트, 비로그인 서버 액션 거부, 로그인 실패 제한, 공개 화면 동작과 캐시 불변, 인증 비밀값이 저장소와 클라이언트 번들에 없는지(패턴 검색), npx tsc --noEmit과 npm run lint를 확인하고 결과를 확인됨/구현만 됨/미확인으로 구분해 보고한다. 문제가 발견되면 임의로 고치지 말고 보고해 사용자와 정한다. ROADMAP 갱신은 사용자 승인 후 별도로 한다. 비밀번호 값은 읽거나 출력하지 않는다.",
       "notes": "개발 서버가 떠 있으면 npm run build가 .next를 깨므로 순서에 주의한다. 완료 후 서버가 남아 있지 않게 정리한다.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "e89c9891-d456-4741-b26a-83f10c2ffb10"
         }
       ],
       "createdAt": "2026-11-09T01:19:13.612Z",
-      "updatedAt": "2026-11-09T01:19:13.612Z",
+      "updatedAt": "2026-11-09T01:55:51.669Z",
       "relatedFiles": [
         {
           "path": "docs/ROADMAP.md",
