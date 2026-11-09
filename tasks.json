@@ -1728,14 +1728,14 @@
       "name": "V2-P2-2 쓰기 전용 노션 키 분리와 import 제한",
       "description": "관리자 쓰기용 노션 클라이언트를 lib/notion/admin/client.ts에 server-only로 만들고 NOTION_ADMIN_API_KEY만 읽는다(없으면 AppError CONFIG_MISSING). .env.example에는 이름과 설명만 추가한다. ESLint no-restricted-imports로 lib/notion/admin/ 모듈을 관리자 영역(lib/notion/admin, app/admin, app/api/admin, components/admin) 밖에서 import하지 못하게 막는다. 공개 읽기 경로는 기존 NOTION_API_KEY 읽기 전용 키를 그대로 쓴다.",
       "notes": "사용자가 노션에서 새 통합(읽기, 삽입, 수정 권한)을 만들고 DB에 연결한 뒤 키를 .env.local의 NOTION_ADMIN_API_KEY에 직접 넣어야 이후 실제 쓰기 확인이 가능하다. 값은 읽거나 출력하지 않는다.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "b040cee5-0801-404c-8c2f-95b7fbb21f8a"
         }
       ],
       "createdAt": "2026-11-09T04:27:03.940Z",
-      "updatedAt": "2026-11-09T04:27:03.940Z",
+      "updatedAt": "2026-11-09T04:41:01.460Z",
       "relatedFiles": [
         {
           "path": "lib/notion/admin/client.ts",
