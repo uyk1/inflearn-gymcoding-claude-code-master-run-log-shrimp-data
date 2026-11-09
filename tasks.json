@@ -1686,10 +1686,10 @@
       "name": "V2-P2-1 상세 화면을 공유 캐시로 전환",
       "description": "상세 화면(app/runs/[id]/page.tsx)이 노션을 직접 조회하지 않고 lib/runs/load.ts의 unstable_cache 공유 캐시에서 기록을 찾게 한다. load.ts에 loadRunRecord(id)를 추가하고 상세 페이지가 사용한다. 존재하지 않는 id는 notFound, 노션 실패는 기존처럼 오류 화면과 목록 링크를 보여 준다. 더 쓰이지 않는 service.findRunRecord는 사용처를 확인한 뒤 정리한다. CLAUDE.md의 상세는 직접 조회 문장과 README 알려진 한계 절을 현재 구현에 맞게 고친다(문서 수정은 변경안을 먼저 보여 주고 승인 후).",
       "notes": "V2-P0-3에서 상세도 공유 캐시를 쓰기로 결정함. 노션에서 직접 바꾼 내용은 상세에서 최대 1~2분 늦게 반영된다.",
-      "status": "in_progress",
+      "status": "completed",
       "dependencies": [],
       "createdAt": "2026-11-09T04:27:03.940Z",
-      "updatedAt": "2026-11-09T04:37:11.243Z",
+      "updatedAt": "2026-11-09T04:37:16.542Z",
       "relatedFiles": [
         {
           "path": "lib/runs/load.ts",
@@ -1720,7 +1720,8 @@
       "implementationGuide": "loadRunRecord(id)는 loadRunRecords() 결과의 records에서 id로 찾고 없으면 null을 돌려준다. errorMessage가 있으면 호출부가 오류 화면을 그린다. 페이지의 revalidate 60은 유지한다.",
       "verificationCriteria": "서로 다른 존재하지 않는 id 3개로 상세를 요청해도 노션 호출이 늘지 않음(호출 계수로 확인). 존재하는 id는 정상 표시, 없는 id는 404 화면. tsc와 lint 통과.",
       "analysisResult": "v2 Phase 2(쓰기 계층): 화면 없이 서버 코드로 러닝 기록을 노션에 만들 수 있는 쓰기 계층을 만든다. 읽기와 같은 검증 규칙을 공유해 입력이 통과하면 목록에서 제외되지 않게 한다. 결정: 쓰기 전용 키 NOTION_ADMIN_API_KEY와 lib/notion/admin/ 분리, 출처는 기존 옵션 수동, 외부ID에 web-UUID 멱등 키로 중복 방지, 테스트는 node --test(새 패키지 없음, 테스트 대상은 확장자 있는 상대 경로 import). 쓰기 진입점은 POST /api/admin/runs Route Handler이며 미들웨어 밖이라 핸들러 안의 세션과 Origin 확인이 유일한 방어다. 노션 쓰기 검증은 사용자 확인 후 TEST- 행만 쓰고 끝나면 휴지통으로 보내 in_trash를 확인한다. .env* 값은 읽거나 출력하지 않는다. 기준 문서는 docs/ROADMAP.md Phase 2와 docs/PRD.md. 한국어 주석과 문서, 새 패키지 설치 금지.",
-      "summary": "V2-P2-1 완료(커밋 전, 브랜치 feat/detail-shared-cache). 코드: lib/runs/load.ts에 loadRunRecord(id)를 추가(공유 캐시 loadRunRecords 결과에서 id로 찾고, 노션 실패는 errorMessage, 없으면 record null), app/runs/[id]/page.tsx가 이를 사용(errorMessage는 목록 링크가 있는 오류 화면, record 없음은 notFound, 설정 오류는 던져 error.tsx가 처리), 더 쓰이지 않는 service.findRunRecord 제거(사용처 0 확인). 새 패키지 없음, 렌더링 방식(/ 정적 ISR, /runs 동적, /runs/[id] SSG)은 빌드 표에서 불변. 검증: 같은 방식의 호출 계수 대조(프로덕션 빌드와 next start, fetch 프리로드로 api.notion.com 호출 기록, 조회 캐시 300초)로 서로 다른 가짜 id 3개 요청 시 수정 전 main은 노션 호출 3회, 수정 후는 0회. 수정 후 실제 id 상세는 거리, 소요 시간, 평균 페이스 필드가 표시되고 호출 0회, 가짜 id는 404 화면 문구가 표시됨. 주의: 빌드 때 만들어진 캐시가 따뜻해 수정 후 /runs도 0회였으므로 수정 전 대조를 추가로 측정해 효과를 입증함. 문서(사용자 승인 후 반영): README 캐시 절과 알려진 한계 절을 공유 캐시 현황으로 교체(상세 반영 지연 최대 약 2분), CLAUDE.md 구조 줄과 캐시 줄에서 findRunRecord와 직접 조회 문장 수정, shrimp-rules.md 3곳 수정. 남은 findRunRecord 참조 없음. npx tsc --noEmit, npm run lint, npm run build 통과. 서버 정리 확인. 한계: 노션에서 직접 바꾼 내용은 상세에서 최대 약 2분 늦게 반영되며, 웹 관리자 쓰기 후 즉시 갱신은 Phase 3의 revalidateTag에서 한다. 캐시가 완전히 비었을 때의 첫 요청 1회 호출은 측정하지 않았다."
+      "summary": "V2-P2-1 완료(커밋 전, 브랜치 feat/detail-shared-cache). 코드: lib/runs/load.ts에 loadRunRecord(id)를 추가(공유 캐시 loadRunRecords 결과에서 id로 찾고, 노션 실패는 errorMessage, 없으면 record null), app/runs/[id]/page.tsx가 이를 사용(errorMessage는 목록 링크가 있는 오류 화면, record 없음은 notFound, 설정 오류는 던져 error.tsx가 처리), 더 쓰이지 않는 service.findRunRecord 제거(사용처 0 확인). 새 패키지 없음, 렌더링 방식(/ 정적 ISR, /runs 동적, /runs/[id] SSG)은 빌드 표에서 불변. 검증: 같은 방식의 호출 계수 대조(프로덕션 빌드와 next start, fetch 프리로드로 api.notion.com 호출 기록, 조회 캐시 300초)로 서로 다른 가짜 id 3개 요청 시 수정 전 main은 노션 호출 3회, 수정 후는 0회. 수정 후 실제 id 상세는 거리, 소요 시간, 평균 페이스 필드가 표시되고 호출 0회, 가짜 id는 404 화면 문구가 표시됨. 주의: 빌드 때 만들어진 캐시가 따뜻해 수정 후 /runs도 0회였으므로 수정 전 대조를 추가로 측정해 효과를 입증함. 문서(사용자 승인 후 반영): README 캐시 절과 알려진 한계 절을 공유 캐시 현황으로 교체(상세 반영 지연 최대 약 2분), CLAUDE.md 구조 줄과 캐시 줄에서 findRunRecord와 직접 조회 문장 수정, shrimp-rules.md 3곳 수정. 남은 findRunRecord 참조 없음. npx tsc --noEmit, npm run lint, npm run build 통과. 서버 정리 확인. 한계: 노션에서 직접 바꾼 내용은 상세에서 최대 약 2분 늦게 반영되며, 웹 관리자 쓰기 후 즉시 갱신은 Phase 3의 revalidateTag에서 한다. 캐시가 완전히 비었을 때의 첫 요청 1회 호출은 측정하지 않았다.",
+      "completedAt": "2026-11-09T04:37:16.537Z"
     },
     {
       "id": "98d40950-8b9e-4e59-bdef-dcbb3c3fc3e9",
