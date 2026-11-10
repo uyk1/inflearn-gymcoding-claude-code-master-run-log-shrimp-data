@@ -2072,14 +2072,14 @@
       "name": "V2-P3-4 입력 화면 코드와 보안 점검",
       "description": "Phase 3 변경을 code-reviewer와 security-checker 서브에이전트로 읽기 전용 점검한다. 대상: lib/notion/admin/run-form.ts, components/admin/run-form.tsx, app/admin/(protected)/runs/new/page.tsx, app/admin/(protected)/page.tsx, app/api/admin/runs/route.ts의 변경분. 점검 항목: 클라이언트 번들에 서버 전용 모듈과 키가 없는지(.next/static 검색 포함), 오류 문구와 응답에 입력값과 내부 정보가 없는지, 렌더링 시 XSS 위험(React 이스케이프, dangerouslySetInnerHTML 없음), CSRF와 Origin 확인, 입력 길이와 본문 크기 제한, 로그에 민감 정보 없음, 접근성(라벨 연결, aria-pressed, 오류 알림), 불필요한 use client와 번들 크기. 발견 사항은 임의로 고치지 말고 심각도와 근거를 보고해 사용자와 정한다. ROADMAP과 문서 갱신은 사용자 승인 후 별도로 한다.",
       "notes": "서버나 개발 서버를 남기지 않는다. 노션에 쓰지 않는다.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "3a332d9a-492d-4f75-97c5-67a0dafa2438"
         }
       ],
       "createdAt": "2026-11-10T06:42:13.729Z",
-      "updatedAt": "2026-11-10T06:42:13.729Z",
+      "updatedAt": "2026-11-10T07:20:42.383Z",
       "relatedFiles": [
         {
           "path": "components/admin/run-form.tsx",
