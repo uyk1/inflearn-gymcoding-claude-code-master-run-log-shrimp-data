@@ -2154,10 +2154,10 @@
       "name": "V2-P4-1 서비스 보강 (편집용 단건 조회와 내용 버전 충돌 확인)",
       "description": "쓰기 서비스에 편집용 조회와 충돌 확인을 추가한다. (1) 순수 모듈 lib/notion/admin/page-to-form.ts: 노션 페이지를 RunFormValues로 바꾼다(readers 재사용, 날짜는 normalizeNotionDate로 한국 시간 YYYY-MM-DD, 거리는 문자열, 소요시간과 장소와 메모는 원문, 강도는 EASY NORMAL HARD 밖이면 빈 값, 태그는 쉼표로 이은 문자열). (2) lib/notion/admin/edit-version.ts: computeVersion(values)가 payloadSignature를 sha256으로 해시한 짧은 문자열을 돌려준다(서버 전용 사용, 클라이언트가 import하지 않음). (3) repository: assertRunPage가 조회한 페이지를 돌려주게 하고, updatePage가 노션이 돌려준 갱신된 페이지를 돌려주게 한다. (4) service: getRunForEdit(pageId)가 소속과 휴지통 여부를 확인하고 입력칸 값과 버전을 돌려준다. updateRun(pageId, raw, baseVersion)은 입력 검증 후 노션에서 다시 읽어 현재 버전과 baseVersion이 다르면 AppError CONFLICT 409로 거부하고 같으면 수정해 갱신된 페이지로 만든 새 버전을 돌려준다(baseVersion이 없으면 필드 오류). trashRun은 소속 확인 그대로.",
       "notes": "노션 last_edited_time은 분 단위 정밀도라 시각 비교는 쓰지 않는다(읽기 전용으로 확인함). 노션에 쓰지 않는다. node --test용 상대 경로 .ts import와 매개변수 프로퍼티 금지 규칙을 지킨다.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [],
       "createdAt": "2026-11-10T07:49:20.271Z",
-      "updatedAt": "2026-11-10T07:49:20.271Z",
+      "updatedAt": "2026-11-10T07:50:15.396Z",
       "relatedFiles": [
         {
           "path": "lib/notion/admin/page-to-form.ts",
