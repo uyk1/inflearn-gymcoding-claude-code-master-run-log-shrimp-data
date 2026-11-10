@@ -2036,14 +2036,14 @@
       "name": "V2-P3-3 브라우저 통합 확인과 캐시 반영 점검",
       "description": "Playwright로 실제 화면을 확인한다. 임시 ADMIN_PASSWORD와 ADMIN_SESSION_SECRET(32자 이상)을 서버 프로세스 환경 변수로만 주입한 프로덕션 서버에서 실제 로그인 폼으로 로그인한다(사용자의 .env.local 비밀번호는 쓰지 않는다). 확인 항목: (a) 비로그인으로 /admin/runs/new 접근 시 로그인 화면으로 이동. (b) 빈 제목과 소요시간 12:5와 존재하지 않는 날짜와 거리 0이 필드별 오류로 보이고 노션 호출이 없음(호출 계수). (c) 360px과 320px에서 가로 스크롤이 없고 라이트와 다크 모두 읽힘(스크린샷). (d) 사용자 확인을 받은 뒤 TEST- 행 1건을 폼으로 저장: 완료 안내가 보이고 노션 행이 1건 늘며, 저장 버튼 연타와 같은 키 재시도에도 행이 1건뿐. (e) 저장 직후 공개 홈과 목록과 통계와 상세에 새 기록이 반영되는지 확인하고, 홈이나 상세가 캐시 때문에 바로 바뀌지 않으면 app/api/admin/runs/route.ts에 revalidatePath를 추가해 다시 확인. (f) 세션 만료(쿠키 삭제)로 저장하면 401 안내가 나오고 입력값이 유지됨. (g) 서버 로그에 입력값과 쿠키와 비밀값이 없음. 끝나면 TEST- 행을 휴지통으로 보내 in_trash true와 행 수 기준값 복귀를 확인한다.",
       "notes": "노션 쓰기 전에 사용자 확인 필수(만들 행, 쓰기 횟수, 정리 방법을 명시). 아이폰 홈 화면 앱 실기기 확인은 Phase 6. Playwright가 연결되지 않으면 먼저 보고한다.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "d8d251f8-623e-4180-bf86-bd11a1ff5b34"
         }
       ],
       "createdAt": "2026-11-10T06:42:13.729Z",
-      "updatedAt": "2026-11-10T06:42:13.729Z",
+      "updatedAt": "2026-11-10T07:14:25.672Z",
       "relatedFiles": [
         {
           "path": "app/api/admin/runs/route.ts",
