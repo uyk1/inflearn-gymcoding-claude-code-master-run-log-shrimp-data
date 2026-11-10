@@ -2103,14 +2103,14 @@
       "name": "V2-P3-5 점검 후속 수정 (입력 화면 안정성, 접근성, 테스트 보강)",
       "description": "점검 발견 사항을 고친다. (1) M1: components/admin/run-form.tsx의 401 안내에서 로그인 링크를 새 탭(target=_blank, rel=noopener noreferrer)으로 열고 문구를 새 탭에서 로그인한 뒤 이 화면에서 다시 저장해 주세요로 바꿔 입력값이 사라진다는 사실과 안내가 어긋나지 않게 한다. (2) M2: 같은 clientKey로 처음 보낸 payload의 서명(clientKey 제외, 정규화한 JSON)을 ref에 한 번만 저장하고, 응답이 created false인데 현재 폼 payload 서명이 처음 보낸 것과 다르면 이미 저장된 기록입니다 문구 대신 이전에 저장된 기록이 있어 고친 내용은 저장되지 않았을 수 있으니 기록 보기에서 확인해 주세요 경고와 기록 보기 링크를 보여 준다(새 키 발급은 비슷한 중복 행을 만들 수 있어 택하지 않는다). 서명 비교는 lib/notion/admin/run-form.ts의 순수 함수(예: payloadSignature)로 만들고 단위 테스트한다. (3) 보안 #2: app/api/admin/runs/route.ts에서 AppError의 code가 CONFIG_MISSING 또는 AUTH_NOT_CONFIGURED이면 응답 문구를 서버 설정 문제로 저장할 수 없습니다 같은 일반 문구로 바꾸고 환경 변수 이름은 응답에 보내지 않는다(서버 로그에는 code만). 순수 함수는 lib/api/public-error.ts로 분리해 테스트한다. (4) 접근성: TextField와 메모의 FieldError에 id를 주고 aria-describedby에 힌트와 오류를 함께 연결(L3), 저장 성공 카드 제목에 tabIndex -1과 마운트 시 focus, 계속 입력 후 제목 칸 setFocus(L5), 서버 400의 첫 필드 오류에만 setError shouldFocus true(L6), 제목과 장소와 메모의 maxLength 속성을 제거해 붙여넣기가 조용히 잘리지 않고 검증 문구가 나오게 하며 거리 힌트에 소수점은 마침표로 쓴다는 안내 추가(L8). (5) 테스트 보강(lib/notion/admin/run-form.test.ts 등): 경계 통과(제목 100자, 장소 200자, 메모 1000자, 태그 정확히 10개와 30자, 거리 1000), 태그 개수 상한이 중복 제거 전에 적용되는 현재 동작 고정, 공백만 있는 메모와 장소와 소요시간과 거리, 매우 긴 숫자 문자열과 매우 긴 입력의 오류 문구에 입력값 비포함, 폼에서 실패하는 값(거리 abc와 5,2, 소요시간 12:5 등)이 JSON 직렬화 후 서버 parseRunInput에서도 같은 필드 오류인 왕복, 날짜 2026-02-29와 2027-02-29와 시간 포함 값과 공백, 소요시간 0:00과 59:60과 1:60:00과 음수와 전각 콜론.",
       "notes": "사용자가 M1 M2 보안2 L3 L5 L6 L8 테스트 보강까지 승인함. L4 L7 L9 L10과 CSP HSTS 세션 폐기 중복 방지 경쟁 상태는 이번 범위가 아니다. 노션에 쓰지 않는다.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "9ecd493c-b01c-40f2-b5ae-e0697bab27cc"
         }
       ],
       "createdAt": "2026-11-10T07:25:15.821Z",
-      "updatedAt": "2026-11-10T07:25:15.821Z",
+      "updatedAt": "2026-11-10T07:26:16.965Z",
       "relatedFiles": [
         {
           "path": "components/admin/run-form.tsx",
