@@ -2247,14 +2247,14 @@
       "name": "V2-P4-3 관리자 목록과 수정 화면 (삭제 확인 포함)",
       "description": "관리자 화면을 만든다. (1) /admin/runs: 서버 컴포넌트, requireAdmin, noindex, loadRunRecords 공유 캐시로 날짜순 카드(날짜, 제목, 거리, 시간, 페이스)와 각 카드의 수정 링크(/admin/runs/[id]/edit), 빈 상태와 노션 오류 안내, 기록 입력 링크. 삭제 버튼은 두지 않는다. (2) /admin/runs/[id]/edit: requireAdmin, createAdminRunService().getRunForEdit(id)로 입력값과 버전을 읽어 폼에 채운다(404는 notFound, 노션 실패는 오류 화면). (3) components/admin/run-form.tsx를 수정 모드로 확장하되 생성 동작은 바꾸지 않는다(필드 마크업은 공용으로 추출). 수정 모드: clientKey 없음, PATCH /api/admin/runs/[id]에 version과 필드를 보내고 성공하면 응답의 새 version으로 바꾸고 같은 화면에 저장되었습니다 안내와 기록 보기 링크, 409는 노션에서 먼저 바뀐 내용이 있어 저장하지 않았습니다와 최신 내용 불러오기 버튼(현재 입력은 사라진다고 안내, 덮어쓰기 선택지 없음), 404는 이미 삭제된 기록 안내, 401은 새 탭 로그인 안내. (4) 수정 화면 맨 아래 이 기록 삭제 버튼: 누르면 화면 안 확인 단계(제목 표시, 노션 휴지통에서 복구 가능, 취소와 삭제)이고 확정하면 DELETE 후 /admin/runs로 이동한다. (5) 관리자 홈에 기록 목록 링크 추가.",
       "notes": "새 패키지와 새 shadcn 컴포넌트 추가 금지. 공개 화면 코드는 쿠키를 읽지 않아야 한다. 실제 동작은 V2-P4-4에서 확인한다.",
-      "status": "in_progress",
+      "status": "completed",
       "dependencies": [
         {
           "taskId": "93fa91fc-d44e-48f1-9f38-1839b4330e27"
         }
       ],
       "createdAt": "2026-11-10T07:49:20.271Z",
-      "updatedAt": "2026-11-10T23:58:12.122Z",
+      "updatedAt": "2026-11-10T23:58:15.953Z",
       "relatedFiles": [
         {
           "path": "app/admin/(protected)/runs/page.tsx",
@@ -2290,7 +2290,8 @@
       "implementationGuide": "입력칸 마크업을 RunFormFields로 추출해 생성과 수정이 공유하게 한다. 수정 모드의 초기 서명과 현재 서명이 같으면 저장 버튼 안내를 변경 없음으로 하는 것은 선택 사항이다. 포커스와 aria 규칙은 Phase 3 후속 수정(오류 칸 aria-describedby, 결과 제목 포커스)을 따른다. 헤더에 관리자 링크를 넣지 않는다.",
       "verificationCriteria": "tsc와 lint와 build 통과, 공개 화면 렌더링 방식 불변(빌드 표), 클라이언트 번들에 서버 모듈과 키 0건, 렌더링 스모크(비로그인 307, 로그인 200). 기존 실제 기록의 수정 화면을 열어(읽기만) 입력칸이 노션 값과 일치하는지 확인.",
       "analysisResult": "v2 Phase 4(수정·삭제): 관리자가 관리자 전용 목록(/admin/runs)에서 기록을 골라 수정 화면(/admin/runs/[id]/edit)에서 고치고 삭제(노션 휴지통)한다. 결정: 충돌 확인은 노션 last_edited_time이 분 단위 정밀도라 내용 기준 버전으로 한다(수정 화면을 열 때 서버가 현재 내용을 payloadSignature와 같은 정규화로 버전 값으로 만들어 주고, 저장 때 노션에서 다시 읽어 비교해 다르면 409 CONFLICT로 거부하고 덮어쓰지 않으며, 성공 응답에는 노션이 돌려준 페이지로 만든 새 버전을 담음). 수정 화면 입력칸은 공유 캐시가 아니라 노션 직접 조회(원문 값). 공개 화면에는 관리자 버튼을 넣지 않는다(쿠키를 읽으면 공개 화면이 동적이 됨). 삭제 버튼은 수정 화면 하단에만 두고 화면 안 확인 단계를 거친다. 수정은 입력 필드 8개만 바꾸고 출처와 외부ID는 건드리지 않는다. 라우트는 저장 뒤 revalidateTag(run-records)를 호출한다. 확인과 저장 사이의 밀리초 틈은 남는 한계로 문서화한다. 새 패키지 설치 금지, components/ui 수정 금지. 노션 쓰기 검증은 사용자 확인 후 TEST- 행만 쓰고 끝나면 휴지통으로 보내 in_trash를 확인한다. 환경 변수를 빈 값으로 덮어쓰는 시험은 PowerShell 대입이 아니라 node spawn으로 한다. .env* 값은 읽거나 출력하지 않는다. 한국어 주석과 문서.",
-      "summary": "V2-P4-3 완료. 입력칸을 run-form-fields.tsx(RunFormFields, createRunFormResolver)로 추출해 생성 폼이 공유(생성 동작 불변). 수정 폼은 별도 edit-run-form.tsx(작업 설명의 run-form.tsx 확장 대신 파일 분리로 생성 동작 보호): PATCH에 version과 필드 전송, 성공 시 새 version 반영, 409 충돌 안내+최신 내용 불러오기(router.refresh 후 initialVersion 변경 시 입력칸 재설정), 404 삭제됨 안내, 401 새 탭 로그인 안내, 400 칸별 오류. delete-run.tsx: 화면 안 확인 단계(alertdialog, 제목 표시, 휴지통 복구 안내, 취소/삭제), 확정 시 DELETE 후 /admin/runs. /admin/runs 목록(noindex, 공유 캐시), /admin/runs/[id]/edit(노션 직접 조회, NOT_FOUND→notFound), 관리자 홈에 기록 목록 링크. 검증 중 버그 발견·수정: 노션에 없는 페이지 retrieve의 object_not_found가 502로 바뀌어 수정 화면이 500, API가 502였음 → repository.assertRunPage가 404 NOT_FOUND로 변환, 테스트 1건 추가(총 178건 통과). tsc·lint·build 통과, 공개 화면 렌더링 방식 불변(빌드 표), 운영 서버 스모크: 비로그인 /admin/runs·edit 307, 로그인 200 noindex, 실제 기록의 수정 화면 값(제목·날짜·거리·소요시간) 정상 표시, 없는 id 404, 잘못된 id 404, 번들 검색 0건. 브라우저 동작(저장·충돌·삭제 흐름, 360/320px)은 V2-P4-4에서 확인 예정."
+      "summary": "V2-P4-3 완료. 입력칸을 run-form-fields.tsx(RunFormFields, createRunFormResolver)로 추출해 생성 폼이 공유(생성 동작 불변). 수정 폼은 별도 edit-run-form.tsx(작업 설명의 run-form.tsx 확장 대신 파일 분리로 생성 동작 보호): PATCH에 version과 필드 전송, 성공 시 새 version 반영, 409 충돌 안내+최신 내용 불러오기(router.refresh 후 initialVersion 변경 시 입력칸 재설정), 404 삭제됨 안내, 401 새 탭 로그인 안내, 400 칸별 오류. delete-run.tsx: 화면 안 확인 단계(alertdialog, 제목 표시, 휴지통 복구 안내, 취소/삭제), 확정 시 DELETE 후 /admin/runs. /admin/runs 목록(noindex, 공유 캐시), /admin/runs/[id]/edit(노션 직접 조회, NOT_FOUND→notFound), 관리자 홈에 기록 목록 링크. 검증 중 버그 발견·수정: 노션에 없는 페이지 retrieve의 object_not_found가 502로 바뀌어 수정 화면이 500, API가 502였음 → repository.assertRunPage가 404 NOT_FOUND로 변환, 테스트 1건 추가(총 178건 통과). tsc·lint·build 통과, 공개 화면 렌더링 방식 불변(빌드 표), 운영 서버 스모크: 비로그인 /admin/runs·edit 307, 로그인 200 noindex, 실제 기록의 수정 화면 값(제목·날짜·거리·소요시간) 정상 표시, 없는 id 404, 잘못된 id 404, 번들 검색 0건. 브라우저 동작(저장·충돌·삭제 흐름, 360/320px)은 V2-P4-4에서 확인 예정.",
+      "completedAt": "2026-11-10T23:58:15.950Z"
     },
     {
       "id": "14911ded-aa00-4427-b31d-db7845705dc8",
