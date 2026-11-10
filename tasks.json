@@ -2026,6 +2026,69 @@
       "implementationGuide": "clientKey는 컴포넌트 마운트 시 crypto.randomUUID()로 한 번 만들어 ref 또는 state에 보관한다(렌더 출력에 쓰지 않으므로 하이드레이션 불일치 없음). 응답은 ApiSuccess와 ApiFailure 타입으로 좁힌다. 모바일 우선 레이아웃(max-w-xl, 16px 좌우 여백)과 라이트·다크 토큰만 사용하고 components/ui는 수정하지 않는다. 시각 구성은 ui-markup-developer 서브에이전트에 맡길 수 있다.",
       "verificationCriteria": "npx tsc --noEmit, npm run lint, npm run build 통과, 공개 화면 렌더링 방식 불변(빌드 표), 클라이언트 번들에 서버 모듈과 키 없음. 화면 동작은 다음 태스크(브라우저 통합 확인)에서 확인.",
       "analysisResult": "v2 Phase 3(기록 입력): 로그인한 관리자가 모바일 우선 폼(/admin/runs/new)으로 러닝 기록을 입력해 POST /api/admin/runs로 저장하고 공개 화면에 바로 반영되게 한다. 결정: 강도는 버튼 3개 선택, 저장 후 같은 화면에 완료 안내와 기록 보기 및 계속 입력, 태그는 쉼표로 구분한 한 칸. 입력 규칙은 서버와 같은 lib/notion/admin/input.ts(순수 모듈)를 재사용한다. 폼이 열릴 때 clientKey(UUID)를 한 번 만들고 재시도는 같은 키로 보내며 저장 성공 후 새 키로 바꾼다. 헤더에 관리자 링크를 넣지 않는다(루트 레이아웃이 쿠키를 읽으면 공개 화면 전체가 동적으로 바뀜). 폼 패턴은 useForm + zodResolver(또는 사용자 resolver) + Controller + Field/FieldError, 새 패키지 설치 금지, components/ui 수정 금지. 노션 쓰기 검증은 사용자 확인 후 TEST- 행만 쓰고 끝나면 휴지통으로 보내 in_trash를 확인한다. .env* 값은 읽거나 출력하지 않는다. 기준 문서는 docs/ROADMAP.md Phase 3, docs/PRD.md, CLAUDE.md. 한국어 주석과 문서."
+    },
+    {
+      "id": "3a332d9a-492d-4f75-97c5-67a0dafa2438",
+      "name": "V2-P3-3 브라우저 통합 확인과 캐시 반영 점검",
+      "description": "Playwright로 실제 화면을 확인한다. 임시 ADMIN_PASSWORD와 ADMIN_SESSION_SECRET(32자 이상)을 서버 프로세스 환경 변수로만 주입한 프로덕션 서버에서 실제 로그인 폼으로 로그인한다(사용자의 .env.local 비밀번호는 쓰지 않는다). 확인 항목: (a) 비로그인으로 /admin/runs/new 접근 시 로그인 화면으로 이동. (b) 빈 제목과 소요시간 12:5와 존재하지 않는 날짜와 거리 0이 필드별 오류로 보이고 노션 호출이 없음(호출 계수). (c) 360px과 320px에서 가로 스크롤이 없고 라이트와 다크 모두 읽힘(스크린샷). (d) 사용자 확인을 받은 뒤 TEST- 행 1건을 폼으로 저장: 완료 안내가 보이고 노션 행이 1건 늘며, 저장 버튼 연타와 같은 키 재시도에도 행이 1건뿐. (e) 저장 직후 공개 홈과 목록과 통계와 상세에 새 기록이 반영되는지 확인하고, 홈이나 상세가 캐시 때문에 바로 바뀌지 않으면 app/api/admin/runs/route.ts에 revalidatePath를 추가해 다시 확인. (f) 세션 만료(쿠키 삭제)로 저장하면 401 안내가 나오고 입력값이 유지됨. (g) 서버 로그에 입력값과 쿠키와 비밀값이 없음. 끝나면 TEST- 행을 휴지통으로 보내 in_trash true와 행 수 기준값 복귀를 확인한다.",
+      "notes": "노션 쓰기 전에 사용자 확인 필수(만들 행, 쓰기 횟수, 정리 방법을 명시). 아이폰 홈 화면 앱 실기기 확인은 Phase 6. Playwright가 연결되지 않으면 먼저 보고한다.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "d8d251f8-623e-4180-bf86-bd11a1ff5b34"
+        }
+      ],
+      "createdAt": "2026-11-10T06:42:13.729Z",
+      "updatedAt": "2026-11-10T06:42:13.729Z",
+      "relatedFiles": [
+        {
+          "path": "app/api/admin/runs/route.ts",
+          "type": "TO_MODIFY",
+          "description": "필요하면 revalidatePath 추가"
+        },
+        {
+          "path": "components/admin/run-form.tsx",
+          "type": "REFERENCE",
+          "description": "확인 대상 폼"
+        },
+        {
+          "path": "docs/ROADMAP.md",
+          "type": "REFERENCE",
+          "description": "Phase 3 완료 기준"
+        }
+      ],
+      "implementationGuide": "서버는 next start로 임시 포트에 띄우고 RUN_RECORDS_REVALIDATE_SECONDS=300으로 두어 revalidateTag 효과를 분리해 본다. 노션 호출 수는 fetch 프리로드 계수 스크립트(scratchpad)로 센다. 정리는 스크래치 스크립트로 관리자 키를 써서 제목이 TEST-로 시작하는 행에만 in_trash를 보낸다.",
+      "verificationCriteria": "ROADMAP Phase 3 완료 기준 4개(폼으로 만든 기록이 공개 홈과 목록과 통계에 반영, 잘못된 입력은 필드별 오류이고 행 미생성, 연타해도 행 1건, 360px 가로 스크롤 없음과 라이트 다크)를 확인됨과 미확인으로 근거와 함께 보고. 노션 행 수 기준값 복귀와 in_trash 확인.",
+      "analysisResult": "v2 Phase 3(기록 입력): 로그인한 관리자가 모바일 우선 폼(/admin/runs/new)으로 러닝 기록을 입력해 POST /api/admin/runs로 저장하고 공개 화면에 바로 반영되게 한다. 결정: 강도는 버튼 3개 선택, 저장 후 같은 화면에 완료 안내와 기록 보기 및 계속 입력, 태그는 쉼표로 구분한 한 칸. 입력 규칙은 서버와 같은 lib/notion/admin/input.ts(순수 모듈)를 재사용한다. 폼이 열릴 때 clientKey(UUID)를 한 번 만들고 재시도는 같은 키로 보내며 저장 성공 후 새 키로 바꾼다. 헤더에 관리자 링크를 넣지 않는다. 새 패키지 설치 금지, components/ui 수정 금지. 노션 쓰기 검증은 사용자 확인 후 TEST- 행만 쓰고 끝나면 휴지통으로 보내 in_trash를 확인한다. .env* 값은 읽거나 출력하지 않는다. 기준 문서는 docs/ROADMAP.md Phase 3, docs/PRD.md, CLAUDE.md. 한국어 주석과 문서."
+    },
+    {
+      "id": "9ecd493c-b01c-40f2-b5ae-e0697bab27cc",
+      "name": "V2-P3-4 입력 화면 코드와 보안 점검",
+      "description": "Phase 3 변경을 code-reviewer와 security-checker 서브에이전트로 읽기 전용 점검한다. 대상: lib/notion/admin/run-form.ts, components/admin/run-form.tsx, app/admin/(protected)/runs/new/page.tsx, app/admin/(protected)/page.tsx, app/api/admin/runs/route.ts의 변경분. 점검 항목: 클라이언트 번들에 서버 전용 모듈과 키가 없는지(.next/static 검색 포함), 오류 문구와 응답에 입력값과 내부 정보가 없는지, 렌더링 시 XSS 위험(React 이스케이프, dangerouslySetInnerHTML 없음), CSRF와 Origin 확인, 입력 길이와 본문 크기 제한, 로그에 민감 정보 없음, 접근성(라벨 연결, aria-pressed, 오류 알림), 불필요한 use client와 번들 크기. 발견 사항은 임의로 고치지 말고 심각도와 근거를 보고해 사용자와 정한다. ROADMAP과 문서 갱신은 사용자 승인 후 별도로 한다.",
+      "notes": "서버나 개발 서버를 남기지 않는다. 노션에 쓰지 않는다.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "3a332d9a-492d-4f75-97c5-67a0dafa2438"
+        }
+      ],
+      "createdAt": "2026-11-10T06:42:13.729Z",
+      "updatedAt": "2026-11-10T06:42:13.729Z",
+      "relatedFiles": [
+        {
+          "path": "components/admin/run-form.tsx",
+          "type": "REFERENCE",
+          "description": "점검 대상"
+        },
+        {
+          "path": "app/api/admin/runs/route.ts",
+          "type": "REFERENCE",
+          "description": "점검 대상"
+        }
+      ],
+      "implementationGuide": "1) git diff로 Phase 3 변경 파일을 확정. 2) code-reviewer와 security-checker를 호출. 3) 빌드 후 .next/static에서 키 이름과 서버 모듈 흔적 검색. 4) npm test와 tsc와 lint 재실행. 5) 결과를 확인됨과 구현만 됨과 미확인으로 정리.",
+      "verificationCriteria": "치명과 높음 보안 이슈가 없거나 발견 사항이 보고됨. npm test, tsc, lint, build 통과. 번들 검색 결과 0건.",
+      "analysisResult": "v2 Phase 3(기록 입력): 로그인한 관리자가 모바일 우선 폼(/admin/runs/new)으로 러닝 기록을 입력해 POST /api/admin/runs로 저장하고 공개 화면에 바로 반영되게 한다. 결정: 강도는 버튼 3개 선택, 저장 후 같은 화면에 완료 안내와 기록 보기 및 계속 입력, 태그는 쉼표로 구분한 한 칸. 입력 규칙은 서버와 같은 lib/notion/admin/input.ts(순수 모듈)를 재사용한다. 폼이 열릴 때 clientKey(UUID)를 한 번 만들고 재시도는 같은 키로 보내며 저장 성공 후 새 키로 바꾼다. 헤더에 관리자 링크를 넣지 않는다. 새 패키지 설치 금지, components/ui 수정 금지. 노션 쓰기 검증은 사용자 확인 후 TEST- 행만 쓰고 끝나면 휴지통으로 보내 in_trash를 확인한다. .env* 값은 읽거나 출력하지 않는다. 기준 문서는 docs/ROADMAP.md Phase 3, docs/PRD.md, CLAUDE.md. 한국어 주석과 문서."
     }
   ]
 }
