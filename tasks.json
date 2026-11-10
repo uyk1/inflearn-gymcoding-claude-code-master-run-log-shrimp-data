@@ -1990,14 +1990,14 @@
       "name": "V2-P3-2 기록 입력 화면 (/admin/runs/new)",
       "description": "app/admin/(protected)/runs/new/page.tsx(서버 컴포넌트, requireAdmin, noindex)와 components/admin/run-form.tsx('use client')를 만든다. 폼 패턴은 useForm과 Controller와 Field/FieldError이며 resolver는 V2-P3-1의 validateRunForm을 쓴다. 필드: 제목, 날짜(type=date, 기본값 오늘 한국 시간), 거리(inputMode=decimal), 소요시간(텍스트 키보드, 형식 안내 mm:ss 또는 h:mm:ss, 초는 두 자리), 장소, 메모(Textarea), 강도(EASY, NORMAL, HARD 버튼 3개, role=group과 aria-pressed, 다시 누르면 해제), 태그(쉼표로 구분한 한 칸). 거리와 소요시간이 유효하면 예상 페이스를 aria-live로 보여 준다. 제출은 fetch로 POST /api/admin/runs, 제출 중 버튼 비활성과 저장 중 문구. 성공하면 같은 화면에 저장되었습니다와 기록 보기(/runs/id)와 계속 입력 버튼을 보여 주고, 계속 입력은 폼을 비우고 clientKey를 새로 만든다. 실패: 400은 필드별 오류 표시, 401은 입력값을 유지한 채 세션 만료 안내와 로그인 링크, 403과 413과 5xx와 네트워크 오류는 일반 문구와 다시 시도(같은 clientKey 재사용). 관리자 홈(app/admin/(protected)/page.tsx)에 기록 입력 버튼을 추가한다.",
       "notes": "헤더에 관리자 링크를 넣지 않는다. 새 패키지와 새 shadcn 컴포넌트는 추가하지 않는다. 오류 문구와 응답에 입력값을 노출하지 않는다.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "e1622da5-3652-4040-9628-1930a17d0436"
         }
       ],
       "createdAt": "2026-11-10T06:41:54.356Z",
-      "updatedAt": "2026-11-10T06:41:54.356Z",
+      "updatedAt": "2026-11-10T06:58:24.506Z",
       "relatedFiles": [
         {
           "path": "app/admin/(protected)/runs/new/page.tsx",
