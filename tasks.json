@@ -1948,10 +1948,10 @@
       "name": "V2-P3-1 입력 폼 순수 로직 (값 변환, 예상 페이스, 오류 매핑)",
       "description": "lib/notion/admin/run-form.ts에 폼이 쓰는 순수 함수를 만든다(server-only와 별칭 import 없이 확장자 있는 상대 경로 import만 쓴다). (1) RunFormValues 타입: title, date, distance(문자열), duration, place, memo, intensity(EASY, NORMAL, HARD 또는 빈 문자열), tags(쉼표로 구분한 문자열). (2) emptyRunFormValues(today): 날짜 기본값을 오늘로. (3) toRunPayload(values, clientKey): API 본문으로 변환. 거리는 trim 후 숫자로(쉼표 소수점이나 숫자가 아닌 값은 NaN으로 두어 검증이 거부), 태그는 쉼표로 나눠 trim하고 빈 것 제거, 빈 강도는 null. (4) validateRunForm(values, clientKey): parseRunInput을 재사용해 성공 데이터 또는 폼 필드 이름 기준 오류(distanceKm는 distance로 매핑, 알 수 없는 항목은 _form)를 돌려준다. (5) previewPace(duration, distance): 둘 다 유효할 때만 예상 페이스 문자열(formatPaceLabel), 아니면 null. (6) mapApiFailureToFieldErrors(failure): apiFailure의 details를 폼 필드 오류로 바꾼다.",
       "notes": "클라이언트 컴포넌트가 이 모듈을 import하므로 서버 전용 모듈(client.ts, repository.ts, service.ts, container.ts)을 import하지 않는다. components/admin은 ESLint 허용 영역이다.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [],
       "createdAt": "2026-11-10T06:41:54.356Z",
-      "updatedAt": "2026-11-10T06:41:54.356Z",
+      "updatedAt": "2026-11-10T06:43:21.736Z",
       "relatedFiles": [
         {
           "path": "lib/notion/admin/run-form.ts",
