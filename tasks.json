@@ -2148,6 +2148,144 @@
       "analysisResult": "v2 Phase 3(기록 입력) 마무리: V2-P3-4 점검(code-reviewer, security-checker)에서 나온 발견 사항 중 사용자가 승인한 범위를 고친다. 결정: M1, M2, 보안 #2, 접근성 L3 L5 L6 L8, 테스트 빈틈 보강. 제외(Phase 6 이후): L4 L7 L9 L10, CSP와 HSTS, 세션 폐기, 중복 방지 경쟁 상태(문서화된 한계). 새 패키지 설치 금지, components/ui 수정 금지, 입력 규칙은 서버와 같은 lib/notion/admin/input.ts 재사용, 순수 로직은 확장자 있는 상대 경로 import로 node --test 단위 테스트. 노션 쓰기 없이 Playwright 모의 응답으로 화면을 확인한다. .env* 값은 읽거나 출력하지 않는다. 한국어 주석과 문서.",
       "summary": "V2-P3-5 완료(커밋 전, 브랜치 fix/run-form-review). 사용자가 승인한 범위(M1, M2, 보안 #2, 접근성 L3 L5 L6 L8, 테스트 보강)를 수정. 변경: components/admin/run-form.tsx(M1: 401 안내의 로그인 링크를 새 탭 target=_blank rel=noopener noreferrer로 열고 문구를 새 탭에서 로그인한 뒤 이 화면에서 다시 저장해 주세요로 변경. M2: 서버에 닿았는지 알 수 없는 시도(네트워크 오류와 5xx)의 내용 서명만 ref에 기억하고 created false 응답 때 그 서명 중 현재와 다른 것이 있으면 이전에 저장된 기록이 있습니다 경고와 기록 보기 링크 표시, 400 401 403 같은 확실한 거부는 기억하지 않아 오탐 없음, 계속 입력에서 초기화. L3: FieldError에 id를 주고 aria-describedby에 힌트와 오류 연결(제목 등 TextField, 메모, 강도 그룹). L5: 저장 결과 제목에 tabIndex -1과 마운트 시 focus, 계속 입력 후 제목 칸 setFocus. L6: 서버 400의 첫 오류 칸에만 setError shouldFocus. L8: 제목 장소 메모의 maxLength 제거와 거리 힌트에 소수점은 마침표 안내), lib/notion/admin/run-form.ts(payloadSignature와 isContentChanged 순수 함수 추가), lib/api/public-error.ts 신규(설정 오류 코드 CONFIG_MISSING와 AUTH_NOT_CONFIGURED는 일반 문구만 응답)와 app/api/admin/runs/route.ts 적용(응답은 일반 문구, 서버 로그에는 코드만). 새 패키지 없음. 테스트: public-error.test.ts 3건, run-form-boundaries.test.ts 약 30건 등으로 총 144건 통과(경계 통과 100 200 1000자와 태그 10개 30자와 거리 1000, 경계 거부, 태그 개수 상한이 중복 제거 전에 적용되는 현재 동작 고정, 공백만 있는 값, 쉼표만 있는 태그, 전각 쉼표 왕복, 400자 숫자 문자열 Infinity 거부, 매우 긴 입력의 오류 문구에 입력값 비포함, 날짜 2026-02-29와 2027-02-29와 시간 포함과 공백, 소요시간 0:00과 59:60과 1:60:00과 음수와 전각 콜론, 폼에서 거부된 18가지 값이 JSON 직렬화 후 서버 parseRunInput에서도 같은 칸과 같은 문구로 거부되는 왕복(NaN이 null이 되는 경로 포함), 서명 정규화와 변경 감지). 변이 시험: 서명의 제목 trim 제거, 태그 중복 제거 제거, 거리 정규화 제거, 강도 무시, 날짜 무시, isContentChanged를 every로 바꿈과 항상 false, toPublicMessage가 원문 그대로, AUTH_NOT_CONFIGURED 제거, 제목 상한 100을 99로, 태그 상한 10을 11로, 소요시간 0초 허용을 모두 새 테스트가 감지하고 원복 후 144건 통과와 원본 동일 확인(처음 두 변이는 CRLF 때문에 적용되지 않은 것을 발견해 한 줄 단위로 다시 시험). tsc와 npm run lint와 npm run build 통과, 공개 화면 렌더링 방식 불변(/admin/runs/new 123kB, First Load 261kB), 클라이언트 번들에 키와 서버 전용 모듈과 설정 오류 문구 0건. Playwright 모의 응답(노션 호출 0회, 3100 서버의 호출 1회는 공개 화면 캐시 갱신용 읽기 query 1회): L8 maxlength 속성 없음, 150자 제목이 잘리지 않고 제목과 메모 오류 문구 표시, 거리 힌트 표시. L3 오류 칸의 aria-describedby가 오류 id를 가리키고 대상 존재, 소요시간은 힌트와 오류 둘 다 연결. L6 서버 400 뒤 첫 오류 칸(run-duration)으로 포커스. M1 401 문구와 새 탭 링크 속성 확인, 클릭하면 새 탭이 /admin/login으로 열리고 원래 화면은 폼에 남아 제목과 소요시간 유지. L5 저장 성공 뒤 포커스가 상태 제목으로, 계속 입력 뒤 run-title로. M2 시나리오 6종: 네트워크 실패 후 내용 변경이면 경고, 같은 내용 재시도는 경고 없음, 400 거부 후 내용 변경은 경고 없음(오탐 방지), 502 후 내용 변경은 경고, 502 후 재시도 created true는 일반 저장 안내, 계속 입력 후 새 키는 이전 이력 없음. 보안 #2: 노션 데이터 소스 ID와 관리자 키를 spawn으로 확실히 빈 문자열로 넘긴 서버(3101)에서 500 CONFIG_MISSING과 서버 설정 문제로 저장할 수 없습니다 문구만 응답하고 NOTION 문자열과 환경 변수 이름 없음, 서버 로그에는 코드만 남고 입력값 쿠키 비밀값 노출 0건, 노션 호출 0회. 사고 보고(숨기지 않음): 이 보안 #2 시험의 첫 시도에서 PowerShell의 $env:이름 = 빈 문자열이 변수를 비우지 않고 삭제해 서버가 .env.local의 실제 관리자 키를 읽었고, 승인 없이 실제 노션에 TEST-설정 오류 확인 행 1개가 생성됨(201, 노션 호출 query 1과 pages 1). 같은 DB를 배포 사이트가 읽어 공개 노출 위험이 있어 즉시 제목 접두사 TEST-설정 안전장치가 있는 스크립트로 해당 행만 휴지통 이동(in_trash true)하고 노션 행 수 7에서 6으로 복귀 확인, 다른 행은 건드리지 않음. 재발 방지: spawn으로 빈 문자열이 Next 로더 뒤에도 비어 있는지 노션 접속 없이 확인한 뒤 데이터 소스 ID까지 비워 호출 불가 상태로 재시험, 교훈을 메모리 powershell-empty-env-deletes-var에 기록. 최종: 서버 3100 3101 모두 종료, 노션 행 6개. 한계와 미확인: L4 L7 L9 L10과 CSP HSTS 세션 폐기 중복 방지 경쟁 상태는 범위 밖, 아이폰 실기기는 Phase 6, 컴포넌트 단위 테스트 없음.",
       "completedAt": "2026-11-10T07:36:47.206Z"
+    },
+    {
+      "id": "c76514b7-78b6-4350-8510-cc8a34d6a7f6",
+      "name": "V2-P4-1 서비스 보강 (편집용 단건 조회와 내용 버전 충돌 확인)",
+      "description": "쓰기 서비스에 편집용 조회와 충돌 확인을 추가한다. (1) 순수 모듈 lib/notion/admin/page-to-form.ts: 노션 페이지를 RunFormValues로 바꾼다(readers 재사용, 날짜는 normalizeNotionDate로 한국 시간 YYYY-MM-DD, 거리는 문자열, 소요시간과 장소와 메모는 원문, 강도는 EASY NORMAL HARD 밖이면 빈 값, 태그는 쉼표로 이은 문자열). (2) lib/notion/admin/edit-version.ts: computeVersion(values)가 payloadSignature를 sha256으로 해시한 짧은 문자열을 돌려준다(서버 전용 사용, 클라이언트가 import하지 않음). (3) repository: assertRunPage가 조회한 페이지를 돌려주게 하고, updatePage가 노션이 돌려준 갱신된 페이지를 돌려주게 한다. (4) service: getRunForEdit(pageId)가 소속과 휴지통 여부를 확인하고 입력칸 값과 버전을 돌려준다. updateRun(pageId, raw, baseVersion)은 입력 검증 후 노션에서 다시 읽어 현재 버전과 baseVersion이 다르면 AppError CONFLICT 409로 거부하고 같으면 수정해 갱신된 페이지로 만든 새 버전을 돌려준다(baseVersion이 없으면 필드 오류). trashRun은 소속 확인 그대로.",
+      "notes": "노션 last_edited_time은 분 단위 정밀도라 시각 비교는 쓰지 않는다(읽기 전용으로 확인함). 노션에 쓰지 않는다. node --test용 상대 경로 .ts import와 매개변수 프로퍼티 금지 규칙을 지킨다.",
+      "status": "pending",
+      "dependencies": [],
+      "createdAt": "2026-11-10T07:49:20.271Z",
+      "updatedAt": "2026-11-10T07:49:20.271Z",
+      "relatedFiles": [
+        {
+          "path": "lib/notion/admin/page-to-form.ts",
+          "type": "CREATE",
+          "description": "페이지를 폼 값으로"
+        },
+        {
+          "path": "lib/notion/admin/edit-version.ts",
+          "type": "CREATE",
+          "description": "내용 버전 계산"
+        },
+        {
+          "path": "lib/notion/admin/repository.ts",
+          "type": "TO_MODIFY",
+          "description": "페이지 반환"
+        },
+        {
+          "path": "lib/notion/admin/service.ts",
+          "type": "TO_MODIFY",
+          "description": "getRunForEdit, updateRun 충돌 확인"
+        },
+        {
+          "path": "lib/notion/admin/fake-notion.ts",
+          "type": "TO_MODIFY",
+          "description": "테스트 도우미 확장"
+        },
+        {
+          "path": "lib/notion/admin/run-form.ts",
+          "type": "DEPENDENCY",
+          "description": "payloadSignature"
+        }
+      ],
+      "implementationGuide": "한 번의 pages.retrieve로 소속 확인과 버전 비교를 같이 한다. 버전은 우리가 쓰는 8개 필드만 반영하므로 last_edited_time이나 출처와 외부ID 변경은 버전을 바꾸지 않는다. fake-notion.ts에 전체 속성을 가진 페이지와 update 응답 페이지를 지원하게 확장한다.",
+      "verificationCriteria": "npm test 통과: 페이지 변환(날짜 시간 포함 값, 빈 값, 알 수 없는 강도), 버전이 같은 내용에서 같고 8개 필드 변경에서 달라지며 출처 외부ID 변경 last_edited_time 변경에서는 같음, 버전 불일치 시 409와 노션 update 미호출, 일치 시 새 버전 반환, 소속 불일치 404. 변이 시험으로 테스트가 잘못된 구현을 감지. tsc와 lint 통과.",
+      "analysisResult": "v2 Phase 4(수정·삭제): 관리자가 관리자 전용 목록(/admin/runs)에서 기록을 골라 수정 화면(/admin/runs/[id]/edit)에서 고치고 삭제(노션 휴지통)한다. 결정: 충돌 확인은 노션 last_edited_time이 분 단위 정밀도라 내용 기준 버전으로 한다(수정 화면을 열 때 서버가 현재 내용을 payloadSignature와 같은 정규화로 버전 값으로 만들어 주고, 저장 때 노션에서 다시 읽어 비교해 다르면 409 CONFLICT로 거부하고 덮어쓰지 않으며, 성공 응답에는 노션이 돌려준 페이지로 만든 새 버전을 담음). 수정 화면 입력칸은 공유 캐시가 아니라 노션 직접 조회(원문 값). 공개 화면에는 관리자 버튼을 넣지 않는다(쿠키를 읽으면 공개 화면이 동적이 됨). 삭제 버튼은 수정 화면 하단에만 두고 화면 안 확인 단계를 거친다. 수정은 입력 필드 8개만 바꾸고 출처와 외부ID는 건드리지 않는다. 라우트는 저장 뒤 revalidateTag(run-records)를 호출한다. 확인과 저장 사이의 밀리초 틈은 남는 한계로 문서화한다. 새 패키지 설치 금지, components/ui 수정 금지. 노션 쓰기 검증은 사용자 확인 후 TEST- 행만 쓰고 끝나면 휴지통으로 보내 in_trash를 확인한다. 환경 변수를 빈 값으로 덮어쓰는 시험은 PowerShell 대입이 아니라 node spawn으로 한다. .env* 값은 읽거나 출력하지 않는다. 한국어 주석과 문서."
+    },
+    {
+      "id": "93fa91fc-d44e-48f1-9f38-1839b4330e27",
+      "name": "V2-P4-2 수정·삭제 API 라우트와 공통 요청 확인",
+      "description": "app/api/admin/runs/[id]/route.ts에 PATCH와 DELETE를 만든다. 먼저 POST 라우트의 Origin 확인과 세션 확인과 본문 읽기(20KB 제한, JSON 파싱)를 lib/auth/admin-request.ts(server-only)의 공통 함수로 분리해 세 핸들러가 함께 쓰게 하고 POST의 동작은 바꾸지 않는다. PATCH 본문은 version(문자열)과 입력 필드들이며 순수 함수 lib/notion/admin/update-body.ts의 parseUpdateBody가 version을 떼어 내고 나머지를 서비스에 넘기게 한다. 응답: 200 apiSuccess id와 새 version, 400 VALIDATION_FAILED와 필드별 오류(version 누락 포함), 404 NOT_FOUND, 409 CONFLICT, 502 NOTION_WRITE_FAILED, 설정 오류는 일반 문구. 성공하면 revalidateTag run-records를 호출한다. DELETE는 서비스 trashRun 후 200 apiSuccess id와 revalidateTag. id는 UUID 형식이 아니면 노션 호출 전에 400으로 거부한다.",
+      "notes": "실제 노션 수정과 삭제 확인은 V2-P4-4에서 사용자 확인 후 한다. 이 태스크에서는 노션을 쓰지 않고 거부 경로만 확인한다(노션 호출 0회).",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "c76514b7-78b6-4350-8510-cc8a34d6a7f6"
+        }
+      ],
+      "createdAt": "2026-11-10T07:49:20.271Z",
+      "updatedAt": "2026-11-10T07:49:20.271Z",
+      "relatedFiles": [
+        {
+          "path": "app/api/admin/runs/[id]/route.ts",
+          "type": "CREATE",
+          "description": "PATCH와 DELETE"
+        },
+        {
+          "path": "lib/auth/admin-request.ts",
+          "type": "CREATE",
+          "description": "Origin 세션 본문 공통 확인"
+        },
+        {
+          "path": "lib/notion/admin/update-body.ts",
+          "type": "CREATE",
+          "description": "PATCH 본문 분리 순수 함수"
+        },
+        {
+          "path": "lib/notion/admin/update-body.test.ts",
+          "type": "CREATE",
+          "description": "순수 함수 테스트"
+        },
+        {
+          "path": "app/api/admin/runs/route.ts",
+          "type": "TO_MODIFY",
+          "description": "공통 함수 사용"
+        }
+      ],
+      "implementationGuide": "핸들러는 얇게 유지하고 서비스 호출만 한다. 응답은 apiSuccess와 apiFailure를 쓰고 AppError는 code와 status를 그대로 변환하되 toPublicMessage를 거친다. 라우트가 미들웨어 matcher 밖이므로 핸들러 안의 확인이 유일한 방어임을 주석에 남긴다.",
+      "verificationCriteria": "npm test 통과(parseUpdateBody), tsc와 lint와 build 통과, 프로덕션 서버(임시 비밀값, 노션 호출 계수)에서 PATCH와 DELETE의 Origin 없음 403, 쿠키 없음과 변조 쿠키 401, 잘못된 id 400, JSON 아님 400, 25KB 413, version 누락 400이고 노션 호출 0회. POST 동작 불변. 클라이언트 번들에 서버 모듈과 키 0건.",
+      "analysisResult": "v2 Phase 4(수정·삭제): 관리자가 관리자 전용 목록(/admin/runs)에서 기록을 골라 수정 화면(/admin/runs/[id]/edit)에서 고치고 삭제(노션 휴지통)한다. 결정: 충돌 확인은 노션 last_edited_time이 분 단위 정밀도라 내용 기준 버전으로 한다(수정 화면을 열 때 서버가 현재 내용을 payloadSignature와 같은 정규화로 버전 값으로 만들어 주고, 저장 때 노션에서 다시 읽어 비교해 다르면 409 CONFLICT로 거부하고 덮어쓰지 않으며, 성공 응답에는 노션이 돌려준 페이지로 만든 새 버전을 담음). 수정 화면 입력칸은 공유 캐시가 아니라 노션 직접 조회(원문 값). 공개 화면에는 관리자 버튼을 넣지 않는다(쿠키를 읽으면 공개 화면이 동적이 됨). 삭제 버튼은 수정 화면 하단에만 두고 화면 안 확인 단계를 거친다. 수정은 입력 필드 8개만 바꾸고 출처와 외부ID는 건드리지 않는다. 라우트는 저장 뒤 revalidateTag(run-records)를 호출한다. 확인과 저장 사이의 밀리초 틈은 남는 한계로 문서화한다. 새 패키지 설치 금지, components/ui 수정 금지. 노션 쓰기 검증은 사용자 확인 후 TEST- 행만 쓰고 끝나면 휴지통으로 보내 in_trash를 확인한다. 환경 변수를 빈 값으로 덮어쓰는 시험은 PowerShell 대입이 아니라 node spawn으로 한다. .env* 값은 읽거나 출력하지 않는다. 한국어 주석과 문서."
+    },
+    {
+      "id": "0e590a77-50af-400b-b6e4-06e94953415a",
+      "name": "V2-P4-3 관리자 목록과 수정 화면 (삭제 확인 포함)",
+      "description": "관리자 화면을 만든다. (1) /admin/runs: 서버 컴포넌트, requireAdmin, noindex, loadRunRecords 공유 캐시로 날짜순 카드(날짜, 제목, 거리, 시간, 페이스)와 각 카드의 수정 링크(/admin/runs/[id]/edit), 빈 상태와 노션 오류 안내, 기록 입력 링크. 삭제 버튼은 두지 않는다. (2) /admin/runs/[id]/edit: requireAdmin, createAdminRunService().getRunForEdit(id)로 입력값과 버전을 읽어 폼에 채운다(404는 notFound, 노션 실패는 오류 화면). (3) components/admin/run-form.tsx를 수정 모드로 확장하되 생성 동작은 바꾸지 않는다(필드 마크업은 공용으로 추출). 수정 모드: clientKey 없음, PATCH /api/admin/runs/[id]에 version과 필드를 보내고 성공하면 응답의 새 version으로 바꾸고 같은 화면에 저장되었습니다 안내와 기록 보기 링크, 409는 노션에서 먼저 바뀐 내용이 있어 저장하지 않았습니다와 최신 내용 불러오기 버튼(현재 입력은 사라진다고 안내, 덮어쓰기 선택지 없음), 404는 이미 삭제된 기록 안내, 401은 새 탭 로그인 안내. (4) 수정 화면 맨 아래 이 기록 삭제 버튼: 누르면 화면 안 확인 단계(제목 표시, 노션 휴지통에서 복구 가능, 취소와 삭제)이고 확정하면 DELETE 후 /admin/runs로 이동한다. (5) 관리자 홈에 기록 목록 링크 추가.",
+      "notes": "새 패키지와 새 shadcn 컴포넌트 추가 금지. 공개 화면 코드는 쿠키를 읽지 않아야 한다. 실제 동작은 V2-P4-4에서 확인한다.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "93fa91fc-d44e-48f1-9f38-1839b4330e27"
+        }
+      ],
+      "createdAt": "2026-11-10T07:49:20.271Z",
+      "updatedAt": "2026-11-10T07:49:20.271Z",
+      "relatedFiles": [
+        {
+          "path": "app/admin/(protected)/runs/page.tsx",
+          "type": "CREATE",
+          "description": "관리자 목록"
+        },
+        {
+          "path": "app/admin/(protected)/runs/[id]/edit/page.tsx",
+          "type": "CREATE",
+          "description": "수정 페이지"
+        },
+        {
+          "path": "components/admin/run-form.tsx",
+          "type": "TO_MODIFY",
+          "description": "수정 모드 확장"
+        },
+        {
+          "path": "components/admin/run-form-fields.tsx",
+          "type": "CREATE",
+          "description": "공용 입력칸"
+        },
+        {
+          "path": "components/admin/delete-run.tsx",
+          "type": "CREATE",
+          "description": "삭제 확인 단계"
+        },
+        {
+          "path": "app/admin/(protected)/page.tsx",
+          "type": "TO_MODIFY",
+          "description": "기록 목록 링크"
+        }
+      ],
+      "implementationGuide": "입력칸 마크업을 RunFormFields로 추출해 생성과 수정이 공유하게 한다. 수정 모드의 초기 서명과 현재 서명이 같으면 저장 버튼 안내를 변경 없음으로 하는 것은 선택 사항이다. 포커스와 aria 규칙은 Phase 3 후속 수정(오류 칸 aria-describedby, 결과 제목 포커스)을 따른다. 헤더에 관리자 링크를 넣지 않는다.",
+      "verificationCriteria": "tsc와 lint와 build 통과, 공개 화면 렌더링 방식 불변(빌드 표), 클라이언트 번들에 서버 모듈과 키 0건, 렌더링 스모크(비로그인 307, 로그인 200). 기존 실제 기록의 수정 화면을 열어(읽기만) 입력칸이 노션 값과 일치하는지 확인.",
+      "analysisResult": "v2 Phase 4(수정·삭제): 관리자가 관리자 전용 목록(/admin/runs)에서 기록을 골라 수정 화면(/admin/runs/[id]/edit)에서 고치고 삭제(노션 휴지통)한다. 결정: 충돌 확인은 노션 last_edited_time이 분 단위 정밀도라 내용 기준 버전으로 한다(수정 화면을 열 때 서버가 현재 내용을 payloadSignature와 같은 정규화로 버전 값으로 만들어 주고, 저장 때 노션에서 다시 읽어 비교해 다르면 409 CONFLICT로 거부하고 덮어쓰지 않으며, 성공 응답에는 노션이 돌려준 페이지로 만든 새 버전을 담음). 수정 화면 입력칸은 공유 캐시가 아니라 노션 직접 조회(원문 값). 공개 화면에는 관리자 버튼을 넣지 않는다(쿠키를 읽으면 공개 화면이 동적이 됨). 삭제 버튼은 수정 화면 하단에만 두고 화면 안 확인 단계를 거친다. 수정은 입력 필드 8개만 바꾸고 출처와 외부ID는 건드리지 않는다. 라우트는 저장 뒤 revalidateTag(run-records)를 호출한다. 확인과 저장 사이의 밀리초 틈은 남는 한계로 문서화한다. 새 패키지 설치 금지, components/ui 수정 금지. 노션 쓰기 검증은 사용자 확인 후 TEST- 행만 쓰고 끝나면 휴지통으로 보내 in_trash를 확인한다. 환경 변수를 빈 값으로 덮어쓰는 시험은 PowerShell 대입이 아니라 node spawn으로 한다. .env* 값은 읽거나 출력하지 않는다. 한국어 주석과 문서."
     }
   ]
 }
