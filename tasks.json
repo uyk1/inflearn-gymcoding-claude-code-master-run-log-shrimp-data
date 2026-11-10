@@ -2247,14 +2247,14 @@
       "name": "V2-P4-3 관리자 목록과 수정 화면 (삭제 확인 포함)",
       "description": "관리자 화면을 만든다. (1) /admin/runs: 서버 컴포넌트, requireAdmin, noindex, loadRunRecords 공유 캐시로 날짜순 카드(날짜, 제목, 거리, 시간, 페이스)와 각 카드의 수정 링크(/admin/runs/[id]/edit), 빈 상태와 노션 오류 안내, 기록 입력 링크. 삭제 버튼은 두지 않는다. (2) /admin/runs/[id]/edit: requireAdmin, createAdminRunService().getRunForEdit(id)로 입력값과 버전을 읽어 폼에 채운다(404는 notFound, 노션 실패는 오류 화면). (3) components/admin/run-form.tsx를 수정 모드로 확장하되 생성 동작은 바꾸지 않는다(필드 마크업은 공용으로 추출). 수정 모드: clientKey 없음, PATCH /api/admin/runs/[id]에 version과 필드를 보내고 성공하면 응답의 새 version으로 바꾸고 같은 화면에 저장되었습니다 안내와 기록 보기 링크, 409는 노션에서 먼저 바뀐 내용이 있어 저장하지 않았습니다와 최신 내용 불러오기 버튼(현재 입력은 사라진다고 안내, 덮어쓰기 선택지 없음), 404는 이미 삭제된 기록 안내, 401은 새 탭 로그인 안내. (4) 수정 화면 맨 아래 이 기록 삭제 버튼: 누르면 화면 안 확인 단계(제목 표시, 노션 휴지통에서 복구 가능, 취소와 삭제)이고 확정하면 DELETE 후 /admin/runs로 이동한다. (5) 관리자 홈에 기록 목록 링크 추가.",
       "notes": "새 패키지와 새 shadcn 컴포넌트 추가 금지. 공개 화면 코드는 쿠키를 읽지 않아야 한다. 실제 동작은 V2-P4-4에서 확인한다.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "93fa91fc-d44e-48f1-9f38-1839b4330e27"
         }
       ],
       "createdAt": "2026-11-10T07:49:20.271Z",
-      "updatedAt": "2026-11-10T07:49:20.271Z",
+      "updatedAt": "2026-11-10T08:09:57.854Z",
       "relatedFiles": [
         {
           "path": "app/admin/(protected)/runs/page.tsx",
