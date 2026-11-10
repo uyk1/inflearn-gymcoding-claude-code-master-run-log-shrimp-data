@@ -1942,6 +1942,90 @@
       "analysisResult": "v2 Phase 2(쓰기 계층): 화면 없이 서버 코드로 러닝 기록을 노션에 만들 수 있는 쓰기 계층을 만든다. 읽기와 같은 검증 규칙을 공유해 입력이 통과하면 목록에서 제외되지 않게 한다. 결정: 쓰기 전용 키 NOTION_ADMIN_API_KEY와 lib/notion/admin/ 분리, 출처는 기존 옵션 수동, 외부ID에 web-UUID 멱등 키로 중복 방지, 테스트는 node --test(새 패키지 없음, 테스트 대상은 확장자 있는 상대 경로 import). 쓰기 진입점은 POST /api/admin/runs Route Handler이며 미들웨어 밖이라 핸들러 안의 세션과 Origin 확인이 유일한 방어다. 노션 쓰기 검증은 사용자 확인 후 TEST- 행만 쓰고 끝나면 휴지통으로 보내 in_trash를 확인한다. .env* 값은 읽거나 출력하지 않는다. 기준 문서는 docs/ROADMAP.md Phase 2와 docs/PRD.md. 한국어 주석과 문서, 새 패키지 설치 금지.",
       "summary": "V2-P2-6 완료(커밋 전, 브랜치 feat/admin-runs-api). 추가: app/api/admin/runs/route.ts(POST만, 순서 Origin 확인 403, 세션 확인 401, Content-Length와 실제 바이트 20KB 상한 413, JSON 파싱 실패 400, 서비스 검증 실패 400과 details 필드별 오류, 성공 시 새로 만든 경우에만 revalidateTag run-records 후 201 아니면 200, AppError는 code와 status 그대로 변환, 예상 못한 오류는 INTERNAL_ERROR 500과 오류 이름만 로그, 모든 응답에 Cache-Control no-store), lib/auth/origin.ts(isSameOrigin 순수 함수, Origin 없음과 null과 형식 오류는 거부), lib/auth/require-admin.ts에 hasAdminSession 추가(requireAdmin이 이를 사용), lib/api/response.ts의 apiFailure에 선택 details 추가(없으면 키 없음). 테스트 6건 추가로 총 86건 통과(origin 3, response 3). 새 패키지 없음. 검증 1(노션 미사용, 프로덕션 빌드 서버 3100과 임시 비밀값으로 만든 쿠키): Origin 없음 403, 다른 Origin 403, 쿠키 없음 401, 변조 쿠키 401, JSON 아님 400, 25KB 본문 413, 소요시간 12:5와 날짜 2026-13-45와 거리 0은 400 VALIDATION_FAILED와 details, 출처 항목 포함 400 _form, GET 405, 이 동안 노션 API 호출 0회(fetch 프리로드 계수). 미들웨어 matcher 밖인 이 라우트가 쿠키 없음과 변조 쿠키를 401로 막아 Phase 1의 남은 기준(requireAdmin 단독 방어)을 확인함. 검증 2(사용자 승인 후 실제 노션, TEST-P2-6 행 1건만): 기준값 행 6개와 공개 목록 카드 6개와 제외 안내 없음, 생성 201(출처 수동 외부ID web-UUID), 같은 키 재전송 200 created false 같은 id로 행 수 7 유지(중복 방지), 공개 목록 카드 7개에 새 행 링크와 제목이 표시되고 제외 안내 없음(조회 캐시 300초에서 즉시 보여 revalidateTag 작동 확인), 상세 화면에 제목 장소 거리 5.25 소요 29:15 페이스 5:34(1755초 나누기 5.25) 강도 EASY 출처 수동 외부ID가 표시되고 홈과 통계 200, 쓰기 서비스로 수정(제목 메모 장소 비움 강도 태그 거리 소요시간 9항목 반영, 출처 수동과 외부ID 유지), 출처를 넣은 수정은 거부, 휴지통 이동 후 in_trash true, 이미 지운 행 재삭제는 NOT_FOUND 404, 노션 행 수 기준값 6 복귀와 TEST 행 0개, 캐시 1초로 다시 띄운 서버의 공개 목록 카드 6개 TEST 제목 없음. 노션 쓰기는 생성 1, 수정 1, 휴지통 1로 모두 TEST-P2-6 행 하나에만 했고 행은 휴지통에 남아 복구 가능. 서버 로그 노출 검사(입력값 쿠키 비밀값 키) 0건, 서버 로그 오류 0건, 클라이언트 번들에 NOTION_ADMIN_API_KEY 키 패턴 createAdminRunService /api/admin/runs 흔적 0건. tsc eslint npm run lint npm run build 통과, 공개 화면 렌더링 방식 불변(빌드 표에 /api/admin/runs 동적 라우트 추가). 한계와 미확인: 브라우저에서 쿠키를 가진 실제 로그인 요청(Origin 자동 첨부)은 Playwright 연결이 끊겨 시험하지 못하고 curl로 쿠키와 Origin을 직접 보냄(Phase 3 폼에서 확인), 쓰기 서비스의 수정과 휴지통은 라우트로 노출되지 않아 스크립트로 확인(Phase 4에서 라우트 노출), 수정과 휴지통은 revalidateTag를 호출하지 않아 공개 화면 반영이 캐시 만료에 의존(Phase 3과 4에서 라우트가 갱신), revalidatePath는 Phase 3, 로그인 사용자 쿠키는 임시 비밀값으로 직접 만들었음(실제 로그인 흐름은 Phase 1에서 확인), 서버리스 다중 인스턴스와 Vercel 실환경 확인은 Phase 6, 입력 1건당 노션 읽기 1회와 쓰기 1회.",
       "completedAt": "2026-11-10T06:24:14.925Z"
+    },
+    {
+      "id": "e1622da5-3652-4040-9628-1930a17d0436",
+      "name": "V2-P3-1 입력 폼 순수 로직 (값 변환, 예상 페이스, 오류 매핑)",
+      "description": "lib/notion/admin/run-form.ts에 폼이 쓰는 순수 함수를 만든다(server-only와 별칭 import 없이 확장자 있는 상대 경로 import만 쓴다). (1) RunFormValues 타입: title, date, distance(문자열), duration, place, memo, intensity(EASY, NORMAL, HARD 또는 빈 문자열), tags(쉼표로 구분한 문자열). (2) emptyRunFormValues(today): 날짜 기본값을 오늘로. (3) toRunPayload(values, clientKey): API 본문으로 변환. 거리는 trim 후 숫자로(쉼표 소수점이나 숫자가 아닌 값은 NaN으로 두어 검증이 거부), 태그는 쉼표로 나눠 trim하고 빈 것 제거, 빈 강도는 null. (4) validateRunForm(values, clientKey): parseRunInput을 재사용해 성공 데이터 또는 폼 필드 이름 기준 오류(distanceKm는 distance로 매핑, 알 수 없는 항목은 _form)를 돌려준다. (5) previewPace(duration, distance): 둘 다 유효할 때만 예상 페이스 문자열(formatPaceLabel), 아니면 null. (6) mapApiFailureToFieldErrors(failure): apiFailure의 details를 폼 필드 오류로 바꾼다.",
+      "notes": "클라이언트 컴포넌트가 이 모듈을 import하므로 서버 전용 모듈(client.ts, repository.ts, service.ts, container.ts)을 import하지 않는다. components/admin은 ESLint 허용 영역이다.",
+      "status": "pending",
+      "dependencies": [],
+      "createdAt": "2026-11-10T06:41:54.356Z",
+      "updatedAt": "2026-11-10T06:41:54.356Z",
+      "relatedFiles": [
+        {
+          "path": "lib/notion/admin/run-form.ts",
+          "type": "CREATE",
+          "description": "폼 순수 로직"
+        },
+        {
+          "path": "lib/notion/admin/run-form.test.ts",
+          "type": "CREATE",
+          "description": "단위 테스트"
+        },
+        {
+          "path": "lib/notion/admin/input.ts",
+          "type": "DEPENDENCY",
+          "description": "서버와 같은 검증 규칙"
+        },
+        {
+          "path": "lib/notion/duration.ts",
+          "type": "DEPENDENCY",
+          "description": "페이스 계산"
+        },
+        {
+          "path": "lib/api/response.ts",
+          "type": "REFERENCE",
+          "description": "ApiFailure 형태"
+        }
+      ],
+      "implementationGuide": "입력 규칙을 새로 만들지 말고 lib/notion/admin/input.ts의 parseRunInput과 lib/notion/duration.ts의 parseDurationToSeconds, calcPaceSecondsPerKm, formatPaceLabel을 재사용한다. 테스트는 lib/notion/admin/run-form.test.ts에 둔다.",
+      "verificationCriteria": "npm test 통과: toRunPayload 결과가 유효 입력에서 parseRunInput을 통과(왕복), 거리 5.25와 공백 5와 쉼표 5,2와 빈 값, 태그 분리와 중복과 빈 항목, 빈 강도, 예상 페이스 계산(25:00 5km는 5:00/km, 거리 0이나 형식 오류는 null), details 오류 매핑. 변이 시험으로 테스트가 잘못된 구현을 감지함. tsc와 lint 통과.",
+      "analysisResult": "v2 Phase 3(기록 입력): 로그인한 관리자가 모바일 우선 폼(/admin/runs/new)으로 러닝 기록을 입력해 POST /api/admin/runs로 저장하고 공개 화면에 바로 반영되게 한다. 결정: 강도는 버튼 3개 선택, 저장 후 같은 화면에 완료 안내와 기록 보기 및 계속 입력, 태그는 쉼표로 구분한 한 칸. 입력 규칙은 서버와 같은 lib/notion/admin/input.ts(순수 모듈)를 재사용한다. 폼이 열릴 때 clientKey(UUID)를 한 번 만들고 재시도는 같은 키로 보내며 저장 성공 후 새 키로 바꾼다. 헤더에 관리자 링크를 넣지 않는다(루트 레이아웃이 쿠키를 읽으면 공개 화면 전체가 동적으로 바뀜). 폼 패턴은 useForm + zodResolver(또는 사용자 resolver) + Controller + Field/FieldError, 새 패키지 설치 금지, components/ui 수정 금지. 노션 쓰기 검증은 사용자 확인 후 TEST- 행만 쓰고 끝나면 휴지통으로 보내 in_trash를 확인한다. .env* 값은 읽거나 출력하지 않는다. 기준 문서는 docs/ROADMAP.md Phase 3, docs/PRD.md, CLAUDE.md. 한국어 주석과 문서."
+    },
+    {
+      "id": "d8d251f8-623e-4180-bf86-bd11a1ff5b34",
+      "name": "V2-P3-2 기록 입력 화면 (/admin/runs/new)",
+      "description": "app/admin/(protected)/runs/new/page.tsx(서버 컴포넌트, requireAdmin, noindex)와 components/admin/run-form.tsx('use client')를 만든다. 폼 패턴은 useForm과 Controller와 Field/FieldError이며 resolver는 V2-P3-1의 validateRunForm을 쓴다. 필드: 제목, 날짜(type=date, 기본값 오늘 한국 시간), 거리(inputMode=decimal), 소요시간(텍스트 키보드, 형식 안내 mm:ss 또는 h:mm:ss, 초는 두 자리), 장소, 메모(Textarea), 강도(EASY, NORMAL, HARD 버튼 3개, role=group과 aria-pressed, 다시 누르면 해제), 태그(쉼표로 구분한 한 칸). 거리와 소요시간이 유효하면 예상 페이스를 aria-live로 보여 준다. 제출은 fetch로 POST /api/admin/runs, 제출 중 버튼 비활성과 저장 중 문구. 성공하면 같은 화면에 저장되었습니다와 기록 보기(/runs/id)와 계속 입력 버튼을 보여 주고, 계속 입력은 폼을 비우고 clientKey를 새로 만든다. 실패: 400은 필드별 오류 표시, 401은 입력값을 유지한 채 세션 만료 안내와 로그인 링크, 403과 413과 5xx와 네트워크 오류는 일반 문구와 다시 시도(같은 clientKey 재사용). 관리자 홈(app/admin/(protected)/page.tsx)에 기록 입력 버튼을 추가한다.",
+      "notes": "헤더에 관리자 링크를 넣지 않는다. 새 패키지와 새 shadcn 컴포넌트는 추가하지 않는다. 오류 문구와 응답에 입력값을 노출하지 않는다.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "e1622da5-3652-4040-9628-1930a17d0436"
+        }
+      ],
+      "createdAt": "2026-11-10T06:41:54.356Z",
+      "updatedAt": "2026-11-10T06:41:54.356Z",
+      "relatedFiles": [
+        {
+          "path": "app/admin/(protected)/runs/new/page.tsx",
+          "type": "CREATE",
+          "description": "입력 페이지"
+        },
+        {
+          "path": "components/admin/run-form.tsx",
+          "type": "CREATE",
+          "description": "입력 폼 클라이언트 컴포넌트"
+        },
+        {
+          "path": "app/admin/(protected)/page.tsx",
+          "type": "TO_MODIFY",
+          "description": "기록 입력 버튼 추가"
+        },
+        {
+          "path": "lib/notion/admin/run-form.ts",
+          "type": "DEPENDENCY",
+          "description": "폼 순수 로직"
+        },
+        {
+          "path": "components/admin/login-form.tsx",
+          "type": "REFERENCE",
+          "description": "기존 폼 패턴"
+        }
+      ],
+      "implementationGuide": "clientKey는 컴포넌트 마운트 시 crypto.randomUUID()로 한 번 만들어 ref 또는 state에 보관한다(렌더 출력에 쓰지 않으므로 하이드레이션 불일치 없음). 응답은 ApiSuccess와 ApiFailure 타입으로 좁힌다. 모바일 우선 레이아웃(max-w-xl, 16px 좌우 여백)과 라이트·다크 토큰만 사용하고 components/ui는 수정하지 않는다. 시각 구성은 ui-markup-developer 서브에이전트에 맡길 수 있다.",
+      "verificationCriteria": "npx tsc --noEmit, npm run lint, npm run build 통과, 공개 화면 렌더링 방식 불변(빌드 표), 클라이언트 번들에 서버 모듈과 키 없음. 화면 동작은 다음 태스크(브라우저 통합 확인)에서 확인.",
+      "analysisResult": "v2 Phase 3(기록 입력): 로그인한 관리자가 모바일 우선 폼(/admin/runs/new)으로 러닝 기록을 입력해 POST /api/admin/runs로 저장하고 공개 화면에 바로 반영되게 한다. 결정: 강도는 버튼 3개 선택, 저장 후 같은 화면에 완료 안내와 기록 보기 및 계속 입력, 태그는 쉼표로 구분한 한 칸. 입력 규칙은 서버와 같은 lib/notion/admin/input.ts(순수 모듈)를 재사용한다. 폼이 열릴 때 clientKey(UUID)를 한 번 만들고 재시도는 같은 키로 보내며 저장 성공 후 새 키로 바꾼다. 헤더에 관리자 링크를 넣지 않는다(루트 레이아웃이 쿠키를 읽으면 공개 화면 전체가 동적으로 바뀜). 폼 패턴은 useForm + zodResolver(또는 사용자 resolver) + Controller + Field/FieldError, 새 패키지 설치 금지, components/ui 수정 금지. 노션 쓰기 검증은 사용자 확인 후 TEST- 행만 쓰고 끝나면 휴지통으로 보내 in_trash를 확인한다. .env* 값은 읽거나 출력하지 않는다. 기준 문서는 docs/ROADMAP.md Phase 3, docs/PRD.md, CLAUDE.md. 한국어 주석과 문서."
     }
   ]
 }
