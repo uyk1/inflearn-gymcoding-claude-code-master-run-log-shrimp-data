@@ -1951,7 +1951,7 @@
       "status": "in_progress",
       "dependencies": [],
       "createdAt": "2026-11-10T06:41:54.356Z",
-      "updatedAt": "2026-11-10T06:43:21.736Z",
+      "updatedAt": "2026-11-10T06:46:17.974Z",
       "relatedFiles": [
         {
           "path": "lib/notion/admin/run-form.ts",
@@ -1981,7 +1981,8 @@
       ],
       "implementationGuide": "입력 규칙을 새로 만들지 말고 lib/notion/admin/input.ts의 parseRunInput과 lib/notion/duration.ts의 parseDurationToSeconds, calcPaceSecondsPerKm, formatPaceLabel을 재사용한다. 테스트는 lib/notion/admin/run-form.test.ts에 둔다.",
       "verificationCriteria": "npm test 통과: toRunPayload 결과가 유효 입력에서 parseRunInput을 통과(왕복), 거리 5.25와 공백 5와 쉼표 5,2와 빈 값, 태그 분리와 중복과 빈 항목, 빈 강도, 예상 페이스 계산(25:00 5km는 5:00/km, 거리 0이나 형식 오류는 null), details 오류 매핑. 변이 시험으로 테스트가 잘못된 구현을 감지함. tsc와 lint 통과.",
-      "analysisResult": "v2 Phase 3(기록 입력): 로그인한 관리자가 모바일 우선 폼(/admin/runs/new)으로 러닝 기록을 입력해 POST /api/admin/runs로 저장하고 공개 화면에 바로 반영되게 한다. 결정: 강도는 버튼 3개 선택, 저장 후 같은 화면에 완료 안내와 기록 보기 및 계속 입력, 태그는 쉼표로 구분한 한 칸. 입력 규칙은 서버와 같은 lib/notion/admin/input.ts(순수 모듈)를 재사용한다. 폼이 열릴 때 clientKey(UUID)를 한 번 만들고 재시도는 같은 키로 보내며 저장 성공 후 새 키로 바꾼다. 헤더에 관리자 링크를 넣지 않는다(루트 레이아웃이 쿠키를 읽으면 공개 화면 전체가 동적으로 바뀜). 폼 패턴은 useForm + zodResolver(또는 사용자 resolver) + Controller + Field/FieldError, 새 패키지 설치 금지, components/ui 수정 금지. 노션 쓰기 검증은 사용자 확인 후 TEST- 행만 쓰고 끝나면 휴지통으로 보내 in_trash를 확인한다. .env* 값은 읽거나 출력하지 않는다. 기준 문서는 docs/ROADMAP.md Phase 3, docs/PRD.md, CLAUDE.md. 한국어 주석과 문서."
+      "analysisResult": "v2 Phase 3(기록 입력): 로그인한 관리자가 모바일 우선 폼(/admin/runs/new)으로 러닝 기록을 입력해 POST /api/admin/runs로 저장하고 공개 화면에 바로 반영되게 한다. 결정: 강도는 버튼 3개 선택, 저장 후 같은 화면에 완료 안내와 기록 보기 및 계속 입력, 태그는 쉼표로 구분한 한 칸. 입력 규칙은 서버와 같은 lib/notion/admin/input.ts(순수 모듈)를 재사용한다. 폼이 열릴 때 clientKey(UUID)를 한 번 만들고 재시도는 같은 키로 보내며 저장 성공 후 새 키로 바꾼다. 헤더에 관리자 링크를 넣지 않는다(루트 레이아웃이 쿠키를 읽으면 공개 화면 전체가 동적으로 바뀜). 폼 패턴은 useForm + zodResolver(또는 사용자 resolver) + Controller + Field/FieldError, 새 패키지 설치 금지, components/ui 수정 금지. 노션 쓰기 검증은 사용자 확인 후 TEST- 행만 쓰고 끝나면 휴지통으로 보내 in_trash를 확인한다. .env* 값은 읽거나 출력하지 않는다. 기준 문서는 docs/ROADMAP.md Phase 3, docs/PRD.md, CLAUDE.md. 한국어 주석과 문서.",
+      "summary": "V2-P3-1 완료(커밋 전, 브랜치 feat/run-form-logic). 추가: lib/notion/admin/run-form.ts(서버 전용 모듈과 별칭 import 없음, 타입 import와 확장자 있는 상대 경로만 사용, 의존 그래프에 server-only나 node: 나 process.env 흔적 없음). 내용: RunFormValues(title, date, distance 문자열, duration, place, memo, intensity는 EASY NORMAL HARD 또는 빈 문자열, tags는 쉼표로 구분한 문자열)와 RunFormErrors, emptyRunFormValues(today), parseDistance(마침표 소수점만 인정하는 정규식, 쉼표 소수점과 1e3과 0x10과 빈 값과 음수와 전각 숫자는 NaN), parseTags(쉼표와 전각 쉼표로 분리, trim, 빈 항목 제거, 중복은 서버 스키마가 합침), toRunPayload(거리 숫자 변환, 빈 강도는 null), validateRunForm(서버와 같은 parseRunInput 재사용, 거리는 distance 칸으로 매핑, clientKey 등 알 수 없는 항목은 _form), mapApiFailureToFieldErrors(ApiFailure의 details를 폼 칸 오류로, 없으면 메시지를 _form으로), previewPace(소요시간 유효 시 calcPaceSecondsPerKm과 formatPaceLabel 재사용, 거리 무효나 0 이하는 null). 입력 규칙을 새로 만들지 않고 읽기와 같은 함수를 재사용. 테스트 22건 추가로 총 108건 통과: 거리 변환 표, 태그 분리, 페이로드 형태, 왕복 10종(폼 검증을 통과한 값이 JSON 직렬화 후 서버 parseRunInput에서도 같은 결과), 칸별 오류, 오류 문구에 입력값 비포함, 예상 페이스 5:00과 5:34와 6:30, details 매핑. 변이 시험 8종 중 7종을 테스트가 감지(거리 느슨한 변환, distanceKm 매핑 제거, 전각 쉼표 미지원, 빈 강도 비null 전송, details 없을 때 빈 오류, 알 수 없는 키 버림, 거리 무시하고 1km로 계산), 변이 5(예상 페이스의 isFinite 검사 제거)는 calcPaceSecondsPerKm이 이미 유한하지 않은 거리와 0 이하를 null로 처리해 동작이 같은 변이라 살아남았고 중복 검사를 제거해 코드를 단순화한 뒤 거리 무시 변이로 대체 시험해 감지 확인. 원복 후 원본과 동일. tsc eslint npm run lint npm run build 통과, 공개 화면 렌더링 방식과 미들웨어 불변, 새 패키지 없음. 한계: 아직 어떤 컴포넌트도 import하지 않아 클라이언트 번들 포함 여부는 V2-P3-2의 빌드와 V2-P3-4의 번들 검색에서 확인, 예상 페이스의 비현실적 값 경고(통계의 PLAUSIBLE_PACE_RANGE)는 넣지 않았고 필요하면 화면 단계에서 검토, 화면 동작은 V2-P3-2와 V2-P3-3에서 확인."
     },
     {
       "id": "d8d251f8-623e-4180-bf86-bd11a1ff5b34",
