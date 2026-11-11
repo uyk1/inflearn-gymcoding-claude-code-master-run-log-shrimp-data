@@ -2606,7 +2606,7 @@
         }
       ],
       "createdAt": "2026-11-11T02:05:29.751Z",
-      "updatedAt": "2026-11-11T05:23:53.366Z",
+      "updatedAt": "2026-11-11T05:54:21.630Z",
       "relatedFiles": [
         {
           "path": "docs/ROADMAP.md",
@@ -2616,7 +2616,8 @@
       ],
       "implementationGuide": "비로그인 점검은 curl로 하되 요청 본문에 실제 입력값을 넣지 않는다. 번들 검색은 빌드 해시가 바뀌므로 최신 HTML에서 청크 URL을 추출해 모두 내려받는다. 사용자 체크리스트는 단계별 기대 결과를 한 줄씩 적는다.",
       "verificationCriteria": "비로그인 거부·헤더·번들 검색 결과를 확인됨으로, 로그인 후 흐름과 아이폰 세션 유지는 사용자 확인 결과에 따라 확인됨 또는 미확인으로 정리해 보고.",
-      "analysisResult": "v2 Phase 6(마무리·배포): 운영(https://pjt-run-log.vercel.app, main 자동 배포)에서 관리자 기능을 안전하게 쓰게 한다. Vercel 환경 변수는 사용자가 콘솔에서 직접 등록하고 값은 채팅·저장소에 쓰지 않는다. 로그인이 필요한 운영 확인은 사용자가 체크리스트로 직접 수행(비밀번호는 Claude에게 주지 않음, TEST- 제목 규칙). 노션 쓰기는 TEST- 행만. 갤럭시 실기기는 계속 미확인. 문서(ROADMAP/PRD/CLAUDE.md/README) 수정은 before→after 승인 후."
+      "analysisResult": "v2 Phase 6(마무리·배포): 운영(https://pjt-run-log.vercel.app, main 자동 배포)에서 관리자 기능을 안전하게 쓰게 한다. Vercel 환경 변수는 사용자가 콘솔에서 직접 등록하고 값은 채팅·저장소에 쓰지 않는다. 로그인이 필요한 운영 확인은 사용자가 체크리스트로 직접 수행(비밀번호는 Claude에게 주지 않음, TEST- 제목 규칙). 노션 쓰기는 TEST- 행만. 갤럭시 실기기는 계속 미확인. 문서(ROADMAP/PRD/CLAUDE.md/README) 수정은 before→after 승인 후.",
+      "summary": "V2-P6-4 완료(확인됨과 미확인을 구분해 보고). Claude가 운영(https://pjt-run-log.vercel.app)에서 확인(읽기 전용, 운영 노션 쓰기 없음): 공개 /·/runs·/stats 200과 set-cookie 없음, 배포된 푸터에 관리자 링크 1개씩 반영, /admin·/admin/runs·/admin/runs/new·/admin/runs/[id]/edit 307 로그인 이동, /admin/login 200, POST·PATCH·DELETE 쓰기 API는 Origin 없음 403·다른 Origin 403·쿠키 없음 401(여러 번 재확인), 보안 헤더(HSTS max-age=63072000 includeSubDomains preload, X-Frame-Options DENY, nosniff, Referrer-Policy, Permissions-Policy), 배포 번들 18개(약 1.5MB) 키·비밀값·서버 모듈 패턴 0건. 사용자 보고(구체 단계는 미확인): 환경 변수 등록과 재배포 후 '다른 기능은 다 된다'(로그인·입력·수정·삭제 흐름을 말한 것으로 이해, 단계별 결과는 받지 못함), 푸터 관리자 링크 배포 후 '됐다'. 미확인: 아이폰 홈 화면 앱(standalone)에서 앱을 닫았다 열어도 로그인 유지되는지, 운영 삭제의 노션 휴지통 반영 세부, Vercel Logs의 노션 429·입력값 노출 여부, Preview 배포 URL에서의 거부, 로그인 후 화면 번들의 운영 검색(로컬 빌드 0건으로 갈음), 갤럭시 실기기. 운영 환경 변수의 값은 Claude가 보지 않았고 로그인 성공으로만 적용을 간접 확인."
     },
     {
       "id": "5d903e1d-6456-43cf-a966-5b8f1bc66382",
