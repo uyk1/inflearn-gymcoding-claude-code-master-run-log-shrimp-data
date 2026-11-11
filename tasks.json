@@ -2508,7 +2508,7 @@
       "status": "in_progress",
       "dependencies": [],
       "createdAt": "2026-11-11T02:05:01.486Z",
-      "updatedAt": "2026-11-11T04:55:44.330Z",
+      "updatedAt": "2026-11-11T05:00:15.528Z",
       "relatedFiles": [
         {
           "path": "app/api/admin/runs/[id]/route.ts",
@@ -2533,7 +2533,8 @@
       ],
       "implementationGuide": "기존 PATCH 라우트의 parseUpdateBody와 service.updateRun의 충돌 확인 흐름을 참고해 대칭으로 구현한다. DELETE는 Origin→세션→id→본문 읽기→version 확인→서비스 순서. 삭제 확인 UI의 version은 서버가 준 initialVersion으로 시작하고 EditRunForm의 저장 성공 응답 version으로 갱신되어야 오탐 409가 없다. CRLF 파일 편집 결과를 확인하고 변이 시험으로 새 테스트의 유효성을 확인한다.",
       "verificationCriteria": "npm test, tsc, lint, build 통과, 번들 검색 0건, 단위 테스트로 일치·불일치·누락 동작 확인, 변이 시험으로 테스트 유효성 확인, 세션 만료가 3일로 바뀌고 관련 테스트가 통과.",
-      "analysisResult": "v2 Phase 6(마무리·배포): 운영(https://pjt-run-log.vercel.app, main 자동 배포라 v2 관리자 코드는 이미 배포됨, HSTS는 Vercel 기본 적용 확인)에서 관리자 기능을 안전하게 쓰게 한다. 결정(2026-11-11 사용자): 보안 하드닝은 서버 DELETE의 내용 버전 확인과 세션 3일로 한정(쓰기 API 횟수 제한과 CSP는 제외, 인스턴스별 제한의 한계는 문서화), 로그인이 필요한 운영 확인은 사용자가 체크리스트로 직접 수행(비밀번호는 Claude에게 주지 않음). Vercel 환경 변수는 사용자가 콘솔에서 직접 등록(값은 채팅·저장소에 쓰지 않음): ADMIN_PASSWORD, ADMIN_SESSION_SECRET(32자 이상 무작위), NOTION_ADMIN_API_KEY(Production만, Preview 제외), 기존 NOTION_API_KEY·NOTION_DATA_SOURCE_ID 확인, RUN_RECORDS_REVALIDATE_SECONDS는 운영에 설정하지 않음, 등록 후 재배포 필요. 노션 쓰기는 TEST- 행만, 환경 변수를 비우는 시험은 node spawn으로, .env* 값 읽기 금지, 새 패키지 금지, 한국어 주석·문서, ROADMAP/PRD/CLAUDE.md/README 수정은 before→after 승인 후. 갤럭시 실기기는 계속 미확인. 운영 쓰기가 필요한 확인은 사용자가 직접(TEST- 제목 규칙)."
+      "analysisResult": "v2 Phase 6(마무리·배포): 운영(https://pjt-run-log.vercel.app, main 자동 배포라 v2 관리자 코드는 이미 배포됨, HSTS는 Vercel 기본 적용 확인)에서 관리자 기능을 안전하게 쓰게 한다. 결정(2026-11-11 사용자): 보안 하드닝은 서버 DELETE의 내용 버전 확인과 세션 3일로 한정(쓰기 API 횟수 제한과 CSP는 제외, 인스턴스별 제한의 한계는 문서화), 로그인이 필요한 운영 확인은 사용자가 체크리스트로 직접 수행(비밀번호는 Claude에게 주지 않음). Vercel 환경 변수는 사용자가 콘솔에서 직접 등록(값은 채팅·저장소에 쓰지 않음): ADMIN_PASSWORD, ADMIN_SESSION_SECRET(32자 이상 무작위), NOTION_ADMIN_API_KEY(Production만, Preview 제외), 기존 NOTION_API_KEY·NOTION_DATA_SOURCE_ID 확인, RUN_RECORDS_REVALIDATE_SECONDS는 운영에 설정하지 않음, 등록 후 재배포 필요. 노션 쓰기는 TEST- 행만, 환경 변수를 비우는 시험은 node spawn으로, .env* 값 읽기 금지, 새 패키지 금지, 한국어 주석·문서, ROADMAP/PRD/CLAUDE.md/README 수정은 before→after 승인 후. 갤럭시 실기기는 계속 미확인. 운영 쓰기가 필요한 확인은 사용자가 직접(TEST- 제목 규칙).",
+      "summary": "V2-P6-1 완료. (1) service.trashRun(pageId, baseVersion): 소속·휴지통 확인(assertRunPage) 뒤 computePageVersion(현재 페이지)이 baseVersion과 다르면 409 CONFLICT(삭제 안 함, pages.update 0회), 버전이 없거나 문자열이 아니면 노션 호출 없이 version 오류. DELETE /api/admin/runs/[id]는 Origin→세션→id→readJsonBody→parseVersionBody({version}만 허용, 다른 항목·잘못된 형식 거부)→서비스 순서이고 DELETE 본문 사용을 주석에 명시, 성공 시 revalidateTag 유지. parseVersionBody 추가(수정과 같은 version 검증 헬퍼 공유). (2) DeleteRun이 version을 JSON 본문으로 보내고, EditRunForm이 삭제 영역을 함께 그려 같은 version 상태를 공유(저장 성공 시 새 version과 저장한 제목으로 갱신되어 오탐 409 없음, edit page에서 DeleteRun 제거). 409면 '노션에서 먼저 바뀐 내용이 있어 삭제하지 않았습니다' 안내와 최신 내용 불러오기 버튼, 충돌 중에는 삭제 버튼 비활성, 취소 시 상태 초기화. (3) SESSION_MAX_AGE_SECONDS 7일→3일(259200초, 쿠키 maxAge와 토큰 만료가 같은 상수를 사용함을 확인, 주석에 이유와 아이폰 3일마다 재로그인 명시; 코드 안의 다른 7일 문구 없음, 문서의 7일은 V2-P6-5에서 정리). 테스트 4건 추가(총 200건): trashRun 버전 불일치 409·pages.update 없음, 버전 없음·잘못된 타입, 출처·외부ID만 바뀐 경우 삭제 가능, parseVersionBody. 변이 시험 4건(버전 비교 제거, 버전 누락 검사 제거, 추가 항목 허용, 길이 제한 제거) 모두 테스트가 잡음. tsc·lint·build 통과, 번들 검색 0건, 운영 서버 스모크(노션 키 비움, 노션 호출 없음) 9건 PASS: Origin 없음 403, 쿠키 없음 401, 잘못된 id 400, 본문 없음·잘못된 JSON·version 없음·version 외 항목 400, 25KB 413, 서비스 도달 시 일반 설정 오류 문구. 실제 노션과 브라우저에서의 삭제 흐름과 로그인 쿠키 만료 3일 실측은 V2-P6-2에서 TEST-P6 행으로 확인 예정."
     },
     {
       "id": "4d1aeb28-1215-492c-af1d-dbf160cf7ee5",
