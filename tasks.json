@@ -2474,14 +2474,14 @@
       "name": "V2-P5-4 제외 행 고치기 코드와 보안 점검",
       "description": "Phase 5 변경을 code-reviewer와 security-checker 서브에이전트로 읽기 전용 점검한다. 대상: lib/notion/mapper.ts 사유 계산 추출, lib/notion/admin/service.ts getRunForEdit 변경, excluded-fields.ts, edit-version.ts 서명 보강, runs/page.tsx와 components/admin/excluded-runs.tsx, 수정 화면의 사유 안내와 강조, 관리자 홈 변경. 점검 항목: 입력 원문이 공개 DTO, 공유 캐시, 공개 HTML, 제외 목록에 새지 않는지, 단건 조회의 id 형식과 소속(다른 DB, 휴지통) 확인, 정상 기록 버전 불변과 서명 보강의 오탐 미탐, 제외 판정이 읽기와 어긋나지 않는지, 접근성(사유 안내, 오류 강조 포커스, 이중 alert), 공개 화면이 쿠키를 읽지 않아 렌더링 방식이 불변인지, 클라이언트 번들 경계(.next/static 검색), 오류 문구와 로그의 정보 노출, XSS, 불필요한 use client. 발견 사항은 임의로 고치지 말고 심각도와 근거를 보고해 사용자와 수정 범위를 정한다. 문서 갱신은 /docs:update-roadmap 5로 before→after를 보여 주고 승인 후 별도로 한다.",
       "notes": "서버를 남기지 않는다. 노션에 쓰지 않는다.",
-      "status": "in_progress",
+      "status": "completed",
       "dependencies": [
         {
           "taskId": "7d4c4734-44ea-4cd5-b3f2-a144632fa150"
         }
       ],
       "createdAt": "2026-11-11T00:17:01.701Z",
-      "updatedAt": "2026-11-11T01:50:37.462Z",
+      "updatedAt": "2026-11-11T01:50:40.861Z",
       "relatedFiles": [
         {
           "path": "lib/notion/admin/service.ts",
@@ -2497,7 +2497,8 @@
       "implementationGuide": "1) git diff로 변경 파일 확정. 2) code-reviewer와 security-checker를 병렬 호출(읽기 전용, 노션 쓰기와 서버 기동 금지). 3) npm test, tsc, lint, build와 .next/static 번들 검색(키 이름, 서버 모듈, node:crypto)을 직접 실행. 4) 결과를 확인됨, 구현만 됨, 미확인으로 정리해 보고.",
       "verificationCriteria": "치명과 높음 보안 이슈가 없거나 발견 사항이 보고됨. npm test, tsc, lint, build 통과. 번들 검색 0건.",
       "analysisResult": "v2 Phase 5(제외 행 고치기): 입력 오타 등으로 목록에서 제외된 노션 행을 관리자가 수정 화면에서 고친다. 진입점은 관리자 목록 /admin/runs의 제외된 기록 섹션만. 노션 쓰기는 TEST-P5 행으로만(확인 없이 진행하되 제목 접두사 가드, 전후 행 수 기준 6 비교, 끝나면 휴지통과 in_trash 확인). 환경 변수를 비우는 시험은 node spawn으로. 새 패키지 금지, .env* 값 읽기 금지, 한국어 주석과 문서.",
-      "summary": "V2-P5-4 점검 완료(읽기 전용, 코드·노션 변경 없음). tsc·lint·npm test 196건·build 통과, 공개 화면 렌더링 방식 불변(빌드 표), .next/static 번들 검색 0건. security-checker: 치명·높음·중간 없음, 낮음 3(노션 날짜 종료일이 버전·손실 안내에 없음, next 중첩 postcss high, 로컬 빌드가 테스트용 캐시 주기(10초)로 만들어졌을 수 있어 배포는 새 빌드로). 원문 유출 경로 없음, 단건 조회 id·소속·휴지통 거부와 존재 여부 오라클 없음, 버전 서명 해시 입력 모호성 없음·정상 버전 불변, 공개 화면 쿠키 미사용, 번들 경계, XSS, 관리자 페이지 requireAdmin, Phase 4 낮음 항목 악화 없음 확인. code-reviewer: 높음 없음, 중간 2(사유 칸 오류가 값을 고쳐도 저장 전까지 사라지지 않음(trigger가 제출 전에 만든 오류는 onSubmit 모드에서 재검증되지 않음), 관리자 홈이 loadRunRecords의 CONFIG_MISSING를 삼키지 않아 설정 오류 시 홈 전체가 오류 화면), 낮음 3(mapper에 제외 판정 두 벌, 제외 안내·오류 alert 중복 낭독 가능성과 제목 없는 행 링크 이름 중복, 재저장 시에도 '이제 목록에 표시됩니다' 문구). 수정 범위는 사용자와 정하기로 하여 코드는 고치지 않음."
+      "summary": "V2-P5-4 점검 완료(읽기 전용, 코드·노션 변경 없음). tsc·lint·npm test 196건·build 통과, 공개 화면 렌더링 방식 불변(빌드 표), .next/static 번들 검색 0건. security-checker: 치명·높음·중간 없음, 낮음 3(노션 날짜 종료일이 버전·손실 안내에 없음, next 중첩 postcss high, 로컬 빌드가 테스트용 캐시 주기(10초)로 만들어졌을 수 있어 배포는 새 빌드로). 원문 유출 경로 없음, 단건 조회 id·소속·휴지통 거부와 존재 여부 오라클 없음, 버전 서명 해시 입력 모호성 없음·정상 버전 불변, 공개 화면 쿠키 미사용, 번들 경계, XSS, 관리자 페이지 requireAdmin, Phase 4 낮음 항목 악화 없음 확인. code-reviewer: 높음 없음, 중간 2(사유 칸 오류가 값을 고쳐도 저장 전까지 사라지지 않음(trigger가 제출 전에 만든 오류는 onSubmit 모드에서 재검증되지 않음), 관리자 홈이 loadRunRecords의 CONFIG_MISSING를 삼키지 않아 설정 오류 시 홈 전체가 오류 화면), 낮음 3(mapper에 제외 판정 두 벌, 제외 안내·오류 alert 중복 낭독 가능성과 제목 없는 행 링크 이름 중복, 재저장 시에도 '이제 목록에 표시됩니다' 문구). 수정 범위는 사용자와 정하기로 하여 코드는 고치지 않음.",
+      "completedAt": "2026-11-11T01:50:40.846Z"
     }
   ]
 }
