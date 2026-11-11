@@ -2558,6 +2558,98 @@
       "implementationGuide": "서버는 spawn 래퍼로 백그라운드 기동하고 포트까지 정리한다. 보조 스크립트는 스크래치패드에 두고 실행할 때만 프로젝트 루트로 복사했다가 지운다. 빌드가 만든 조회 캐시(300초)가 새 노션 행을 가리므로 행을 만든 뒤 재빌드한다. .next 재귀 삭제는 훅이 막으니 우회하지 않는다.",
       "verificationCriteria": "운영 조건 빌드의 revalidate 값 확인, Preview 조건에서 쓰기 거부와 공개 화면 정상, 시크릿 검색 0건, npm audit 판단 보고, DELETE 버전 확인의 실제 동작과 행 수 6 복귀.",
       "analysisResult": "v2 Phase 6(마무리·배포): 운영(https://pjt-run-log.vercel.app, main 자동 배포라 v2 관리자 코드는 이미 배포됨, HSTS는 Vercel 기본 적용 확인)에서 관리자 기능을 안전하게 쓰게 한다. 결정(2026-11-11 사용자): 보안 하드닝은 서버 DELETE의 내용 버전 확인과 세션 3일로 한정(쓰기 API 횟수 제한과 CSP는 제외, 인스턴스별 제한의 한계는 문서화), 로그인이 필요한 운영 확인은 사용자가 체크리스트로 직접 수행(비밀번호는 Claude에게 주지 않음). Vercel 환경 변수는 사용자가 콘솔에서 직접 등록(값은 채팅·저장소에 쓰지 않음): ADMIN_PASSWORD, ADMIN_SESSION_SECRET(32자 이상 무작위), NOTION_ADMIN_API_KEY(Production만, Preview 제외), 기존 NOTION_API_KEY·NOTION_DATA_SOURCE_ID 확인, RUN_RECORDS_REVALIDATE_SECONDS는 운영에 설정하지 않음, 등록 후 재배포 필요. 노션 쓰기는 TEST- 행만, 환경 변수를 비우는 시험은 node spawn으로, .env* 값 읽기 금지, 새 패키지 금지, 한국어 주석·문서, ROADMAP/PRD/CLAUDE.md/README 수정은 before→after 승인 후. 갤럭시 실기기는 계속 미확인. 운영 쓰기가 필요한 확인은 사용자가 직접(TEST- 제목 규칙)."
+    },
+    {
+      "id": "9b900605-5bea-434a-b300-b3548865c0c2",
+      "name": "V2-P6-3 Vercel 환경 변수 등록 안내와 배포 (사용자 작업)",
+      "description": "사용자가 Vercel 콘솔에서 직접 하는 작업을 체크리스트로 안내하고, 완료를 확인한다. Claude는 값을 보지도 쓰지도 않는다. (1) V2-P6-2의 점검 결과를 반영한 최종 체크리스트를 사용자에게 제시: Production 환경 변수로 ADMIN_PASSWORD(길고 추측하기 어려운 값, 12자 이상 권장), ADMIN_SESSION_SECRET(32자 이상 무작위, 생성 명령 예: node -e \"console.log(require('crypto').randomBytes(32).toString('hex'))\" 를 사용자가 자기 터미널에서 실행해 콘솔에 붙여 넣기), NOTION_ADMIN_API_KEY(Production만, Preview·Development 체크 해제), 기존 NOTION_API_KEY와 NOTION_DATA_SOURCE_ID 확인(DB ID가 아니라 data source ID), RUN_RECORDS_REVALIDATE_SECONDS는 등록하지 않음. 값에 $가 있으면 .env.local과 달리 Vercel 콘솔은 확장하지 않는지 공식 문서(context7 또는 WebSearch)로 확인해 안내. (2) 환경 변수는 새 배포부터 적용되므로 등록 뒤 재배포(Redeploy)가 필요함을 안내. 노션 관리자 통합에 러닝 기록 DB가 연결(공유)돼 있고 Read·Insert·Update 권한인지 확인하도록 안내. (3) 사용자가 등록·재배포를 마쳤다고 알려 주면 비로그인으로 확인 가능한 것을 즉시 점검: 배포 상태, /admin 307, 로그인 화면 200. 값 노출은 하지 않는다.",
+      "notes": "Claude는 키·비밀번호 값을 요청하지도 출력하지도 않는다. 사용자가 값을 채팅에 붙여 넣으면 사용하지 말고 폐기하고 재발급을 권한다.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "4d1aeb28-1215-492c-af1d-dbf160cf7ee5"
+        }
+      ],
+      "createdAt": "2026-11-11T02:05:29.751Z",
+      "updatedAt": "2026-11-11T02:05:29.751Z",
+      "relatedFiles": [
+        {
+          "path": ".env.example",
+          "type": "REFERENCE",
+          "description": "변수 이름 목록"
+        },
+        {
+          "path": "README.md",
+          "type": "REFERENCE",
+          "description": "배포 절"
+        }
+      ],
+      "implementationGuide": "사용자 응답을 기다리는 태스크다. 안내는 한국어로 번호를 매긴 짧은 체크리스트로 제공한다. Vercel UI 경로는 변경될 수 있으므로 확실하지 않은 메뉴 이름은 단정하지 말고 공식 문서로 확인한다.",
+      "verificationCriteria": "사용자가 환경 변수 등록과 재배포를 마쳤다고 확인했고, 비로그인 확인(배포 응답, /admin 307)이 통과.",
+      "analysisResult": "v2 Phase 6(마무리·배포): 운영(https://pjt-run-log.vercel.app, main 자동 배포)에서 관리자 기능을 안전하게 쓰게 한다. Vercel 환경 변수는 사용자가 콘솔에서 직접 등록하고 값은 채팅·저장소에 쓰지 않는다. 로그인이 필요한 운영 확인은 사용자가 체크리스트로 직접 수행(비밀번호는 Claude에게 주지 않음, TEST- 제목 규칙). 노션 쓰기는 TEST- 행만. 갤럭시 실기기는 계속 미확인. 문서(ROADMAP/PRD/CLAUDE.md/README) 수정은 before→after 승인 후."
+    },
+    {
+      "id": "105ef469-ba81-4b48-a2da-e873080b5b2c",
+      "name": "V2-P6-4 운영 환경 확인 (비로그인 점검과 사용자 체크리스트)",
+      "description": "(1) Claude가 하는 비로그인 점검(읽기 전용 요청만, 운영 노션에 쓰지 않음): /admin과 /admin/runs/new·/admin/runs/[id]/edit가 307로 로그인 이동, /admin/login 200, POST·PATCH·DELETE /api/admin/runs를 Origin 없음(403), 다른 Origin(403), 쿠키 없음(401)으로 호출해 거부 확인(성공 가능한 요청은 보내지 않음), 응답 보안 헤더(HSTS, X-Frame-Options, nosniff, Referrer-Policy, Permissions-Policy)와 /admin 계열 Cache-Control, 공개 화면이 set-cookie 없이 정적·ISR로 동작. (2) 배포된 정적 번들(/_next/static JS·CSS)을 내려받아 키·비밀값 패턴(secret_, ntn_, 환경 변수 이름, node:crypto 등)이 0건인지 검색. (3) Preview 배포 확인: 가능하면 PR 미리보기 URL(없으면 사용자에게 Vercel 대시보드에서 Preview 배포 URL을 알려 달라고 요청)에서 관리자 쓰기가 설정 오류로 거부되는지 비로그인·로그인 없이 확인 가능한 범위(로그인 자체가 실패하는지)를 확인. (4) 사용자 체크리스트 제시(사용자가 직접 수행하고 결과를 알려 줌): 운영 주소에서 로그인 → 기록 입력(제목은 TEST-P6로 시작) → 목록에서 수정 → 공개 화면 반영 확인 → 삭제(확인 단계) → 노션 휴지통 확인 → 로그아웃. 아이폰: 홈 화면 앱(standalone)에서 로그인하고 앱을 닫았다 다시 열어 세션이 유지되는지, 3일 만료 안내. (5) 사용자가 알려 준 결과를 기록하고 운영 로그(Vercel 대시보드 Logs)에서 노션 호출 제한(429)이나 입력값 노출이 없는지 사용자에게 확인 요청 또는 스크린샷 요청.",
+      "notes": "운영 노션 쓰기는 사용자가 TEST-P6 행으로만 한다. Claude는 운영 쓰기 요청을 보내지 않는다.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "9b900605-5bea-434a-b300-b3548865c0c2"
+        }
+      ],
+      "createdAt": "2026-11-11T02:05:29.751Z",
+      "updatedAt": "2026-11-11T02:05:29.751Z",
+      "relatedFiles": [
+        {
+          "path": "docs/ROADMAP.md",
+          "type": "REFERENCE",
+          "description": "Phase 6 완료 기준"
+        }
+      ],
+      "implementationGuide": "비로그인 점검은 curl로 하되 요청 본문에 실제 입력값을 넣지 않는다. 번들 검색은 빌드 해시가 바뀌므로 최신 HTML에서 청크 URL을 추출해 모두 내려받는다. 사용자 체크리스트는 단계별 기대 결과를 한 줄씩 적는다.",
+      "verificationCriteria": "비로그인 거부·헤더·번들 검색 결과를 확인됨으로, 로그인 후 흐름과 아이폰 세션 유지는 사용자 확인 결과에 따라 확인됨 또는 미확인으로 정리해 보고.",
+      "analysisResult": "v2 Phase 6(마무리·배포): 운영(https://pjt-run-log.vercel.app, main 자동 배포)에서 관리자 기능을 안전하게 쓰게 한다. Vercel 환경 변수는 사용자가 콘솔에서 직접 등록하고 값은 채팅·저장소에 쓰지 않는다. 로그인이 필요한 운영 확인은 사용자가 체크리스트로 직접 수행(비밀번호는 Claude에게 주지 않음, TEST- 제목 규칙). 노션 쓰기는 TEST- 행만. 갤럭시 실기기는 계속 미확인. 문서(ROADMAP/PRD/CLAUDE.md/README) 수정은 before→after 승인 후."
+    },
+    {
+      "id": "5d903e1d-6456-43cf-a966-5b8f1bc66382",
+      "name": "V2-P6-5 문서 최종 정리와 ROADMAP Phase 6 갱신",
+      "description": "README(배포 절: 관리자 환경 변수, Preview에 쓰기 키 미등록, 세션 3일과 아이폰 재로그인, 로그인·쓰기 제한의 인스턴스별 한계, 운영 주의), CLAUDE.md(세션 3일, DELETE 버전 확인, 환경 변수 요약 중 달라진 부분), PRD(필요한 경우 8장 비기능 요구사항과 9장 리스크 표에 최종 대응과 남은 한계), ROADMAP Phase 6(확인된 항목만 ✅와 근거, 미확인은 명시: 갤럭시, 사용자가 확인하지 못한 항목)를 현재 구현과 운영 확인 결과에 맞게 정리한다. /docs:update-roadmap 6 절차로 변경안(before→after)을 보여 주고 AskUserQuestion(모두 적용 권장·일부만·적용 안 함)으로 승인받은 뒤에만 수정한다. 남은 한계 목록을 정리해 기록: 쓰기 API·로그인 제한이 인스턴스별, CSP 없음, 세션 서버 폐기 불가, next 중첩 postcss high(판단 결과), 노션 날짜 종료일 손실, 읽기 실패가 쓰기 실패 코드로 보고, 응답 유실 뒤 자기 충돌. 이후 문서 PR과 Shrimp 서브모듈 포인터 PR을 올리고 머지(방침: 검증 통과 시 진행), 메모리의 진행 현황을 갱신한다. v2 완료 요약(범위, 확인됨/미확인, 알려진 한계, 후속 후보)을 사용자에게 보고한다.",
+      "notes": "승인 전에는 ROADMAP·PRD·CLAUDE.md·README를 수정하지 않는다.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "105ef469-ba81-4b48-a2da-e873080b5b2c"
+        }
+      ],
+      "createdAt": "2026-11-11T02:05:29.751Z",
+      "updatedAt": "2026-11-11T02:05:29.751Z",
+      "relatedFiles": [
+        {
+          "path": "README.md",
+          "type": "TO_MODIFY",
+          "description": "배포 절"
+        },
+        {
+          "path": "docs/ROADMAP.md",
+          "type": "TO_MODIFY",
+          "description": "Phase 6 상태"
+        },
+        {
+          "path": "CLAUDE.md",
+          "type": "TO_MODIFY",
+          "description": "관리자 절"
+        },
+        {
+          "path": "docs/PRD.md",
+          "type": "TO_MODIFY",
+          "description": "리스크 표"
+        }
+      ],
+      "implementationGuide": "문서 수정 전 git grep으로 7일·세션 관련 문구와 배포 절의 현재 문장을 모두 찾아 빠짐없이 변경안에 넣는다. 확인하지 않은 항목에는 ✅를 쓰지 않는다. 날짜는 오늘 날짜를 쓴다.",
+      "verificationCriteria": "승인된 변경안이 문서에 반영되고, ROADMAP Phase 6와 요약 표의 상태가 일치, 문서의 환경 변수·세션 값이 구현과 일치, 문서 PR과 포인터 PR 머지.",
+      "analysisResult": "v2 Phase 6(마무리·배포): 운영(https://pjt-run-log.vercel.app, main 자동 배포)에서 관리자 기능을 안전하게 쓰게 한다. Vercel 환경 변수는 사용자가 콘솔에서 직접 등록하고 값은 채팅·저장소에 쓰지 않는다. 로그인이 필요한 운영 확인은 사용자가 체크리스트로 직접 수행(비밀번호는 Claude에게 주지 않음, TEST- 제목 규칙). 노션 쓰기는 TEST- 행만. 갤럭시 실기기는 계속 미확인. 문서(ROADMAP/PRD/CLAUDE.md/README) 수정은 before→after 승인 후."
     }
   ]
 }
