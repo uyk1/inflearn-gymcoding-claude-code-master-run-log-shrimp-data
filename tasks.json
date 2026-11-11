@@ -2402,14 +2402,14 @@
       "name": "V2-P5-2 관리자 목록의 제외 섹션과 수정 화면 강조",
       "description": "(1) app/admin/(protected)/runs/page.tsx 상단에 제외된 기록 N건 섹션: loadRunRecords()의 excluded(공개 DTO, 제목과 사유만, 노션 호출 추가 없음)를 카드로 나열하고 제목(없으면 제목 없음), 사유, 고치기 링크(/admin/runs/[id]/edit)를 둔다. 제외가 없으면 그리지 않는다. 새 서버 컴포넌트 components/admin/excluded-runs.tsx를 만들고 공개용 excluded-notice.tsx는 수정하지 않는다. (2) 수정 화면(edit page, components/admin/edit-run-form.tsx): excludedReasons가 있으면 폼 위에 안내(이 기록은 사유 때문에 목록에서 제외돼 있습니다, 고쳐서 저장하면 목록에 나타납니다)를 넣고(alert 중첩 금지), 사유에 해당하는 입력칸은 열자마자 서버와 같은 검증으로 오류 표시한다. initialValues가 바뀌는 최신 내용 불러오기에서도 일관되게 동작해야 하며 정상 기록의 수정 동작은 불변. (3) 관리자 홈에 제외 건수가 있으면 한 줄 안내와 목록 링크(공유 캐시). 공개 화면은 쿠키를 읽지 않으며 빌드 표의 렌더링 방식이 불변이어야 한다.",
       "notes": "관리자 홈과 목록은 서버 컴포넌트 유지. 실제 동작 확인은 V2-P5-3에서 한다.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "14b9dc6b-2d6e-4e53-b0c7-83cae82adfce"
         }
       ],
       "createdAt": "2026-11-11T00:16:45.909Z",
-      "updatedAt": "2026-11-11T00:16:45.909Z",
+      "updatedAt": "2026-11-11T00:52:44.240Z",
       "relatedFiles": [
         {
           "path": "app/admin/(protected)/runs/page.tsx",
