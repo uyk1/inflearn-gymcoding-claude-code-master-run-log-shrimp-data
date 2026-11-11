@@ -2632,7 +2632,7 @@
         }
       ],
       "createdAt": "2026-11-11T02:05:29.751Z",
-      "updatedAt": "2026-11-11T05:57:13.224Z",
+      "updatedAt": "2026-11-11T06:00:54.889Z",
       "relatedFiles": [
         {
           "path": "README.md",
@@ -2657,7 +2657,8 @@
       ],
       "implementationGuide": "문서 수정 전 git grep으로 7일·세션 관련 문구와 배포 절의 현재 문장을 모두 찾아 빠짐없이 변경안에 넣는다. 확인하지 않은 항목에는 ✅를 쓰지 않는다. 날짜는 오늘 날짜를 쓴다.",
       "verificationCriteria": "승인된 변경안이 문서에 반영되고, ROADMAP Phase 6와 요약 표의 상태가 일치, 문서의 환경 변수·세션 값이 구현과 일치, 문서 PR과 포인터 PR 머지.",
-      "analysisResult": "v2 Phase 6(마무리·배포): 운영(https://pjt-run-log.vercel.app, main 자동 배포)에서 관리자 기능을 안전하게 쓰게 한다. Vercel 환경 변수는 사용자가 콘솔에서 직접 등록하고 값은 채팅·저장소에 쓰지 않는다. 로그인이 필요한 운영 확인은 사용자가 체크리스트로 직접 수행(비밀번호는 Claude에게 주지 않음, TEST- 제목 규칙). 노션 쓰기는 TEST- 행만. 갤럭시 실기기는 계속 미확인. 문서(ROADMAP/PRD/CLAUDE.md/README) 수정은 before→after 승인 후."
+      "analysisResult": "v2 Phase 6(마무리·배포): 운영(https://pjt-run-log.vercel.app, main 자동 배포)에서 관리자 기능을 안전하게 쓰게 한다. Vercel 환경 변수는 사용자가 콘솔에서 직접 등록하고 값은 채팅·저장소에 쓰지 않는다. 로그인이 필요한 운영 확인은 사용자가 체크리스트로 직접 수행(비밀번호는 Claude에게 주지 않음, TEST- 제목 규칙). 노션 쓰기는 TEST- 행만. 갤럭시 실기기는 계속 미확인. 문서(ROADMAP/PRD/CLAUDE.md/README) 수정은 before→after 승인 후.",
+      "summary": "V2-P6-5 완료. README(관리자 화면·환경 변수 3종·배포 절의 쓰기 키 Production만과 재배포·세션 3일과 푸터 관리자 링크·구조·알려진 한계, 기존 '읽기 전용·인증 없음' 문구 정정), CLAUDE.md(DELETE 버전 확인, 세션 3일, 푸터 링크 결정, 캐시 문장), PRD(인증 방식·환경 변수 확정, 아이폰 확인 반영, 리스크 표 대응, 보안 후속 항목), ROADMAP(Phase 6 ✅ 완료 2026-11-11, 확인된 항목에만 ✅와 근거, 실제 Preview 배포와 갤럭시는 미확인 명시, 남은 한계 소절 추가, 요약 표 일치, Phase 1 기록의 7일에 3일 단축 주석)을 사용자 승인(모두 적용)한 before→after 그대로 반영(문구 위치 일치를 assert로 확인, 오래된 문구 검색 0건). 문서 PR #86 머지. 사용자 확인 결과 반영: 운영 로그인, 입력·수정·노션 휴지통 이동, 아이폰 홈 화면 앱 로그인 유지, Vercel 로그 문제 없음."
     }
   ]
 }
