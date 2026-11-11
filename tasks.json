@@ -2334,14 +2334,14 @@
       "name": "V2-P4-5 수정·삭제 코드와 보안 점검",
       "description": "Phase 4 변경을 code-reviewer와 security-checker 서브에이전트로 읽기 전용 점검한다. 대상: lib/notion/admin/page-to-form.ts, edit-version.ts, service.ts와 repository.ts의 변경분, lib/auth/admin-request.ts, app/api/admin/runs/[id]/route.ts, 수정된 app/api/admin/runs/route.ts, components/admin/run-form.tsx의 수정 모드와 run-form-fields.tsx와 delete-run.tsx, app/admin/(protected)/runs 아래 페이지. 점검 항목: PATCH와 DELETE의 인증과 Origin 확인과 id 검증(다른 DB 페이지 접근 차단), 충돌 확인 우회 가능성과 version 위조 영향, 내용 버전 비교의 오탐과 미탐, 확인과 저장 사이 틈의 영향, 삭제 확인 우회, 클라이언트 번들에 서버 전용 모듈과 키가 없는지(.next/static 검색 포함), 오류 문구와 로그의 정보 노출, XSS, 접근성(삭제 확인 단계 포커스와 역할, 충돌 안내), 불필요한 use client. 발견 사항은 임의로 고치지 말고 심각도와 근거를 보고해 사용자와 정한다. ROADMAP과 문서 갱신은 사용자 승인 후 별도로 한다.",
       "notes": "서버를 남기지 않는다. 노션에 쓰지 않는다.",
-      "status": "in_progress",
+      "status": "completed",
       "dependencies": [
         {
           "taskId": "14911ded-aa00-4427-b31d-db7845705dc8"
         }
       ],
       "createdAt": "2026-11-10T07:49:41.529Z",
-      "updatedAt": "2026-11-11T00:06:52.255Z",
+      "updatedAt": "2026-11-11T00:06:55.723Z",
       "relatedFiles": [
         {
           "path": "app/api/admin/runs/[id]/route.ts",
@@ -2357,7 +2357,8 @@
       "implementationGuide": "1) git diff로 Phase 4 변경 파일을 확정. 2) code-reviewer와 security-checker를 호출. 3) 빌드 후 .next/static에서 키 이름과 서버 모듈 흔적 검색. 4) npm test와 tsc와 lint 재실행. 5) 결과를 확인됨과 구현만 됨과 미확인으로 정리.",
       "verificationCriteria": "치명과 높음 보안 이슈가 없거나 발견 사항이 보고됨. npm test, tsc, lint, build 통과. 번들 검색 결과 0건.",
       "analysisResult": "v2 Phase 4(수정·삭제): 관리자가 관리자 전용 목록(/admin/runs)에서 기록을 골라 수정 화면(/admin/runs/[id]/edit)에서 고치고 삭제(노션 휴지통)한다. 결정: 충돌 확인은 노션 last_edited_time이 분 단위 정밀도라 내용 기준 버전으로 한다(수정 화면을 열 때 서버가 현재 내용을 payloadSignature와 같은 정규화로 버전 값으로 만들어 주고, 저장 때 노션에서 다시 읽어 비교해 다르면 409 CONFLICT로 거부하고 덮어쓰지 않으며, 성공 응답에는 노션이 돌려준 페이지로 만든 새 버전을 담음). 수정 화면 입력칸은 노션 직접 조회. 공개 화면에는 관리자 버튼을 넣지 않는다. 삭제 버튼은 수정 화면 하단에만 두고 화면 안 확인 단계를 거친다. 수정은 입력 필드 8개만 바꾸고 출처와 외부ID는 건드리지 않는다. 라우트는 저장 뒤 revalidateTag(run-records)를 호출한다. 새 패키지 설치 금지. 노션 쓰기 검증은 사용자 확인 후 TEST- 행만 쓰고 끝나면 휴지통으로 보내 in_trash를 확인한다. 환경 변수를 빈 값으로 덮어쓰는 시험은 PowerShell 대입이 아니라 node spawn으로 한다. .env* 값은 읽거나 출력하지 않는다. 한국어 주석과 문서.",
-      "summary": "V2-P4-5 점검 완료(읽기 전용, 코드·노션 변경 없음). tsc·lint·npm test 178건·build 통과, .next/static 번들 검색 0건(키 이름, 서버 모듈, node:crypto, 키 패턴). security-checker: 치명·높음·중간 없음, 낮음 5(소요시간 길이·Infinity 통과(Phase 2부터), 세션 7일·폐기 불가의 영향 확대, 쓰기 API 횟수 제한 없음, 편집 왕복 시 서식·전각쉼표 변화, next 중첩 postcss high) + 참고 2(충돌 확인 한계, 삭제 확인이 클라이언트에만 있음). 인증·Origin·id 검증 순서, 다른 DB 페이지 차단, 오류·로그 정보 노출, XSS, 번들 경계, 캐시 분리는 문제 없음으로 확인. code-reviewer: 높음 없음, 중간 3(수정 폼이 서버 값으로 다시 채워지지 않는 경로(initialVersion 의존 effect), 409 안내·삭제 확인의 접근성(role 중첩, 포커스 복귀), 모르는 강도·전각 쉼표 태그가 조용히 바뀜), 낮음 7(버전 서명이 NaN 등을 같게 봄, 버전이 payloadSignature에 암묵 결합, 읽기 실패가 쓰기 실패 코드로 보고, 응답 유실 뒤 자기 충돌, 날짜 시간·종료일 삭제, 읽기엔 통과하나 수정엔 거부되는 기록, 오래된 주석·중복 코드). 수정 범위는 사용자와 정하기로 하여 코드는 고치지 않음."
+      "summary": "V2-P4-5 점검 완료(읽기 전용, 코드·노션 변경 없음). tsc·lint·npm test 178건·build 통과, .next/static 번들 검색 0건(키 이름, 서버 모듈, node:crypto, 키 패턴). security-checker: 치명·높음·중간 없음, 낮음 5(소요시간 길이·Infinity 통과(Phase 2부터), 세션 7일·폐기 불가의 영향 확대, 쓰기 API 횟수 제한 없음, 편집 왕복 시 서식·전각쉼표 변화, next 중첩 postcss high) + 참고 2(충돌 확인 한계, 삭제 확인이 클라이언트에만 있음). 인증·Origin·id 검증 순서, 다른 DB 페이지 차단, 오류·로그 정보 노출, XSS, 번들 경계, 캐시 분리는 문제 없음으로 확인. code-reviewer: 높음 없음, 중간 3(수정 폼이 서버 값으로 다시 채워지지 않는 경로(initialVersion 의존 effect), 409 안내·삭제 확인의 접근성(role 중첩, 포커스 복귀), 모르는 강도·전각 쉼표 태그가 조용히 바뀜), 낮음 7(버전 서명이 NaN 등을 같게 봄, 버전이 payloadSignature에 암묵 결합, 읽기 실패가 쓰기 실패 코드로 보고, 응답 유실 뒤 자기 충돌, 날짜 시간·종료일 삭제, 읽기엔 통과하나 수정엔 거부되는 기록, 오래된 주석·중복 코드). 수정 범위는 사용자와 정하기로 하여 코드는 고치지 않음.",
+      "completedAt": "2026-11-11T00:06:55.720Z"
     }
   ]
 }
