@@ -2568,14 +2568,14 @@
       "name": "V2-P6-3 Vercel 환경 변수 등록 안내와 배포 (사용자 작업)",
       "description": "사용자가 Vercel 콘솔에서 직접 하는 작업을 체크리스트로 안내하고, 완료를 확인한다. Claude는 값을 보지도 쓰지도 않는다. (1) V2-P6-2의 점검 결과를 반영한 최종 체크리스트를 사용자에게 제시: Production 환경 변수로 ADMIN_PASSWORD(길고 추측하기 어려운 값, 12자 이상 권장), ADMIN_SESSION_SECRET(32자 이상 무작위, 생성 명령 예: node -e \"console.log(require('crypto').randomBytes(32).toString('hex'))\" 를 사용자가 자기 터미널에서 실행해 콘솔에 붙여 넣기), NOTION_ADMIN_API_KEY(Production만, Preview·Development 체크 해제), 기존 NOTION_API_KEY와 NOTION_DATA_SOURCE_ID 확인(DB ID가 아니라 data source ID), RUN_RECORDS_REVALIDATE_SECONDS는 등록하지 않음. 값에 $가 있으면 .env.local과 달리 Vercel 콘솔은 확장하지 않는지 공식 문서(context7 또는 WebSearch)로 확인해 안내. (2) 환경 변수는 새 배포부터 적용되므로 등록 뒤 재배포(Redeploy)가 필요함을 안내. 노션 관리자 통합에 러닝 기록 DB가 연결(공유)돼 있고 Read·Insert·Update 권한인지 확인하도록 안내. (3) 사용자가 등록·재배포를 마쳤다고 알려 주면 비로그인으로 확인 가능한 것을 즉시 점검: 배포 상태, /admin 307, 로그인 화면 200. 값 노출은 하지 않는다.",
       "notes": "Claude는 키·비밀번호 값을 요청하지도 출력하지도 않는다. 사용자가 값을 채팅에 붙여 넣으면 사용하지 말고 폐기하고 재발급을 권한다.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "4d1aeb28-1215-492c-af1d-dbf160cf7ee5"
         }
       ],
       "createdAt": "2026-11-11T02:05:29.751Z",
-      "updatedAt": "2026-11-11T02:05:29.751Z",
+      "updatedAt": "2026-11-11T05:11:29.066Z",
       "relatedFiles": [
         {
           "path": ".env.example",
