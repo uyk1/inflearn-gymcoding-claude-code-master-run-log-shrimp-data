@@ -2542,14 +2542,14 @@
       "name": "V2-P6-2 배포 전 점검과 Preview 조건 확인",
       "description": "(1) 운영과 같은 조건 빌드: RUN_RECORDS_REVALIDATE_SECONDS 없이 빌드해 빌드 표의 revalidate(홈 60초)와 .next/prerender-manifest.json의 initialRevalidateSeconds가 코드값(60)과 일치하는지 확인(.env.local 영향이 있으면 spawn으로 빌드 env에서 제외하거나 영향을 보고한다. .env* 값은 읽지 않는다). (2) Preview 조건 시험: node spawn 환경 변수로 NOTION_ADMIN_API_KEY를 빈 문자열로 넘기고(그리고 필요 시 ADMIN_SESSION_SECRET만 임시값) 서버를 띄워, 로그인한 세션으로 PATCH·POST·DELETE가 일반 문구의 설정 오류(CONFIG_MISSING, 내부 정보 없음)로 거부되고 노션에 쓰지 않으며 공개 화면은 정상인지 확인한다. PowerShell의 $env:X=\"\" 사용 금지. (3) 시크릿 검색: git grep과 git 이력(git log -p 또는 git rev-list --all | 패턴 grep)에서 secret_/ntn_ 키 패턴과 비밀번호 같은 값이 없는지 확인(값을 출력하지 말고 건수와 위치만 보고). (4) npm audit(운영 의존성) 결과 정리: next 중첩 postcss high는 배포 영향 여부를 판단해 보고. (5) V2-P6-1의 DELETE 버전 확인을 TEST-P6 행 1개로 실제 노션에서 확인(임시 비밀번호 운영 서버+Playwright: 낡은 화면에서 노션 쪽 수정 후 삭제하면 409이고 삭제 안 됨, 불러온 뒤 삭제는 성공, in_trash true, 행 수 6 복귀). (6) 배포 점검 체크리스트(환경 변수, Preview/Production 구분)를 정리해 V2-P6-3 입력으로 넘긴다.",
       "notes": "노션 쓰기는 TEST-P6 행만. 키·비밀번호 값은 출력하지 않는다.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "b6c3ddcd-cfe9-4875-b803-88e1a8325962"
         }
       ],
       "createdAt": "2026-11-11T02:05:01.486Z",
-      "updatedAt": "2026-11-11T02:05:01.486Z",
+      "updatedAt": "2026-11-11T05:01:02.907Z",
       "relatedFiles": [
         {
           "path": "package.json",
