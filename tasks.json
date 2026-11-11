@@ -2568,14 +2568,14 @@
       "name": "V2-P6-3 Vercel 환경 변수 등록 안내와 배포 (사용자 작업)",
       "description": "사용자가 Vercel 콘솔에서 직접 하는 작업을 체크리스트로 안내하고, 완료를 확인한다. Claude는 값을 보지도 쓰지도 않는다. (1) V2-P6-2의 점검 결과를 반영한 최종 체크리스트를 사용자에게 제시: Production 환경 변수로 ADMIN_PASSWORD(길고 추측하기 어려운 값, 12자 이상 권장), ADMIN_SESSION_SECRET(32자 이상 무작위, 생성 명령 예: node -e \"console.log(require('crypto').randomBytes(32).toString('hex'))\" 를 사용자가 자기 터미널에서 실행해 콘솔에 붙여 넣기), NOTION_ADMIN_API_KEY(Production만, Preview·Development 체크 해제), 기존 NOTION_API_KEY와 NOTION_DATA_SOURCE_ID 확인(DB ID가 아니라 data source ID), RUN_RECORDS_REVALIDATE_SECONDS는 등록하지 않음. 값에 $가 있으면 .env.local과 달리 Vercel 콘솔은 확장하지 않는지 공식 문서(context7 또는 WebSearch)로 확인해 안내. (2) 환경 변수는 새 배포부터 적용되므로 등록 뒤 재배포(Redeploy)가 필요함을 안내. 노션 관리자 통합에 러닝 기록 DB가 연결(공유)돼 있고 Read·Insert·Update 권한인지 확인하도록 안내. (3) 사용자가 등록·재배포를 마쳤다고 알려 주면 비로그인으로 확인 가능한 것을 즉시 점검: 배포 상태, /admin 307, 로그인 화면 200. 값 노출은 하지 않는다.",
       "notes": "Claude는 키·비밀번호 값을 요청하지도 출력하지도 않는다. 사용자가 값을 채팅에 붙여 넣으면 사용하지 말고 폐기하고 재발급을 권한다.",
-      "status": "in_progress",
+      "status": "completed",
       "dependencies": [
         {
           "taskId": "4d1aeb28-1215-492c-af1d-dbf160cf7ee5"
         }
       ],
       "createdAt": "2026-11-11T02:05:29.751Z",
-      "updatedAt": "2026-11-11T05:23:46.619Z",
+      "updatedAt": "2026-11-11T05:23:50.133Z",
       "relatedFiles": [
         {
           "path": ".env.example",
@@ -2591,7 +2591,8 @@
       "implementationGuide": "사용자 응답을 기다리는 태스크다. 안내는 한국어로 번호를 매긴 짧은 체크리스트로 제공한다. Vercel UI 경로는 변경될 수 있으므로 확실하지 않은 메뉴 이름은 단정하지 말고 공식 문서로 확인한다.",
       "verificationCriteria": "사용자가 환경 변수 등록과 재배포를 마쳤다고 확인했고, 비로그인 확인(배포 응답, /admin 307)이 통과.",
       "analysisResult": "v2 Phase 6(마무리·배포): 운영(https://pjt-run-log.vercel.app, main 자동 배포)에서 관리자 기능을 안전하게 쓰게 한다. Vercel 환경 변수는 사용자가 콘솔에서 직접 등록하고 값은 채팅·저장소에 쓰지 않는다. 로그인이 필요한 운영 확인은 사용자가 체크리스트로 직접 수행(비밀번호는 Claude에게 주지 않음, TEST- 제목 규칙). 노션 쓰기는 TEST- 행만. 갤럭시 실기기는 계속 미확인. 문서(ROADMAP/PRD/CLAUDE.md/README) 수정은 before→after 승인 후.",
-      "summary": "V2-P6-3 완료. Claude는 값을 요청·출력·사용하지 않았고 Vercel 환경 변수 등록과 재배포는 사용자가 콘솔에서 직접 수행(사용자 보고: 등록하고 재배포 중 → 확인 요청). 체크리스트(ADMIN_PASSWORD, ADMIN_SESSION_SECRET 32자 이상 무작위, NOTION_ADMIN_API_KEY는 Production만, 기존 NOTION_API_KEY·NOTION_DATA_SOURCE_ID 확인, RUN_RECORDS_REVALIDATE_SECONDS 미등록, Sensitive 옵션 권장, 재배포 필요, $ 포함 값 회피)를 Vercel 문서 확인(환경 변수는 새 배포부터 적용, Production/Preview/Development 범위 선택, Sensitive 값은 저장 후 열람 불가; $ 처리 방식은 공식 문서에서 확인하지 못해 회피 권고)과 함께 제시. 비로그인 점검 통과: 공개 /·/runs·/stats 200과 set-cookie 없음, /admin·/admin/runs·/admin/runs/new·/admin/runs/[id]/edit 307 로그인 이동, /admin/login 200, POST·PATCH·DELETE 쓰기 API는 Origin 없음 403·다른 Origin 403·쿠키 없음 401(2회 확인), 보안 헤더(HSTS, X-Frame-Options DENY, nosniff, Referrer-Policy, Permissions-Policy) 확인. 한계: 비로그인 응답은 환경 변수 유무와 관계없이 같아서 변수 적용 여부는 외부에서 구분할 수 없고, 로그인 성공 여부(V2-P6-4 사용자 확인)로만 확인 가능."
+      "summary": "V2-P6-3 완료. Claude는 값을 요청·출력·사용하지 않았고 Vercel 환경 변수 등록과 재배포는 사용자가 콘솔에서 직접 수행(사용자 보고: 등록하고 재배포 중 → 확인 요청). 체크리스트(ADMIN_PASSWORD, ADMIN_SESSION_SECRET 32자 이상 무작위, NOTION_ADMIN_API_KEY는 Production만, 기존 NOTION_API_KEY·NOTION_DATA_SOURCE_ID 확인, RUN_RECORDS_REVALIDATE_SECONDS 미등록, Sensitive 옵션 권장, 재배포 필요, $ 포함 값 회피)를 Vercel 문서 확인(환경 변수는 새 배포부터 적용, Production/Preview/Development 범위 선택, Sensitive 값은 저장 후 열람 불가; $ 처리 방식은 공식 문서에서 확인하지 못해 회피 권고)과 함께 제시. 비로그인 점검 통과: 공개 /·/runs·/stats 200과 set-cookie 없음, /admin·/admin/runs·/admin/runs/new·/admin/runs/[id]/edit 307 로그인 이동, /admin/login 200, POST·PATCH·DELETE 쓰기 API는 Origin 없음 403·다른 Origin 403·쿠키 없음 401(2회 확인), 보안 헤더(HSTS, X-Frame-Options DENY, nosniff, Referrer-Policy, Permissions-Policy) 확인. 한계: 비로그인 응답은 환경 변수 유무와 관계없이 같아서 변수 적용 여부는 외부에서 구분할 수 없고, 로그인 성공 여부(V2-P6-4 사용자 확인)로만 확인 가능.",
+      "completedAt": "2026-11-11T05:23:50.129Z"
     },
     {
       "id": "105ef469-ba81-4b48-a2da-e873080b5b2c",
