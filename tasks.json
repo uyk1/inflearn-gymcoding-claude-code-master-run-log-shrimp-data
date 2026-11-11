@@ -2334,14 +2334,14 @@
       "name": "V2-P4-5 수정·삭제 코드와 보안 점검",
       "description": "Phase 4 변경을 code-reviewer와 security-checker 서브에이전트로 읽기 전용 점검한다. 대상: lib/notion/admin/page-to-form.ts, edit-version.ts, service.ts와 repository.ts의 변경분, lib/auth/admin-request.ts, app/api/admin/runs/[id]/route.ts, 수정된 app/api/admin/runs/route.ts, components/admin/run-form.tsx의 수정 모드와 run-form-fields.tsx와 delete-run.tsx, app/admin/(protected)/runs 아래 페이지. 점검 항목: PATCH와 DELETE의 인증과 Origin 확인과 id 검증(다른 DB 페이지 접근 차단), 충돌 확인 우회 가능성과 version 위조 영향, 내용 버전 비교의 오탐과 미탐, 확인과 저장 사이 틈의 영향, 삭제 확인 우회, 클라이언트 번들에 서버 전용 모듈과 키가 없는지(.next/static 검색 포함), 오류 문구와 로그의 정보 노출, XSS, 접근성(삭제 확인 단계 포커스와 역할, 충돌 안내), 불필요한 use client. 발견 사항은 임의로 고치지 말고 심각도와 근거를 보고해 사용자와 정한다. ROADMAP과 문서 갱신은 사용자 승인 후 별도로 한다.",
       "notes": "서버를 남기지 않는다. 노션에 쓰지 않는다.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "14911ded-aa00-4427-b31d-db7845705dc8"
         }
       ],
       "createdAt": "2026-11-10T07:49:41.529Z",
-      "updatedAt": "2026-11-10T07:49:41.529Z",
+      "updatedAt": "2026-11-11T00:02:26.593Z",
       "relatedFiles": [
         {
           "path": "app/api/admin/runs/[id]/route.ts",
