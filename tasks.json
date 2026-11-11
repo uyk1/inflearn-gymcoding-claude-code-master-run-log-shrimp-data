@@ -2625,14 +2625,14 @@
       "name": "V2-P6-5 문서 최종 정리와 ROADMAP Phase 6 갱신",
       "description": "README(배포 절: 관리자 환경 변수, Preview에 쓰기 키 미등록, 세션 3일과 아이폰 재로그인, 로그인·쓰기 제한의 인스턴스별 한계, 운영 주의), CLAUDE.md(세션 3일, DELETE 버전 확인, 환경 변수 요약 중 달라진 부분), PRD(필요한 경우 8장 비기능 요구사항과 9장 리스크 표에 최종 대응과 남은 한계), ROADMAP Phase 6(확인된 항목만 ✅와 근거, 미확인은 명시: 갤럭시, 사용자가 확인하지 못한 항목)를 현재 구현과 운영 확인 결과에 맞게 정리한다. /docs:update-roadmap 6 절차로 변경안(before→after)을 보여 주고 AskUserQuestion(모두 적용 권장·일부만·적용 안 함)으로 승인받은 뒤에만 수정한다. 남은 한계 목록을 정리해 기록: 쓰기 API·로그인 제한이 인스턴스별, CSP 없음, 세션 서버 폐기 불가, next 중첩 postcss high(판단 결과), 노션 날짜 종료일 손실, 읽기 실패가 쓰기 실패 코드로 보고, 응답 유실 뒤 자기 충돌. 이후 문서 PR과 Shrimp 서브모듈 포인터 PR을 올리고 머지(방침: 검증 통과 시 진행), 메모리의 진행 현황을 갱신한다. v2 완료 요약(범위, 확인됨/미확인, 알려진 한계, 후속 후보)을 사용자에게 보고한다.",
       "notes": "승인 전에는 ROADMAP·PRD·CLAUDE.md·README를 수정하지 않는다.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "105ef469-ba81-4b48-a2da-e873080b5b2c"
         }
       ],
       "createdAt": "2026-11-11T02:05:29.751Z",
-      "updatedAt": "2026-11-11T02:05:29.751Z",
+      "updatedAt": "2026-11-11T05:57:13.224Z",
       "relatedFiles": [
         {
           "path": "README.md",
