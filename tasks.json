@@ -2599,14 +2599,14 @@
       "name": "V2-P6-4 운영 환경 확인 (비로그인 점검과 사용자 체크리스트)",
       "description": "(1) Claude가 하는 비로그인 점검(읽기 전용 요청만, 운영 노션에 쓰지 않음): /admin과 /admin/runs/new·/admin/runs/[id]/edit가 307로 로그인 이동, /admin/login 200, POST·PATCH·DELETE /api/admin/runs를 Origin 없음(403), 다른 Origin(403), 쿠키 없음(401)으로 호출해 거부 확인(성공 가능한 요청은 보내지 않음), 응답 보안 헤더(HSTS, X-Frame-Options, nosniff, Referrer-Policy, Permissions-Policy)와 /admin 계열 Cache-Control, 공개 화면이 set-cookie 없이 정적·ISR로 동작. (2) 배포된 정적 번들(/_next/static JS·CSS)을 내려받아 키·비밀값 패턴(secret_, ntn_, 환경 변수 이름, node:crypto 등)이 0건인지 검색. (3) Preview 배포 확인: 가능하면 PR 미리보기 URL(없으면 사용자에게 Vercel 대시보드에서 Preview 배포 URL을 알려 달라고 요청)에서 관리자 쓰기가 설정 오류로 거부되는지 비로그인·로그인 없이 확인 가능한 범위(로그인 자체가 실패하는지)를 확인. (4) 사용자 체크리스트 제시(사용자가 직접 수행하고 결과를 알려 줌): 운영 주소에서 로그인 → 기록 입력(제목은 TEST-P6로 시작) → 목록에서 수정 → 공개 화면 반영 확인 → 삭제(확인 단계) → 노션 휴지통 확인 → 로그아웃. 아이폰: 홈 화면 앱(standalone)에서 로그인하고 앱을 닫았다 다시 열어 세션이 유지되는지, 3일 만료 안내. (5) 사용자가 알려 준 결과를 기록하고 운영 로그(Vercel 대시보드 Logs)에서 노션 호출 제한(429)이나 입력값 노출이 없는지 사용자에게 확인 요청 또는 스크린샷 요청.",
       "notes": "운영 노션 쓰기는 사용자가 TEST-P6 행으로만 한다. Claude는 운영 쓰기 요청을 보내지 않는다.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "9b900605-5bea-434a-b300-b3548865c0c2"
         }
       ],
       "createdAt": "2026-11-11T02:05:29.751Z",
-      "updatedAt": "2026-11-11T02:05:29.751Z",
+      "updatedAt": "2026-11-11T05:23:53.366Z",
       "relatedFiles": [
         {
           "path": "docs/ROADMAP.md",
