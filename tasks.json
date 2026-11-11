@@ -2365,10 +2365,10 @@
       "name": "V2-P5-1 제외 사유 조회와 버전 서명 보강",
       "description": "(1) lib/notion/admin/service.ts getRunForEdit 결과에 excludedReasons(ExcludedReason[], 정상이면 빈 배열)를 추가한다. 판정은 lib/notion/mapper.ts의 사유 계산을 순수 함수로 추출해 mapper와 서비스가 함께 쓴다(mapper 동작과 로그 불변). 이미 읽은 page로 계산해 노션 호출을 늘리지 않는다. (2) lib/notion/admin/excluded-fields.ts(순수): 사유를 입력칸 이름(title, date, distance, duration)으로 대응하고 안내 문구를 만든다. (3) lib/notion/admin/edit-version.ts 서명 보강: 파싱에 실패한 값(형식 틀린 날짜, NaN 거리, 모르는 강도)이 모두 같은 서명으로 뭉개지지 않게 원문을 구분한다. 정상 기록의 버전 문자열은 이전과 정확히 같아야 하며 고정 입력 해시를 골든 테스트로 못박는다. payloadSignature(run-form.ts)는 중복 입력 경고용이라 건드리지 않는다. 사용처를 맞춘다. 단위 테스트: 사유 6종, 정상 빈 배열, 사유 칸 대응, 서로 다른 잘못된 값이 다른 버전, 정상 버전 골든 불변.",
       "notes": "노션 호출 추가 금지. 새 패키지 금지.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [],
       "createdAt": "2026-11-11T00:16:45.909Z",
-      "updatedAt": "2026-11-11T00:16:45.909Z",
+      "updatedAt": "2026-11-11T00:43:39.388Z",
       "relatedFiles": [
         {
           "path": "lib/notion/mapper.ts",
