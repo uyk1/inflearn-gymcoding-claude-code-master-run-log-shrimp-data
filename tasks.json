@@ -2505,10 +2505,10 @@
       "name": "V2-P6-1 서버 DELETE 버전 확인과 세션 3일",
       "description": "(1) 서버 DELETE /api/admin/runs/[id]가 수정 화면을 열 때 받은 내용 버전(version)을 받아, 저장 직전 노션 현재 내용의 computePageVersion과 일치할 때만 휴지통으로 보낸다. 다르면 409 CONFLICT(노션에서 먼저 바뀐 내용이 있어 삭제하지 않았습니다 취지), version이 없으면 400. 버전은 요청 본문 JSON({version})으로 받고 본문 크기·JSON 파싱은 lib/auth/admin-request.ts의 readJsonBody를 재사용한다(DELETE에 본문을 쓰는 점을 주석에 적는다). service.trashRun이 baseVersion 인자를 받도록 확장하고 기존 소속·휴지통 확인(assertRunPage)을 유지한다. 서비스·update-body 재사용 가능한 파서(parseVersionBody 등)와 단위 테스트(버전 일치 시 휴지통, 불일치 409이며 pages.update 0회, 버전 없음 400, 다른 DB·휴지통 404) 추가. (2) components/admin/delete-run.tsx가 현재 폼의 최신 버전을 보내도록 한다: 수정 폼이 저장에 성공하면 새 version으로 바뀌므로 EditRunForm과 DeleteRun이 같은 버전을 공유해야 한다(상태 끌어올리기 또는 컨텍스트 중 단순한 쪽, 서버 컴포넌트 page에서 version을 props로 넘기되 저장 성공 후 갱신 반영). 409면 최신 내용 불러오기 안내. (3) lib/auth/constants.ts SESSION_MAX_AGE_SECONDS를 7일에서 3일로(쿠키 만료와 토큰 만료가 같은 값을 쓰는지 확인, 관련 테스트·주석·문서의 7일 문구를 찾아 맞춘다). 아이폰에서는 3일마다 다시 로그인함을 README 주의에 적는다(문서는 P6-5).",
       "notes": "노션 쓰기 검증은 V2-P6-2에서 TEST-P6 행으로 한다. 새 패키지 금지.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [],
       "createdAt": "2026-11-11T02:05:01.486Z",
-      "updatedAt": "2026-11-11T02:05:01.486Z",
+      "updatedAt": "2026-11-11T04:55:44.330Z",
       "relatedFiles": [
         {
           "path": "app/api/admin/runs/[id]/route.ts",
