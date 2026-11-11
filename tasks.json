@@ -2474,14 +2474,14 @@
       "name": "V2-P5-4 제외 행 고치기 코드와 보안 점검",
       "description": "Phase 5 변경을 code-reviewer와 security-checker 서브에이전트로 읽기 전용 점검한다. 대상: lib/notion/mapper.ts 사유 계산 추출, lib/notion/admin/service.ts getRunForEdit 변경, excluded-fields.ts, edit-version.ts 서명 보강, runs/page.tsx와 components/admin/excluded-runs.tsx, 수정 화면의 사유 안내와 강조, 관리자 홈 변경. 점검 항목: 입력 원문이 공개 DTO, 공유 캐시, 공개 HTML, 제외 목록에 새지 않는지, 단건 조회의 id 형식과 소속(다른 DB, 휴지통) 확인, 정상 기록 버전 불변과 서명 보강의 오탐 미탐, 제외 판정이 읽기와 어긋나지 않는지, 접근성(사유 안내, 오류 강조 포커스, 이중 alert), 공개 화면이 쿠키를 읽지 않아 렌더링 방식이 불변인지, 클라이언트 번들 경계(.next/static 검색), 오류 문구와 로그의 정보 노출, XSS, 불필요한 use client. 발견 사항은 임의로 고치지 말고 심각도와 근거를 보고해 사용자와 수정 범위를 정한다. 문서 갱신은 /docs:update-roadmap 5로 before→after를 보여 주고 승인 후 별도로 한다.",
       "notes": "서버를 남기지 않는다. 노션에 쓰지 않는다.",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         {
           "taskId": "7d4c4734-44ea-4cd5-b3f2-a144632fa150"
         }
       ],
       "createdAt": "2026-11-11T00:17:01.701Z",
-      "updatedAt": "2026-11-11T00:17:01.701Z",
+      "updatedAt": "2026-11-11T01:47:54.393Z",
       "relatedFiles": [
         {
           "path": "lib/notion/admin/service.ts",
